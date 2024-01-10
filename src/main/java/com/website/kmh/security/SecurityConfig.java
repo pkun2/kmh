@@ -13,19 +13,19 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    //@Bean
+    //public PasswordEncoder passwordEncoder() {
+    //    return new BCryptPasswordEncoder();
+    //}
 
     @Configuration
     public static class MySecurityConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-        private final PasswordEncoder passwordEncoder;
+        //private final PasswordEncoder passwordEncoder;
 
-        public MySecurityConfigurer(PasswordEncoder passwordEncoder) {
-            this.passwordEncoder = passwordEncoder;
-        }
+        //public MySecurityConfigurer(PasswordEncoder passwordEncoder) {
+        //    this.passwordEncoder = passwordEncoder;
+        //}
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
