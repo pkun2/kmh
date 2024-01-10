@@ -4,8 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
 
-@Entity
+@Entity(name = "users")
 public class User {
 
     @Id
@@ -16,10 +17,6 @@ public class User {
     private String email;
     private String password;
 
-    public User() {
-        // 기본 생성자
-    }
-
     // getter, setter, 기타 메소드
     public Long getId() {
         return user_id;
@@ -28,7 +25,6 @@ public class User {
     public void setId(Long user_id) {
         this.user_id = user_id;
     }
-
     public String getNickname() {
         return nickname;
     }

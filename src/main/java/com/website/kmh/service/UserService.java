@@ -15,10 +15,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void createUser(String nickname, String email) {
+    public void createUser(String nickname, String email, String password) {
         User newUser = new User();
         newUser.setNickname(nickname);
         newUser.setEmail(email);
+        newUser.setPassword(password);
 
         userRepository.save(newUser);
     }
