@@ -9,7 +9,8 @@ import {
   NoticePage,
   ProfilePage,
   SearchPage,
-  TrpgPage
+  TrpgPage,
+  ChannelPage,
 } from "./pages";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <li><Link to="/profile">Profile</Link></li>
             <li><Link to="/search">Search</Link></li>
             <li><Link to="/trpg">Trpg</Link></li>
+            <li><Link to="/channel">Channel</Link></li>
           </ul>
         </nav>
         <Routes>
@@ -36,7 +38,8 @@ function App() {
           <Route path="/notice" element={<NoticePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/trpg" element={<TrpgPage />
+          <Route path="/trpg" element={<TrpgPage /> } />
+          <Route path="/channel" element={<ChannelPage />
           } />
         </Routes>
       </div>

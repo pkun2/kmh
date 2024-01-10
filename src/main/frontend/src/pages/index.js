@@ -6,6 +6,7 @@ import NoticePage from "./notice";
 import ProfilePage from "./profile";
 import SearchPage from "./search";
 import TrpgPage from "./trpg";
+import ChannelPage from "./channel";
 
 export {
   HomePage,
@@ -15,5 +16,6 @@ export {
   NoticePage,
   ProfilePage,
   SearchPage,
-  TrpgPage
+  TrpgPage,
+  ChannelPage,
 };
