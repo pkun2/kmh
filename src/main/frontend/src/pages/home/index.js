@@ -25,7 +25,7 @@ function HomePage() {
       <nav>
         <ul>
           <li>
-            <Link to="/channels">채널</Link>
+            <Link to="/channel">채널</Link>
           </li>
           <li>
             <Link to="/trpg">trpg</Link>

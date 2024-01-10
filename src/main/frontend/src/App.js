@@ -17,19 +17,6 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <nav>
-          <ul>
-            <li><Link to="/home">Home</Link></li>
-            <li><Link to="/image">Image</Link></li>
-            <li><Link to="/write">Write</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/notice">Notice</Link></li>
-            <li><Link to="/profile">Profile</Link></li>
-            <li><Link to="/search">Search</Link></li>
-            <li><Link to="/trpg">Trpg</Link></li>
-            <li><Link to="/channel">Channel</Link></li>
-          </ul>
-        </nav>
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/image" element={<ImagePage />} />
