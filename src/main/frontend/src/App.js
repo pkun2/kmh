@@ -10,7 +10,7 @@ import {
   ProfilePage,
   SearchPage,
   TrpgPage,
-  ChannelPage,
+  ChannelPage, SignUpPage,
 } from "./pages";
 
 function App() {
@@ -22,6 +22,7 @@ function App() {
           <Route path="/image" element={<ImagePage />} />
           <Route path="/write" element={<WritePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="/notice" element={<NoticePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/search" element={<SearchPage />} />

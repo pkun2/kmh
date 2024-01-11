@@ -1,9 +1,18 @@
 import React from "react"
-const TextInput = () => {
+const TextInput = ({handleChange, handleValue, items, styles, fonts}) => {
+    const combinedStyles = {...styles, ...fonts};
+    const value = handleValue || "";
+
     return (
         <>
             <div>
-                입력칸 컴포넌트
+                <input
+                    type={items.type}
+                    value = {value}
+                    onChange = {() => handleChange}
+                    style={combinedStyles}
+                    placeholder={items.title}
+                />
             </div>
         </>
     )
