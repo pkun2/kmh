@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.website.kmh.domain.User;
 import com.website.kmh.service.UserService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class UserController {
 
@@ -18,9 +21,18 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping("/register")
-    public String getRegister() {
-        return "register test";
+    public Map<String, String> getRegister() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Hello register");
+        return response;
+    }
+    @GetMapping("/login")
+    public Map<String, String> getLogin() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Hello login");
+        return response;
     }
 
     @PostMapping("/register")
