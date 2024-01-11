@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+// import axios from 'axios';
 import {
   ChannelPage,
   SearchPage,
@@ -13,6 +14,7 @@ import './HomePage.css'; // 스타일 파일 추가
 function HomePage() {
   const [searchInput, setSearchInput] = useState('');
   const [isNoticeModalOpen, setNoticeModalOpen] = useState(false);
+  const [posts, setPosts] = useState([]);
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
@@ -29,6 +31,19 @@ function HomePage() {
   const handleCloseNoticeModal = () => {
     setNoticeModalOpen(false);
   };
+
+//   useEffect(() => {
+//     const fetchPosts = async () => {
+//         try {
+//             const response = await axios.get('http://localhost:8080/api/posts');
+//             setPosts(response.data);
+//         } catch (error) {
+//             console.error('Error fetching posts:', error);
+//         }
+//     };
+
+//     fetchPosts();
+// }, []);
 
   return (
     <div className="home-container">
