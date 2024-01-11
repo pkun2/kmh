@@ -7,13 +7,12 @@ public class Channel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private String channel_id;
+    private Long channel_id;
 
     private String channel_name;
 
-    private String user_id;
+    private Long user_id;
 
     // getters and setters
 }
