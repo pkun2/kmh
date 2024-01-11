@@ -12,21 +12,7 @@ import {
 import './HomePage.css'; // 스타일 파일 추가
 
 function HomePage() {
-  const [searchInput, setSearchInput] = useState('');
   const [isNoticeModalOpen, setNoticeModalOpen] = useState(false);
-  const [posts, setPosts] = useState([]);
-
-  const handleSearchInputChange = (e) => {
-    setSearchInput(e.target.value);
-  };
-
-  const handleSearchSubmit = () => {
-    console.log(`Searching for: ${searchInput}`);
-  };
-
-  const handleOpenNoticeModal = () => {
-    setNoticeModalOpen(true);
-  };
 
   const handleCloseNoticeModal = () => {
     setNoticeModalOpen(false);
@@ -47,28 +33,6 @@ function HomePage() {
 
   return (
     <div className="home-container">
-      <nav>
-        <ul className="nav-list">
-          <li>
-            <Link to="/channel">채널</Link>
-          </li>
-          <li>
-            <Link to="/trpg">trpg</Link>
-          </li>
-          <li className="search-profile-notice">
-            <input
-              type="text"
-              placeholder="검색"
-              value={searchInput}
-              onChange={handleSearchInputChange}
-            />
-            <button onClick={handleSearchSubmit}>검색</button>
-            <Link to="/profile">프로필</Link>
-            <span onClick={handleOpenNoticeModal}>알림</span>
-          </li>
-        </ul>
-      </nav>
-
       <Routes>
         <Route path="/channel" element={<ChannelPage />} />
         <Route path="/trpg" element={<ChannelPage />} />

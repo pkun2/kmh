@@ -11,11 +11,16 @@ import {
   SearchPage,
   TrpgPage,
   ChannelPage,
+  Header,
+  Footer,
 } from "./pages";
 
 function App() {
   return (
     <BrowserRouter>
+      <div className="home-container">
+        <Header />
+      </div>
       <div>
         <Routes>
           <Route path="/home" element={<HomePage />} />
@@ -25,10 +30,13 @@ function App() {
           <Route path="/notice" element={<NoticePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/trpg" element={<TrpgPage /> } />
+          <Route path="/trpg" element={<TrpgPage />} />
           <Route path="/channel" element={<ChannelPage />
           } />
         </Routes>
+      </div>
+      <div>
+        <Footer />
       </div>
     </BrowserRouter>);
 } export default App;
