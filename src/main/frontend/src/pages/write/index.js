@@ -3,7 +3,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import './index.css';
 
-class App extends Component {
+class WritePage extends Component {
     render() {
         return (
             <div className="App">
@@ -27,10 +27,11 @@ class App extends Component {
                     onFocus={ ( event, editor ) => {
                         console.log( 'Focus.', editor );
                     } }
+                    
                 />
             </div>
         );
     }
 }
 
-export default App;
+export default WritePage;
