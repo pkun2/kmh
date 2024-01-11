@@ -30,11 +30,17 @@ const SignUpPage = () => {
         }
     }
 
+    const handleClick = () => {
+        setCurrentMenu(currentMenu + 1);
+    }
+
     return (
         <>
-            <div style={{display: "flex", width: 600, height: 400, border: "2px solid #000099", borderRadius: 2}}>
-                <div style={{width: "55%", paddingLeft: "5%"}}>
-                    <h2>SIGN UP</h2>
+            <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+                회원가입
+                <SignUpMenu
+                    currentMenu={currentMenu}
+                />
                     <div style={{marginTop: 10, marginBottom: 10}}>
                         <input
                             type="text"
@@ -70,9 +76,9 @@ const SignUpPage = () => {
                     />
                     <div style={{marginTop: 10, width: 304, height: 1, backgroundColor: "black"}}>
                     </div>
-                </div>
-                <div style={{backgroundColor: "#CCCCCC", width: "40%", height: "100%"}}>
-                </div>
+                <button onClick={handleClick}>
+                    +
+                </button>
             </div>
         </>
     );
