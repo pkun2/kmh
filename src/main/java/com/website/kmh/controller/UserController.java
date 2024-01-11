@@ -1,6 +1,7 @@
 package com.website.kmh.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,17 +23,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
-    public Map<String, String> getRegister() {
+    @GetMapping(value = "/register", produces = "application/json")
+    public ResponseEntity<Map<String, String>> getRegister() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hello register");
-        return response;
+        return ResponseEntity.ok(response);
     }
-    @GetMapping("/login")
-    public Map<String, String> getLogin() {
+    @GetMapping(value = "/login", produces = "application/json")
+    public ResponseEntity<Map<String, String>> getLogin() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hello login");
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
@@ -40,7 +41,6 @@ public class UserController {
         userService.createUser(
                 request.getNickname(),
                 request.getEmail(),
-                request.getPassword()
-        );
+                request.getPassword());
     }
 }
