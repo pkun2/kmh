@@ -1,7 +1,7 @@
 import HomePage from "./home";
 import ImagePage from "./image";
 import WritePage from "./write";
-import LoginPage from "./login";
+import { LoginPage, SignUpPage } from "./login";
 import NoticePage from "./notice";
 import ProfilePage from "./profile";
 import SearchPage from "./search";
@@ -15,6 +15,7 @@ export {
   ImagePage,
   WritePage,
   LoginPage,
+  SignUpPage,
   NoticePage,
   ProfilePage,
   SearchPage,
