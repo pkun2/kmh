@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.website.kmh.domain.User;
 import com.website.kmh.repository.UserRepository;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -48,4 +49,9 @@ public class UserService implements UserDetailsService {
                 .roles("USER")
                 .build();
     }
+
+    /*public User getUserById(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        return optionalUser.orElse(null);
+    }*/
 }

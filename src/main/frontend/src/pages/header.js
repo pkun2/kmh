@@ -42,8 +42,6 @@ export default function Header() {
             // 로그인 상태가 아닐 경우
             <Link to="/login">로그인</Link>
           )}
-          <li>
-          </li>
         </li>
       </ul>
     </nav>
