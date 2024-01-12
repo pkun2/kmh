@@ -22,7 +22,7 @@ const SignUpPage = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/register', items);
+            const response = await axios.post('http://localhost:8080/api/auth/register', items);
             console.log(response.data);
             navigate("/login");
         } catch (error) {

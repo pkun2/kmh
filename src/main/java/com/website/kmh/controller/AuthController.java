@@ -26,7 +26,6 @@ import com.website.kmh.service.UserService;
 public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     @Autowired
     public AuthController(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
@@ -37,11 +36,13 @@ public class AuthController {
     @PostMapping("/register")
     public void registerUser(@RequestBody User request) {
         userService.createUser(
-                request.getNickname(),
                 request.getEmail(),
+                request.getNickname(),
                 request.getPassword()
         );
     }
+
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody User request) {
@@ -50,13 +51,17 @@ public class AuthController {
         String password = request.getPassword();
 
         // UserDetailsService를 통해 UserDetails 객체 가져오기
+        Authentication authenticationRequest =
+                UsernamePasswordAuthenticationToken.unauthenticated(email, password);
+        Authentication authenticationResponse =
+                this.authenticationManager.authenticate(authenticationRequest);
         UserDetails userDetails = userService.loadUserByUsername(email);
 
+        System.out.println(authenticationResponse);
         // UserDetailsService에서 가져온 UserDetails의 비밀번호와 클라이언트 제공 비밀번호 비교
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             // 인증 성공 시 SecurityContext에 사용자 정보를 설정하고 성공 메시지 반환
             Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication = authenticationManager.authenticate(authentication);
 
             if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
