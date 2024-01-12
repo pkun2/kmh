@@ -1,11 +1,15 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
-function SearchPage() {
+const SearchPage = () => {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search).get('q');
+
   return (
     <div>
-      <p>검색이에요</p>
+      <h2>Search Results for: {query}</h2>
     </div>
   );
-}
+};
 
 export default SearchPage;
