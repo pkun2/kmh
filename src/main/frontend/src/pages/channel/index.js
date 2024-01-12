@@ -20,12 +20,13 @@ function ChannelPage() {
           <tbody>
             {channels.map((channel, index) => (
               <tr key={index}>
-                <td>{channels.channel_id}</td>
-                <td>{channels.channel_name}</td>
-                <td>{channels.user_id}</td>
+                <td>{channel.channel_id}</td>
+                <td>{channel.channel_name}</td>
+                <td>{channel.user_id}</td>
                 <td><button>채널 구독하기</button></td>
               </tr>
             ))}
+
           </tbody>
         </table>
       </div>

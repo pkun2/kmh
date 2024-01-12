@@ -18,6 +18,7 @@ public class ChannelService {
     }
 
     public List<Channel> findAll() {
+        // System.out.println(channels);
         return channelRepository.findAll();
     }
 }
