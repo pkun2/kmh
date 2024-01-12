@@ -19,8 +19,8 @@ const LoginPage = () => {
         }
 
         try {
-            const response = await axios.get('http://localhost:8080/login', items);
-            console.log(response.data);
+            const request = await axios.post('http://localhost:8080/api/auth/login', items);
+            console.log(request.data);
             navigate("/home");
         } catch (error) {
             console.error('Error sending data: ', error);
