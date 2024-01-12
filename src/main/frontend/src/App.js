@@ -15,7 +15,6 @@ import {
   ChannelPage,
   Header,
   Footer,
-  SignUpPage,
 } from "./pages";
 
 function App() {

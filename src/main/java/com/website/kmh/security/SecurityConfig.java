@@ -58,7 +58,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/api/auth/register", "/api/auth/login", "/channels", "/api/posts").permitAll()
+                        .requestMatchers("/", "/api/auth/register", "/api/auth/login", "/api/channel/post", "/api/channel/get", "/api/posts").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

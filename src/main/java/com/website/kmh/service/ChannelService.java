@@ -17,8 +17,12 @@ public class ChannelService {
         this.channelRepository = channelRepository;
     }
 
+    public Channel createChannel(Long channel_id, String channel_name, Long user_id) {
+        Channel newChannel = new Channel(channel_id, channel_name, user_id);
+        return channelRepository.save(newChannel);
+    }
+
     public List<Channel> findAll() {
-        // System.out.println(channels);
         return channelRepository.findAll();
     }
 }
