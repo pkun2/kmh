@@ -9,8 +9,10 @@ import TrpgPage from "./trpg";
 import ChannelPage from "./channel";
 import Header from "./header";
 import Footer from "./footer";
+import { APITestPage } from "./apitest";
 
 export {
+  APITestPage,
   HomePage,
   ImagePage,
   WritePage,

@@ -6,7 +6,7 @@ const SignUpMenu = ({currentMenu}) => {
         <>
             <div style = {{display: "flex", justifyContent: "center", width: 800, height: 50, border: "2px solid #000099", borderRadius: 10}}>
                 {menu.map((item, index) => (
-                    <div
+                    <div key = {index}
                         style = {{
                             display: "flex",
                             alignItems: "center",
