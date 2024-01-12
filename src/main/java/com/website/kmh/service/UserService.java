@@ -49,9 +49,4 @@ public class UserService implements UserDetailsService {
                 .roles("USER")
                 .build();
     }
-
-    /*public User getUserById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        return optionalUser.orElse(null);
-    }*/
 }
