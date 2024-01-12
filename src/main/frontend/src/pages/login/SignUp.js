@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { CommonButton, SignUpMenu } from "../../components";
-import axios from "axios";
+import { postData } from "../../services";
 import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
@@ -21,13 +21,8 @@ const SignUpPage = () => {
             password: password
         }
 
-        try {
-            const response = await axios.post('http://localhost:8080/api/auth/register', items);
-            console.log(response.data);
-            navigate("/login");
-        } catch (error) {
-            console.error('Error sending data: ', error);
-        }
+        const response = await postData(items, 'api/auth/register');
+        console.log(response);
     }
 
     const handleClick = () => {
