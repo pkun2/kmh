@@ -1,5 +1,6 @@
 package com.website.kmh.service;
 
+import com.website.kmh.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.website.kmh.domain.User;
 import com.website.kmh.repository.UserRepository;
+
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -31,28 +34,46 @@ public class UserService implements UserDetailsService {
     }
 
     public void createUser(String nickname, String email, String password) {
-        User newUser = new User();
-        newUser.setNickname(nickname);
-        newUser.setEmail(email);
-        newUser.setPassword(passwordEncoder.encode(password));
+        try {
+            // 사용자가 이미 존재하는지 확인
+            if (userRepository.existsByEmail(email)) {
+                throw new UserAlreadyExistsException("해당 이메일 주소로 이미 가입된 사용자가 있습니다.");
+            }
 
-        userRepository.save(newUser);
+            // 사용자가 존재하지 않으면 새로운 사용자 생성
+            User newUser = new User();
+            newUser.setNickname(nickname);
+            newUser.setEmail(email);
+            newUser.setPassword(passwordEncoder.encode(password));
+
+            userRepository.save(newUser);
+
+        } catch (UserAlreadyExistsException e) {
+            // 이미 가입된 사용자 예외 처리
+            // 원하는 방식으로 처리하거나 예외를 다시 던지거나 로깅 등을 수행합니다.
+            // 여기서는 간단하게 로그만 출력하도록 했습니다.
+            System.out.println("이미 가입된 사용자: " + e.getMessage());
+
+        } catch (Exception e) {
+            // 그 외의 예외 처리
+            // 원하는 방식으로 처리하거나 예외를 다시 던지거나 로깅 등을 수행합니다.
+            // 여기서는 간단하게 로그만 출력하도록 했습니다.
+            System.out.println("사용자 생성 중 오류 발생: " + e.getMessage());
+        }
     }
 
+
+
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        Optional<User> userOptional = userRepository.findByEmail(email);
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
-
-        String user_email = user.getEmail();
-        String user_password = user.getPassword();
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user_email)
-                .password(user_password)
+                .username(user.getEmail())
+                .password(user.getPassword())
                 .roles("USER")
                 .build();
     }
+
 }
