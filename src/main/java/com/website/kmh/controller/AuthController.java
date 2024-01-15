@@ -1,38 +1,41 @@
 package com.website.kmh.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.website.kmh.service.JWTService;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.website.kmh.domain.User;
 import com.website.kmh.service.UserService;
+
+import java.text.ParseException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
     private final UserService userService;
+    private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public AuthController(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
     }
+
     @PostMapping("/register")
     public void registerUser(@RequestBody User request) {
         userService.createUser(
@@ -42,34 +45,41 @@ public class AuthController {
         );
     }
 
-    private final AuthenticationManager authenticationManager;
-
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody User request) {
+    public ResponseEntity<String> loginUser(@RequestBody User request) throws ParseException {
         // 클라이언트가 제공한 이메일과 비밀번호 가져오기
         String email = request.getEmail();
         String password = request.getPassword();
 
-        // UserDetailsService를 통해 UserDetails 객체 가져오기
-        Authentication authenticationRequest =
-                UsernamePasswordAuthenticationToken.unauthenticated(email, password);
-        Authentication authenticationResponse =
-                this.authenticationManager.authenticate(authenticationRequest);
-        UserDetails userDetails = userService.loadUserByUsername(email);
+        // UsernamePasswordAuthenticationToken을 사용하여 토큰 생성
+        Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(email, password);
 
-        System.out.println(authenticationResponse);
-        // UserDetailsService에서 가져온 UserDetails의 비밀번호와 클라이언트 제공 비밀번호 비교
-        if (passwordEncoder.matches(password, userDetails.getPassword())) {
-            // 인증 성공 시 SecurityContext에 사용자 정보를 설정하고 성공 메시지 반환
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        try {
+            // AuthenticationManager를 통해 직접 인증 수행
+            Authentication authenticationResponse = authenticationManager.authenticate(authenticationRequest);
 
-            if (authentication.isAuthenticated()) {
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                return ResponseEntity.ok("Login successful");
+            // 사용자 정보 추출
+            User user = (User) authenticationResponse.getPrincipal();
+
+            // 비밀번호 확인
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                // 인증 성공 시 SecurityContext에 사용자 정보를 설정하고 성공 메시지 반환
+                SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+                // JWT 생성
+                List<String> authorities = user.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList());
+                String jwt = jwtService.generateJwt(request.getEmail(), authorities);
+                return ResponseEntity.ok("Login successful. JWT: " + jwt);
             }
+        } catch (AuthenticationException e) {
+            // 인증 실패 시 적절한 응답 반환
+            return ResponseEntity.status(401).body("Login failed: " + e.getMessage());
         }
 
-        // 인증 실패 시 적절한 응답 반환
+        // 기타 실패 시 적절한 응답 반환
         return ResponseEntity.status(401).body("Login failed");
     }
+
+
 }
