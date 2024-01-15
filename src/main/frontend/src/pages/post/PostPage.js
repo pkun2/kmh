@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const PostPage = () => {
 
+
     return (
         <>
             <div>
