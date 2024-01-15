@@ -68,8 +68,8 @@ const LoginPage = () => {
                     <CommonButton
                         handleClick={handleLogin}
                         items={{title: "로그인"}}
-                        styles={{width: 304, height: 50, backgroundColor: '#000099', color: 'white', border: 'none'}}
-                        fonts={{fontSize: '25px', fontWeight: 'bold'}}
+                        styles={{width: 304, height: 50, backgroundColor: '#000099'}}
+                        fonts={{color: "white", fontSize: '25px', fontWeight: 'bold'}}
                     />
                     <div style={{marginTop: 10, width: 304, height: 1, backgroundColor: "black"}}>
                     </div>
