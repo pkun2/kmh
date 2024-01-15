@@ -5,19 +5,58 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
-
-    private String nickname;
     private String email;
+    private String nickname;
     private String password;
 
-    // getter, setter, 기타 메소드
+    @Override
+    public String getUsername() {
+        return email;
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 여기에서 사용자의 권한 정보를 반환합니다.
+        // 예를 들어, "ROLE_USER" 권한을 부여하려면 아래와 같이 작성할 수 있습니다.
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // 계정이 만료되지 않았음을 반환
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // 계정이 잠겨 있지 않음을 반환
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // 자격 증명이 만료되지 않았음을 반환
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // 계정이 활성화되었음을 반환
+        return true;
+    }
+
     public Long getId() {
         return user_id;
     }
@@ -48,5 +87,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 
 }

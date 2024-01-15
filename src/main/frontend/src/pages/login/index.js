@@ -1,11 +1,4 @@
-import React from 'react';
+import LoginPage from "./Login";
+import SignUpPage from "./SignUp";
 
-function LoginPage() {
-  return (
-    <div>
-      <p>로그인이에요</p>
-    </div>
-  );
-}
-
-export default LoginPage;
+export { LoginPage, SignUpPage }
