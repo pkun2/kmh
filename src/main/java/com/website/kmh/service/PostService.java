@@ -14,7 +14,7 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    // 예시: 최신 게시글 목록 조회 서비스 메서드
+    //최신 게시글 목록 조회 서비스 메서드
     public List<Post> getLatestPosts() {
         return postRepository.findAllByOrderByCreatedAtDesc();
     }
