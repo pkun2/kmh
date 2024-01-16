@@ -36,7 +36,6 @@ function HomePage() {
       <Routes>
         <Route path="/channel" element={<ChannelPage />} />
         <Route path="/trpg" element={<ChannelPage />} />
-        <Route path="/search" element={<SearchPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/write" element={<WritePage />} />
       </Routes>
