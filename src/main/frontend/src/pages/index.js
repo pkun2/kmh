@@ -1,7 +1,7 @@
 import HomePage from "./home";
 import ImagePage from "./image";
-import WritePage from "./write";
 import { PostPage } from "./post";
+import { WritePage } from "./write";
 import { LoginPage, SignUpPage } from "./login";
 import NoticePage from "./notice";
 import ProfilePage from "./profile";
@@ -16,7 +16,6 @@ export {
   APITestPage,
   HomePage,
   ImagePage,
-  WritePage,
   LoginPage,
   PostPage,
   SignUpPage,
@@ -28,4 +27,5 @@ export {
   ChannelPage,
   Header,
   Footer,
+  WritePage,
 };
