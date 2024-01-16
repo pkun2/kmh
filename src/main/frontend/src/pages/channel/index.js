@@ -6,7 +6,7 @@ function ChannelPage() {
   const [channels, setChannels] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/channels')
+    axios.get('http://localhost:8080/api/channel/get')
       .then(response => {
         console.log(response);
         setChannels(response.data);
