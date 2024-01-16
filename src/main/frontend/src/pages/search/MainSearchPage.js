@@ -27,6 +27,9 @@ const MainSearchPage = () => {
             <div>
                 조회순 드롭다운, 출력할 갯수 드롭다운, 글 쓰기 버튼
             </div>
+            <button onClick = {handleSearch}>
+                get 보내기
+            </button>
         </>
     )
 }
