@@ -10,6 +10,8 @@ import {
   PostPage,
   NoticePage,
   ProfilePage,
+  TrpgMain,
+  TrpgMake,
   MainSearchPage,
   TrpgPage,
   SignUpPage,
@@ -35,7 +37,8 @@ function App() {
             <Route path="/notice" element={<NoticePage/>}/>
             <Route path="/profile" element={<ProfilePage/>}/>
             <Route path="/search" element={<MainSearchPage/>}/>
-            <Route path="/trpg" element={<TrpgPage/>}/>
+            <Route path="/trpg" element={<TrpgMain/>}/>
+            <Route path="/trpg/make" element={<TrpgMake/>}/>
             <Route path="/apitest" element={<APITestPage/>}/>
             <Route path="/channel" element={<ChannelPage/>
 

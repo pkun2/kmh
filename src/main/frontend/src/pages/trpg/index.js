@@ -1,11 +1,4 @@
-import React from 'react';
+import TrpgMake from "./trpgMake";
+import TrpgMain from "./trpgMain";
 
-function TrpgPage() {
-  return (
-    <div>
-      <p>trpg에요</p>
-    </div>
-  );
-}
-
-export default TrpgPage;
+export { TrpgMain, TrpgMake }
