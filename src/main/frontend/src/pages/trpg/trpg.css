@@ -1,6 +1,6 @@
-/* trpg.css */
-
 .trpg-container {
+    display: flex;
+    flex-direction: column;
     max-width: 800px;
     margin: 0 auto;
     background-color: #fff;
@@ -10,12 +10,15 @@
     margin-top: 50px;
   }
   
-  .trpg-stepShow {
+  .trpg-main {
     display: flex;
-    justify-content: space-between;
   }
   
-  .trpg-stepShow div {
+  .trpg-stepShow {
+    width: 48%;
+  }
+  
+  .trpg-steps {
     width: 48%;
   }
   
@@ -58,3 +61,25 @@
     cursor: not-allowed;
   }
   
+  .trpg-navigation {
+    margin-bottom: 20px;
+  }
+  
+  .trpg-navigation button {
+    margin-right: 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .trpg-navigation button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }

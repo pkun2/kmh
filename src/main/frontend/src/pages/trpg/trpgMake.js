@@ -4,7 +4,7 @@ import TrpgStep2 from './trpgStep2';
 import TrpgStep3 from './trpgStep3';
 import TrpgStep4 from './trpgStep4';
 import TrpgStepShow from './trpgStepShow';
-//import './trpg.css';
+import './trpg.css';
 
 const TrpgMake = () => {
   const [step, setStep] = useState(1);
@@ -81,40 +81,49 @@ const TrpgMake = () => {
   };
 
   return (
-    <div className="trpg-container"> {/* 클래스 추가 */}
-      <TrpgStepShow step={step} userInfo={userInfo} content={content} prompt={prompt} />
-      {step === 1 && (
-        <TrpgStep1
-          userInfo={userInfo}
-          handleUserInfoChange={handleUserInfoChange}
-          handleNextStep={handleNextStep}
-          isNextStepAllowed={isUserInfoValid()} // Add validation function
-        />
-      )}
-      {step === 2 && (
-        <TrpgStep2
-          content={content}
-          handleContentChange={handleContentChange}
-          handleExampleQuestionChange={handleExampleQuestionChange}
-          handleNextStep={handleNextStep}
-          handlePrevStep={handlePrevStep}
-        />
-      )}
-      {step === 3 && (
-        <TrpgStep3
-          prompt={prompt}
-          handlePromptChange={handlePromptChange}
-          handleNextStep={handleNextStep}
-          handlePrevStep={handlePrevStep}
-        />
-      )}
-      {step === 4 && (
-        <TrpgStep4
-          handlePrevStep={handlePrevStep}
-        />
-      )}
+    <div className="trpg-container">
+      <div className="trpg-main">
+        <div className="trpg-stepShow">
+          <TrpgStepShow step={step} userInfo={userInfo} content={content} prompt={prompt} />
+        </div>
+        <div className="trpg-steps">
+          <div className="trpg-navigation">
+            {/* 1. 위에 1~4번 버튼 추가 */}
+            <button onClick={() => setStep(1)} disabled={step === 1}>Step 1</button>
+            <button onClick={() => setStep(2)} disabled={step === 2}>Step 2</button>
+            <button onClick={() => setStep(3)} disabled={step === 3}>Step 3</button>
+            <button onClick={() => setStep(4)} disabled={step === 4}>Step 4</button>
+          </div>
+          {step === 1 && (
+            <TrpgStep1
+              userInfo={userInfo}
+              handleUserInfoChange={handleUserInfoChange}
+              isNextStepAllowed={isUserInfoValid()}
+            />
+          )}
+          {step === 2 && (
+            <TrpgStep2
+              content={content}
+              handleContentChange={handleContentChange}
+              handleExampleQuestionChange={handleExampleQuestionChange}
+            />
+          )}
+          {step === 3 && (
+            <TrpgStep3
+              prompt={prompt}
+              handlePromptChange={handlePromptChange}
+            />
+          )}
+          {step === 4 && (
+            <TrpgStep4
+              userInfo={userInfo}
+              content={content}
+              prompt={prompt}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
-
 export default TrpgMake;
