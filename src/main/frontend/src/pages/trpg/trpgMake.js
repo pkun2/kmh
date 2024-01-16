@@ -29,16 +29,6 @@ const TrpgMake = () => {
     requirements: '',
   });
 
-  // Function to handle moving to the next step
-  const handleNextStep = () => {
-    setStep((prevStep) => prevStep + 1);
-  };
-
-  // Function to handle moving to the previous step
-  const handlePrevStep = () => {
-    setStep((prevStep) => prevStep - 1);
-  };
-
   // Functions to handle changes in each step
   const handleUserInfoChange = (e) => {
     const { name, value, type, checked } = e.target;

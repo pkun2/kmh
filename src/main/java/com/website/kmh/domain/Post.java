@@ -1,9 +1,13 @@
 package com.website.kmh.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -43,85 +47,5 @@ public class Post {
     private int badCount;
 
     // Getters and Setters
-
-    public Long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Long postId) {
-        this.postId = postId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public int getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(int viewCount) {
-        this.viewCount = viewCount;
-    }
-
-    public String getCategoryTag() {
-        return categoryTag;
-    }
-
-    public void setCategoryTag(String categoryTag) {
-        this.categoryTag = categoryTag;
-    }
-
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
-
-    public int getGoodCount() {
-        return goodCount;
-    }
-
-    public void setGoodCount(int goodCount) {
-        this.goodCount = goodCount;
-    }
-
-    public int getBadCount() {
-        return badCount;
-    }
-
-    public void setBadCount(int badCount) {
-        this.badCount = badCount;
-    }
 
 }
