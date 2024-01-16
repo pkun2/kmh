@@ -10,7 +10,7 @@ import {
   PostPage,
   NoticePage,
   ProfilePage,
-  SearchPage,
+  MainSearchPage,
   TrpgPage,
   SignUpPage,
   ChannelPage,
@@ -34,7 +34,7 @@ function App() {
             <Route path="/signup" element={<SignUpPage/>}/>
             <Route path="/notice" element={<NoticePage/>}/>
             <Route path="/profile" element={<ProfilePage/>}/>
-            <Route path="/search" element={<SearchPage/>}/>
+            <Route path="/search" element={<MainSearchPage/>}/>
             <Route path="/trpg" element={<TrpgPage/>}/>
             <Route path="/apitest" element={<APITestPage/>}/>
             <Route path="/channel" element={<ChannelPage/>

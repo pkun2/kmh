@@ -14,7 +14,7 @@ export default function Header() {
 
     const handleSearch = () => { // 검색어 검색 페이지로 전송 및 이동 함수
         console.log("검색어 : ", searchInput);
-        navigate(`./search/${searchInput}`);
+        navigate(`./search?${searchInput}`);
     }
 
     const handleChannel = (e) => { // 채널 선택시 선택된 채널 콘솔에 표시, 채널 이동
@@ -40,6 +40,7 @@ export default function Header() {
           <Link
             style = {{
                 color: "black",
+                minWidth: 120,
                 textDecoration: "none",
                 fontWeight: "bold",
                 fontSize: "4vh"

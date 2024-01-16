@@ -5,7 +5,7 @@ import { PostPage } from "./post";
 import { LoginPage, SignUpPage } from "./login";
 import NoticePage from "./notice";
 import ProfilePage from "./profile";
-import SearchPage from "./search";
+import { MainSearchPage } from "./search";
 import TrpgPage from "./trpg";
 import ChannelPage from "./channel";
 import Header from "./header";
@@ -22,7 +22,7 @@ export {
   SignUpPage,
   NoticePage,
   ProfilePage,
-  SearchPage,
+  MainSearchPage,
   TrpgPage,
   ChannelPage,
   Header,
