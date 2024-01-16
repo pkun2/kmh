@@ -60,12 +60,12 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/api/auth/register", "/api/auth/login", "/api/channel/get", "/api/channel/post").permitAll()
+                        .requestMatchers("/", "/api/auth/register", "/api/auth/login", "/api/posts/latest",  "/api/channel/get", "/api/channel/post").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        .loginPage("/api/auth/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .successHandler(authenticationSuccessHandler)

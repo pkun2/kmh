@@ -3,10 +3,7 @@ package com.website.kmh.controller;
 import com.website.kmh.service.JWTService;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,6 +40,10 @@ public class AuthController {
                 request.getNickname(),
                 request.getPassword()
         );
+    }
+    @GetMapping("/login")
+    public  void getLogin() {
+        return;
     }
 
     @PostMapping("/login")
