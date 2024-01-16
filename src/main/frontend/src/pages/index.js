@@ -1,7 +1,7 @@
 import HomePage from "./home";
 import ImagePage from "./image";
 import WritePage from "./write";
-import { PostPage } from "./post";
+import { PostPage, PostDetailPage } from "./post";
 import { LoginPage, SignUpPage } from "./login";
 import NoticePage from "./notice";
 import ProfilePage from "./profile";
@@ -19,6 +19,7 @@ export {
   WritePage,
   LoginPage,
   PostPage,
+  PostDetailPage,
   SignUpPage,
   NoticePage,
   ProfilePage,

@@ -8,6 +8,7 @@ import {
   WritePage,
   LoginPage,
   PostPage,
+  PostDetailPage,
   NoticePage,
   ProfilePage,
   TrpgMain,
@@ -33,6 +34,7 @@ function App() {
             <Route path="/write" element={<WritePage/>}/>
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/post" element={<PostPage />} />
+            <Route path="/postdetail" element={<PostDetailPage />} />
             <Route path="/signup" element={<SignUpPage/>}/>
             <Route path="/notice" element={<NoticePage/>}/>
             <Route path="/profile" element={<ProfilePage/>}/>
