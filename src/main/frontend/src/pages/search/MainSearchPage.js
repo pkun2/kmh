@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getData } from "../../services";
-import { CommonButton } from "../../components";
+import { CommonButton, SearchResultBox, PageNameBox } from "../../components";
 
 const options = [
     { value: 'option1', label: 'Option 1' },
@@ -133,6 +133,7 @@ const MainSearchPage = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search).get('searchInput');
     const [searchList, setSearchList] = useState(tempList);
+    const navigate = useNavigate();
 
     const handleSearch = async (event) => {
         event.preventDefault();
@@ -150,8 +151,9 @@ const MainSearchPage = () => {
 
     const handlePost = (index) => {
         console.log(`${index}번째 글 클릭함`);
+        console.log(`${index}번째 글 정보 :\n`, searchList[index]);
+        navigate(`/postdetail?post_id=${encodeURIComponent(searchList[index].number)}`)
     }
-
 
     return (
         <>
@@ -160,15 +162,15 @@ const MainSearchPage = () => {
                 marginLeft: 5,
                 }}
             >
-                <div style = {{
+                <PageNameBox
+                    items = {{title: "전체 채널 검색"}}
+                    styles = {{
                         padding: 8,
-                        borderBottom : "2px solid #000099",
+                        borderBottom: "2px solid #000099",
                         fontWeight: "bold",
                         fontSize: 18
                     }}
-                >
-                    전체 채널 검색
-                </div>
+                />
                 <div style = {{
                     display: "flex",
                     borderBottom: "2px solid #000099",
@@ -178,157 +180,33 @@ const MainSearchPage = () => {
                     paddingBottom : 5,
                     }}
                 >
-                <select style={{
-                    borderRadius: 0,
-                    padding: 2,
-                    marginLeft: 3,
-                    outline: "none"
-                }}
-                >
-                    <option>조회순</option>
-                </select>
-                <select style={{
-                    borderRadius: 0,
-                    padding: 2,
-                    marginLeft: 3,
-                    outline: "none"
-                }}
-                >
-                    <option>30개</option>
-                </select>
-                <CommonButton
-                    styles={{border: "1px solid gray", backgroundColor: "white", marginLeft: 3}}
-                    items={{title: "글 쓰기"}}
-                />
-            </div>
-                    <div>
-                        <div style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            borderBottom: "1px solid #000099",
-                            paddingTop: 2,
-                            paddingBottom: 2,
-                            fontSize: 10,
-                            fontWeight: "bold"
-                        }}
-                        >
-                            <div style={{
-                                display: "flex",
-                                width: "10%",
-                                justifyContent: "center",
-                            }}
-                            >
-                            번호
-                        </div>
-                        <div style = {{
-                            display: "flex",
-                            width: "5%",
-                            justifyContent:"center",
-                        }}
-                        >
-                            태그
-                        </div>
-                        <div style = {{
-                            display: "flex",
-                            width: "55%",
-                            justifyContent:"center",
-                        }}
-                        >
-                            제목
-                        </div>
-                        <div style = {{
-                            display: "flex",
-                            width: "15%",
-                            justifyContent:"center",
-                        }}
-                        >
-                            닉네임
-                        </div>
-                        <div style = {{
-                            display: "flex",
-                            width: "7.5%",
-                            justifyContent:"center",
-                        }}
-                        >
-                            방문
-                        </div>
-                        <div style = {{
-                            display: "flex",
-                            width: "7.5%",
-                            justifyContent:"center",
-                        }}
-                        >
-                            추천
-                        </div>
-                    </div>
-                    <div>
-                        {searchList.map((item, index) => (
-                            <div style = {{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                borderBottom: "1px solid #AAAAAA",
-                                paddingTop: 2,
-                                paddingBottom: 2,
-                                fontSize: 10,
-                                cursor: "pointer"
-                            }}
-                                 key = {index}
-                                 onClick = {() => handlePost(index)}
-                            >
-                                <div style = {{
-                                    display: "flex",
-                                    width: "10%",
-                                    justifyContent:"center",
-                                }}
-                                >
-                                    {item.number}
-                                </div>
-                                <div style = {{
-                                    display: "flex",
-                                    width: "5%",
-                                    justifyContent:"center",
-                                }}
-                                >
-                                    {item.tag}
-                                </div>
-                                <div style = {{
-                                    display: "flex",
-                                    width: "55%",
-                                    justifyContent:"center",
-                                }}
-                                >
-                                    {item.title}
-                                </div>
-                                <div style = {{
-                                    display: "flex",
-                                    width: "15%",
-                                    justifyContent:"center",
-                                }}
-                                >
-                                    {item.nickname}
-                                </div>
-                                <div style = {{
-                                    display: "flex",
-                                    width: "7.5%",
-                                    justifyContent:"center",
-                                }}
-                                >
-                                    {item.view}
-                                </div>
-                                <div style = {{
-                                    display: "flex",
-                                    width: "7.5%",
-                                    justifyContent:"center",
-                                }}
-                                >
-                                    {item.like}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <select style={{
+                        borderRadius: 0,
+                        padding: 2,
+                        marginLeft: 3,
+                        outline: "none"
+                    }}
+                    >
+                        <option>조회순</option>
+                    </select>
+                    <select style={{
+                        borderRadius: 0,
+                        padding: 2,
+                        marginLeft: 3,
+                        outline: "none"
+                    }}
+                    >
+                        <option>30개</option>
+                    </select>
+                    <CommonButton
+                        styles={{border: "1px solid gray", backgroundColor: "white", marginLeft: 3}}
+                        items={{title: "글 쓰기"}}
+                    />
                 </div>
+                <SearchResultBox
+                    items = {searchList}
+                    handleClick={handlePost}
+                />
                 <div style = {{
                     display: "flex",
                     justifyContent:"center",
