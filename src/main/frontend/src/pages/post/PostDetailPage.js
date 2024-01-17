@@ -147,7 +147,7 @@ const PostDetailPage = () => {
                         {items.content}
                     </div>
                     <div>
-                        이미지 출력이나 게시글 폰트크기에 따른 출력 같은것 때매 DB나 작성 양식을 봐야할듯
+                        임시 이미지
                     </div>
                 </div>
                 <div>
