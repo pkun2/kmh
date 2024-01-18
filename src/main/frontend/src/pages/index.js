@@ -1,5 +1,4 @@
 import HomePage from "./home";
-import ImagePage from "./image";
 import { WritePage} from "./write";
 import { PostPage, PostDetailPage } from "./post";
 import { LoginPage, SignUpPage } from "./login";
@@ -15,7 +14,6 @@ import { APITestPage } from "./apitest";
 export {
   APITestPage,
   HomePage,
-  ImagePage,
   LoginPage,
   PostPage,
   PostDetailPage,

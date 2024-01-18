@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   APITestPage,
   HomePage,
-  ImagePage,
   WritePage,
   LoginPage,
   PostPage,
@@ -14,7 +13,6 @@ import {
   TrpgMain,
   TrpgMake,
   MainSearchPage,
-  TrpgPage,
   SignUpPage,
   ChannelPage,
   Header,
@@ -30,7 +28,6 @@ function App() {
         <div>
           <Routes>
             <Route path="/home" element={<HomePage/>}/>
-            <Route path="/image" element={<ImagePage/>}/>
             <Route path="/write" element={<WritePage/>}/>
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/post" element={<PostPage />} />
