@@ -24,6 +24,4 @@ public class ImageController {
         response.put("url", imageUrl);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 }
