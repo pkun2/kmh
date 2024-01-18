@@ -1,6 +1,6 @@
 package com.website.kmh.service;
 
-import com.website.kmh.domain.Post;
+import com.website.kmh.entity.Post;
 import com.website.kmh.repository.PostRepository;
 import org.springframework.stereotype.Service;
 

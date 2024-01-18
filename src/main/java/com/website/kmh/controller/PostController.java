@@ -1,6 +1,6 @@
 package com.website.kmh.controller;
 
-import com.website.kmh.domain.Post;
+import com.website.kmh.entity.Post;
 import com.website.kmh.service.PostService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
