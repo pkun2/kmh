@@ -60,7 +60,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/api/auth/register", "/api/auth/login", "/api/posts/latest",  "/api/channel/get", "/api/channel/post", "/api/posts/test").permitAll()
+                        .requestMatchers("/", "/api/auth/register", "/api/auth/login", "/api/posts/latest",  "/api/channel/get", "/api/channel/post", "/api/posts/test", "/api/image/upload").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
