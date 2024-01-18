@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getData } from "../../services";
-import {CommonButton, PageNameBox, SearchResultBox} from "../../components";
+import { CommonButton, SearchResultBox, PageNameBox } from "../../components";
+
+const options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+];
 
 const tempList = [{'number': 1,
     'tag': '태그1',
@@ -122,20 +127,12 @@ const tempList = [{'number': 1,
         'title': '제목20',
         'nickname': '닉네임20',
         'view': 190,
-        'like': 95}
-];
+        'like': 95}];
 
-const tempChannel = {
-    channel_id: 1,
-    channel_name: "채널 명",
-    user_id:1
-}
-
-const PostPage = () => {
+const MainSearchPage = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search).get('searchInput');
     const [searchList, setSearchList] = useState(tempList);
-    const [channelInfo, setChannelInfo] = useState(tempChannel);
     const navigate = useNavigate();
 
     const handleSearch = async (event) => {
@@ -163,10 +160,10 @@ const PostPage = () => {
             <div style = {{
                 marginRight : 5,
                 marginLeft: 5,
-            }}
+                }}
             >
                 <PageNameBox
-                    items = {{title: `${channelInfo.channel_name} 채널`}}
+                    items = {{title: "전체 채널 검색"}}
                     styles = {{
                         padding: 8,
                         borderBottom: "2px solid #000099",
@@ -181,7 +178,7 @@ const PostPage = () => {
                     justifyContent: "flex-end",
                     paddingTop : 5,
                     paddingBottom : 5,
-                }}
+                    }}
                 >
                     <select style={{
                         borderRadius: 0,
@@ -222,4 +219,5 @@ const PostPage = () => {
         </>
     )
 }
-export default PostPage
+
+export default MainSearchPage;

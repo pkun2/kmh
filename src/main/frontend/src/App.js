@@ -8,11 +8,13 @@ import {
   WritePage,
   LoginPage,
   PostPage,
+  PostDetailPage,
   NoticePage,
   ProfilePage,
-  SearchPage,
   TrpgMain,
   TrpgMake,
+  MainSearchPage,
+  TrpgPage,
   SignUpPage,
   ChannelPage,
   Header,
@@ -32,10 +34,11 @@ function App() {
             <Route path="/write" element={<WritePage/>}/>
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/post" element={<PostPage />} />
+            <Route path="/postdetail" element={<PostDetailPage />} />
             <Route path="/signup" element={<SignUpPage/>}/>
             <Route path="/notice" element={<NoticePage/>}/>
             <Route path="/profile" element={<ProfilePage/>}/>
-            <Route path="/search" element={<SearchPage/>}/>
+            <Route path="/search" element={<MainSearchPage/>}/>
             <Route path="/trpg" element={<TrpgMain/>}/>
             <Route path="/trpg/make" element={<TrpgMake/>}/>
             <Route path="/apitest" element={<APITestPage/>}/>
