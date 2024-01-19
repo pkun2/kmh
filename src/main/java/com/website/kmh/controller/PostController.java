@@ -43,7 +43,7 @@ public class PostController {
     @PostMapping("/test")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
         // 지금 로그인 저장이 안되니까 임시로 user_id 2인 정보 가져옴
-        User user = userService.getUserById(2);
+        Account user = accountService.getUserById(2);
 
         // Post 객체의 user 필드에 사용자 정보를 설정합니다.
         post.setUser(user);
