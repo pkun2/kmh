@@ -1,6 +1,6 @@
 package com.website.kmh.controller;
 
-import com.website.kmh.entity.Channel;
+import com.website.kmh.domain.Channel;
 import com.website.kmh.service.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

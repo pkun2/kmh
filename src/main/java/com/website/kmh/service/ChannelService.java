@@ -1,6 +1,6 @@
 package com.website.kmh.service;
 
-import com.website.kmh.entity.Channel;
+import com.website.kmh.domain.Channel;
 import com.website.kmh.repository.ChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

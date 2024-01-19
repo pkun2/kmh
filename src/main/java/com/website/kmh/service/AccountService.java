@@ -1,7 +1,7 @@
 package com.website.kmh.service;
 
 import com.website.kmh.dto.JwtToken;
-import com.website.kmh.entity.Account;
+import com.website.kmh.domain.Account;
 
 public interface AccountService {
     Account getUserById(long id);

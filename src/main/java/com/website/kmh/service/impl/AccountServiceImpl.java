@@ -1,7 +1,7 @@
 package com.website.kmh.service.impl;
 
 import com.website.kmh.dto.JwtToken;
-import com.website.kmh.entity.Account;
+import com.website.kmh.domain.Account;
 import com.website.kmh.repository.AccountRepository;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;

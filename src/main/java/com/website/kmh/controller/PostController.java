@@ -1,7 +1,7 @@
 package com.website.kmh.controller;
 
-import com.website.kmh.entity.Account;
-import com.website.kmh.entity.Post;
+import com.website.kmh.domain.Account;
+import com.website.kmh.domain.Post;
 import com.website.kmh.service.AccountService;
 import com.website.kmh.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;

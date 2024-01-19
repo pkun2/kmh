@@ -1,7 +1,6 @@
 package com.website.kmh.repository;
 
-import com.website.kmh.entity.Account;
-import org.springframework.data.jpa.repository.EntityGraph;
+import com.website.kmh.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

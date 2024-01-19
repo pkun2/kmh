@@ -1,11 +1,9 @@
 package com.website.kmh.service.impl;
 
 import com.website.kmh.dto.RegisterDto;
-import com.website.kmh.entity.Account;
+import com.website.kmh.domain.Account;
 import com.website.kmh.repository.AccountRepository;
 import com.website.kmh.service.RegisterService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
