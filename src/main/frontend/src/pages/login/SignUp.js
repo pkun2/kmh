@@ -40,8 +40,8 @@ const SignUpPage = () => {
                         <input
                             type="text"
                             style={{border: 'none', backgroundColor: "#DDDDDD", width: 300, height: 50, fontSize: 18}}
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder=" ID"
                         />
                     </div>
@@ -49,8 +49,8 @@ const SignUpPage = () => {
                         <input
                             type="text"
                             style={{border: 'none', backgroundColor: "#DDDDDD", width: 300, height: 50, fontSize: 18}}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={nickname}
+                            onChange={(e) => setNickname(e.target.value)}
                             placeholder=" Nickname"
                         />
                     </div>

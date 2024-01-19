@@ -4,6 +4,7 @@ import lombok.*;
 
 import jakarta.persistence.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,17 +19,18 @@ import java.util.stream.Collectors;
 @Entity(name="users")
 public class Account implements UserDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", updatable = false, unique = true, nullable = false)
     private Long id;
 
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
     @Column(name = "nickname")
     private String nickname;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -48,6 +50,12 @@ public class Account implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+
+    public void setPassword(String password) {
+        // 비밀번호 암호화 로직 적용 (예: BCryptPasswordEncoder 사용)
+        // this.password = passwordEncoder.encode(password);
     }
 
     @Override
