@@ -9,6 +9,7 @@ import lombok.Setter;
 @Entity(name = "channels")
 public class Channel {
 
+    // channels DB와 그 필드 값 지정
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long channel_id;

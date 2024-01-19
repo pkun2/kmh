@@ -22,7 +22,7 @@ public class SshFileUploader {
     @Value("${ssh.password}")
     private String password;
 
-    @Value("${ssh.remoteDiretory}")
+    @Value("${ssh.remoteDirectory}")
     private String remoteDirectory;
 
     public String uploadFile(MultipartFile upload) {

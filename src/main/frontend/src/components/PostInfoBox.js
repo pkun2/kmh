@@ -1,6 +1,8 @@
 
 const PostInfoBox = ({items}) => {
-
+    const formattedDate = new Date(items.createdAt);
+    const dateString = formattedDate.toLocaleString("en-US", { timeZone: "Asia/Seoul" });
+    
     return (
         <>
             <div style = {{
@@ -35,7 +37,7 @@ const PostInfoBox = ({items}) => {
                             justifyContent:"center"
                         }}
                     >
-                        {items.category_tag}
+                        {items.categoryTag}
                     </div>
                 </div>
                 <div
@@ -54,7 +56,7 @@ const PostInfoBox = ({items}) => {
                             borderRight: "1px solid #DDDDDD",
                         }}
                     >
-                        {items.nickname}
+                        {items.user.nickname}
                     </div>
                     <div
                         style={{
@@ -65,7 +67,7 @@ const PostInfoBox = ({items}) => {
                             borderRight: "1px solid #DDDDDD",
                         }}
                     >
-                        {items.create_at}
+                        {dateString}
                     </div>
                     <div
                         style={{
@@ -76,7 +78,7 @@ const PostInfoBox = ({items}) => {
                             borderRight: "1px solid #DDDDDD",
                         }}
                     >
-                        조회 {items.view_count}
+                        조회 {items.viewCount}
                     </div>
                     <div
                         style={{
@@ -87,7 +89,7 @@ const PostInfoBox = ({items}) => {
                             borderRight: "1px solid #DDDDDD",
                         }}
                     >
-                        추천 {items.good_count}
+                        추천 {items.goodCount}
                     </div>
                     <div
                         style={{
@@ -97,7 +99,7 @@ const PostInfoBox = ({items}) => {
                             width: "15vw",
                         }}
                     >
-                        비추 {items.bad_count}
+                        비추 {items.badCount}
                     </div>
                 </div>
             </div>
