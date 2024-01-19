@@ -1,9 +1,9 @@
-const PagingBox = () => {
+const PagingBox = (handlePaging) => {
 
     return (
         <>
             <div>
-                페이징
+                1
             </div>
         </>
     );

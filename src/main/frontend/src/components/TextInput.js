@@ -9,7 +9,7 @@ const TextInput = ({handleChange, handleValue, items, styles, fonts}) => {
                 <input
                     type={items.type}
                     value = {value}
-                    onChange = {() => handleChange}
+                    onChange = {(e) => handleChange(e.target.value)}
                     style={combinedStyles}
                     placeholder={items.title}
                 />

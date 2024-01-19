@@ -109,65 +109,31 @@ const CommentBox = ({id}) => {
             <div>
                 <PageNameBox
                     items = {{title : "전체 댓글"}}
-                    styles={{
-                        paddingTop: "5vh",
-                        paddingBottom: 5,
-                        borderBottom: "2px solid #000099",
-                        fontWeight: "bold",
-                        fontSize: 14
-                    }}
+                    styles={styles.pageNameBox(14)}
                 />
-                <div style={{
-                    alignItems: "center",
-                    paddingTop: 2,
-                    paddingBottom: 2,
-                    fontSize: 10,
-                }}
-                >
-                    {items.map((item, index) => (
-                        <div style = {{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            borderBottom: "1px solid #AAAAAA",
-                            paddingTop: 2,
-                            paddingBottom: 2,
-                            fontSize: 11,
-                        }}
-                             key = {index}
+                {items.map((item, index) => (
+                    <div style = {styles.commentBox(10)}
+                         key = {index}
+                    >
+                        <div style = {styles.commentContent("15%", "none","right", "1px", "#AAAAAA")}
                         >
-                            <div style = {{
-                                display: "flex",
-                                width: "15%",
-                                justifyContent:"center",
-                                borderRight: "1px solid #AAAAAA",
-                            }}
-                            >
-                                {item.nickname}
-                            </div>
-                            <div style = {{
-                                display: "flex",
-                                width: "65%",
-                                paddingLeft: "1%",
-                                borderRight: "1px solid #AAAAAA"
-                            }}
-                            >
-                                {item.content}
-                            </div>
-                            <div style = {{
-                                display: "flex",
-                                width: "20%",
-                                justifyContent:"center",
-                            }}
-                            >
-                                {item.time}
-                            </div>
+                            {item.nickname}
                         </div>
-                    ))}
-                </div>
-                <PagingBox />
+                        <div style = {styles.commentContent("65%", "none","right", "1px", "#AAAAAA")}
+                        >
+                            {item.content}
+                        </div>
+                        <div style = {styles.commentContent("20%", "none","none", "1px", "#AAAAAA")}
+                        >
+                            {item.time}
+                        </div>
+                    </div>
+                ))}
+                <PagingBox
+
+                />
                 <div>
-                    <div>
+                    <div style = {{display: "flex", alignItems: "center"}}>
                         <TextInput
                             handleChange={setContent}
                             handleValue={content}
@@ -175,33 +141,30 @@ const CommentBox = ({id}) => {
                                 type: "text",
                                 title: "내용"
                             }}
-                            styles = {{
-
-                            }}
-                            fonts = {{
-
-                            }}
+                            styles = {styles.commentInputBox}
+                            fonts = {styles.smallFont("black", "none")}
                         />
                     </div>
-                    <div>
+                    <div style = {{
+                            marginTop : 10,
+                            marginBottom: 10,
+                            justifyContent: "flex-end"
+                        }}
+                    >
                         <CommonButton
                             handleClick={handleEmote}
                             items = {{
                                 title: "이모티콘"
                             }}
-                            styles = {{
-
-                            }}
-                            fonts = {styles.middleFont("black", "none")}
+                            styles = {styles.defaultButton}
+                            fonts = {styles.middleFont("black", "light")}
                         />
                         <CommonButton
                             handleClick={handleAddComment}
                             items = {{
                                 title: "추가"
                             }}
-                            styles = {{
-
-                            }}
+                            styles = {styles.defaultButton}
                             fonts ={styles.middleFont("black", "light")}
                         />
                     </div>
