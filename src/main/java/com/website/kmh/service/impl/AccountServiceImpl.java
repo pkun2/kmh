@@ -1,15 +1,19 @@
 package com.website.kmh.service.impl;
 
 import com.website.kmh.dto.JwtToken;
+import com.website.kmh.entity.Account;
 import com.website.kmh.repository.AccountRepository;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,19 +24,25 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
     public JwtToken login(String email, String password) {
-        // 1. username + password 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+        // 1. username을 기반으로 저장된 Account를 찾음
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        // 2. 저장된 비밀번호와 입력된 비밀번호를 비교
+        if (!passwordEncoder.matches(password, account.getPassword())) {
+            throw new BadCredentialsException("잘못된 비밀번호 입니다.");
+        }
+        // 3. Authentication 객체 생성
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, account.getPassword() );
 
-        // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
-        // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
+        // 4. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        // 5. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
 
         return jwtToken;

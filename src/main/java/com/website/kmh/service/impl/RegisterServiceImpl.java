@@ -17,8 +17,6 @@ import java.util.Arrays;
 @Transactional
 @Slf4j
 public class RegisterServiceImpl implements RegisterService {
-    @PersistenceContext
-    private EntityManager entityManager;
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -47,7 +45,6 @@ public class RegisterServiceImpl implements RegisterService {
                     .build();
 
             accountRepository.save(account);
-            entityManager.flush();
 
             log.info("Account saved: {}", account);
         } catch (Exception e) {
