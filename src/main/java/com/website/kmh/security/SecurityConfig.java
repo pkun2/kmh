@@ -29,9 +29,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api").permitAll() // /api
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/api/**").permitAll() // /api
                         .requestMatchers("/api/auth/login").permitAll() // 로그인 경로는 인증없이 호출 가능
                         .requestMatchers("/api/auth/register").permitAll() // 회원가입 경로는 인증없이 호출 가능
+                        .requestMatchers("/api/posts/latest").permitAll() // /api/posts/latest에 대한 접근을 허용
                         .requestMatchers("/api/auth/test").hasRole("USER")
                         .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
                 )
