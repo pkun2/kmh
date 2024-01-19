@@ -1,7 +1,7 @@
 package com.website.kmh.repository;
 
-import com.website.kmh.entity.Channel;
-import com.website.kmh.entity.Post;
+import com.website.kmh.domain.Channel;
+import com.website.kmh.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
