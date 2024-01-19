@@ -3,83 +3,74 @@ import { useLocation } from "react-router-dom";
 import { getData } from "../../services";
 import { CommonButton, PageNameBox, PostInfoBox, CommentBox } from "../../components";
 
-const tempItems = {
-    post_id: 1,
-    user_id: 1,
-    nickname: "닉네임",
-    title: "때려치우고 최애의 아이 보고싶다 ㅅㅂ",
-    content: "다레모 가 메 우바와레테쿠 키미와 깐페키데 큐코쿠노 아이도루!!",
-    create_at: "2024-01-17 14:34:00",
-    view_count: 1,
-    category_tag: "태그",
-    channel_id: 1,
-    channel_name: "채널 명",
-    good_count: 1,
-    bad_count: 1
-}
-
 const PostDetailPage = () => {
     const location = useLocation();
     const postReference = new URLSearchParams(location.search).get('post_id');
-    const [items, setItems] = useState(tempItems);
+    const [items, setItems] = useState(null);
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
-        console.log("정보 업데이트 함수 실행"); // 화면 첫 로딩시
+        const fetchData = async () => {
+            try {
+                console.log(postReference);
+                const response = await getData({}, `api/posts/${postReference}`);
+                console.log("API Response:", response);
 
-        // const fetchData = async () => {
-        //     const item = {
-        //         //보낼 객체
-        //     }
-        //
-        //     const response = await getData(items, "api");
-        //     if(response.status === false) {
-        //
-        //     } else {
-        //         setItems(response.data);
-        //     }
-        // }
-        //
-        // fetchData()
-    }, [])
+                if (response.status && response.data) {
+                    setItems(response.data);
+                } else {
+                    console.error("게시글 정보를 가져오는데 실패했습니다.");
+                }
+            } catch (error) {
+                console.error("데이터를 불러오는 중 에러가 발생했습니다.", error);
+            }
+        };
+
+        fetchData();
+    }, [postReference]);
+
+
 
     return (
         <>
             <div style={{
                 marginRight: 5,
                 marginLeft: 5,
-            }}
-            >
-                <PageNameBox
-                    items={{title: `${items.channel_name} 채널`}}
-                    styles={{
-                        paddingTop : 7,
-                        paddingBottom: 7,
-                        borderBottom: "2px solid #000099",
-                        fontWeight: "bold",
-                        fontSize: 18
-                    }}
-                />
-                <PostInfoBox
-                    items={items}
-                />
-                <div
-                    style = {{
-                        borderBottom: "2px solid #AAAAAA",
-                        minHeight: 300
-                    }}
-                >
-                    <div>
-                        {items.content}
-                    </div>
-                    <div>
-                        임시 이미지
-                    </div>
-                </div>
-                <div>
-                    <CommentBox
-                        id = {items.post_id}
-                    />
-                </div>
+            }}>
+                {items && (
+                    <>
+                        <PageNameBox
+                            items={{ title: `${items.channel.channel_name} 채널` }}
+                            styles={{
+                                paddingTop: 7,
+                                paddingBottom: 7,
+                                borderBottom: "2px solid #000099",
+                                fontWeight: "bold",
+                                fontSize: 18
+                            }}
+                        />
+                        <PostInfoBox
+                            items={items}
+                        />
+                        <div
+                            style={{
+                                borderBottom: "2px solid #AAAAAA",
+                                minHeight: 300
+                            }}
+                        >
+                            <div dangerouslySetInnerHTML={{ __html: items.content }} />;
+
+                            <div>
+                                {/* 임시 이미지 */}
+                            </div>
+                        </div>
+                        <div>
+                            <CommentBox
+                                items={comments}
+                            />
+                        </div>
+                    </>
+                )}
             </div>
         </>
     )
