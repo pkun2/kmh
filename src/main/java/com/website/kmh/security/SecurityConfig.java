@@ -1,79 +1,48 @@
 package com.website.kmh.security;
 
-import com.website.kmh.provider.CustomAuthenticationProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.website.kmh.security.jwt.JwtAuthenticationFilter;
+import com.website.kmh.security.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-
-    @Autowired
-    private CustomAuthenticationProvider customAuthenticationProvider;
-
-    @Autowired
-    private MyAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
-    public AuthenticationManager authenticationManager() {
-        return new ProviderManager(Arrays.asList(customAuthenticationProvider));
-    }
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.builder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-        return new InMemoryUserDetailsManager(userDetails);
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/api").permitAll() // /api
+                        .requestMatchers("/api/auth/login").permitAll() // 로그인 경로는 인증없이 호출 가능
+                        .requestMatchers("/api/auth/register").permitAll() // 회원가입 경로는 인증없이 호출 가능
+                        .requestMatchers("/api/auth/test").hasRole("USER")
+                        .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
+                )
+
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/api/auth/register", "/api/auth/login", "/api/posts/latest", "/api/posts/test", "/api/posts/**", "/api/channel/get", "/api/channel/post",  "/api/image/upload").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin((form) -> form
-                        .loginPage("/api/auth/login")
-                        .usernameParameter("email")
-                        .passwordParameter("password")
-                        .successHandler(authenticationSuccessHandler)
-                        .permitAll()
-                )
-                .logout(logout-> logout.logoutSuccessUrl("/"));
-
-        return http.build();
+        // BCrypt Encoder 사용
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
 

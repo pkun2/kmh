@@ -1,9 +1,9 @@
 package com.website.kmh.controller;
 
+import com.website.kmh.domain.Account;
 import com.website.kmh.domain.Post;
-import com.website.kmh.domain.User;
+import com.website.kmh.service.AccountService;
 import com.website.kmh.service.PostService;
-import com.website.kmh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,7 @@ public class PostController {
 
     //임시 절차임
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @PostMapping("/test")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
