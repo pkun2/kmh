@@ -19,7 +19,7 @@ public class ChannelController {
         this.channelService = channelService;
     }
 
-    @GetMapping("/channels")
+    @GetMapping("/get")
     public List<Channel> getAllChannels() {
         List<Channel> channels = channelService.findAll();
         System.out.println(channels);

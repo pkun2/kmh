@@ -18,4 +18,8 @@ public class PostService {
     public List<Post> getLatestPosts() {
         return postRepository.findAllByOrderByCreatedAtDesc();
     }
+
+    public Post createPost(Post post) {
+        return postRepository.save(post);
+    }
 }

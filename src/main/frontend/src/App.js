@@ -4,14 +4,15 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   APITestPage,
   HomePage,
-  ImagePage,
   WritePage,
   LoginPage,
   PostPage,
+  PostDetailPage,
   NoticePage,
   ProfilePage,
+  TrpgMain,
+  TrpgMake,
   MainSearchPage,
-  TrpgPage,
   SignUpPage,
   ChannelPage,
   Header,
@@ -27,15 +28,16 @@ function App() {
         <div>
           <Routes>
             <Route path="/home" element={<HomePage/>}/>
-            <Route path="/image" element={<ImagePage/>}/>
             <Route path="/write" element={<WritePage/>}/>
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/post" element={<PostPage />} />
+            <Route path="/postdetail" element={<PostDetailPage />} />
             <Route path="/signup" element={<SignUpPage/>}/>
             <Route path="/notice" element={<NoticePage/>}/>
             <Route path="/profile" element={<ProfilePage/>}/>
             <Route path="/search" element={<MainSearchPage/>}/>
-            <Route path="/trpg" element={<TrpgPage/>}/>
+            <Route path="/trpg" element={<TrpgMain/>}/>
+            <Route path="/trpg/make" element={<TrpgMake/>}/>
             <Route path="/apitest" element={<APITestPage/>}/>
             <Route path="/channel" element={<ChannelPage/>
 

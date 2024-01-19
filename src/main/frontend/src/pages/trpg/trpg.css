@@ -1,0 +1,85 @@
+.trpg-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+  }
+  
+  .trpg-main {
+    display: flex;
+  }
+  
+  .trpg-stepShow {
+    width: 48%;
+  }
+  
+  .trpg-steps {
+    width: 48%;
+  }
+  
+  .trpg-h2,
+  .trpg-h3,
+  .trpg-h4 {
+    color: #333;
+  }
+  
+  .trpg-label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .trpg-input,
+  .trpg-select,
+  .trpg-textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  
+  .trpg-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .trpg-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .trpg-navigation {
+    margin-bottom: 20px;
+  }
+  
+  .trpg-navigation button {
+    margin-right: 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .trpg-navigation button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
