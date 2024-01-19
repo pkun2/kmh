@@ -20,6 +20,8 @@ const LoginPage = () => {
 
         try {
             const request = await axios.post('http://localhost:8080/api/auth/login', items);
+            const accessToken = request.headers['Authorization'];
+            console.log(accessToken);
             console.log(request.data);
             navigate("/home");
         } catch (error) {
