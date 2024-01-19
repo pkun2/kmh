@@ -1,4 +1,4 @@
-package com.website.kmh.domain;
+package com.website.kmh.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
