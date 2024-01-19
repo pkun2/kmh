@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -51,5 +53,17 @@ public class AccountServiceImpl implements AccountService {
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken.getAccessToken());
 
         return jwtToken;
+    }
+
+    public Account getUserById(long id) {
+        Optional<Account> userOptional = accountRepository.findById(id);
+
+        // ID에 해당하는 사용자가 없는 경우, 예외를 발생시킵니다.
+        if (userOptional.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with id: " + id);
+        }
+
+        // ID에 해당하는 사용자를 반환합니다.
+        return userOptional.get();
     }
 }
