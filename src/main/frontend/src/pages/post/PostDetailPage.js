@@ -18,85 +18,10 @@ const tempItems = {
     bad_count: 1
 }
 
-const tempComment = [
-    {'comment_id': 1,
-        'user_id': 78,
-        'post_id': 20,
-        'content': 'Content of comment 1',
-        'double_comment': 0,
-        'nickname': 'User1',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 2,
-        'user_id': 24,
-        'post_id': 10,
-        'content': 'Content of comment 2',
-        'double_comment': 0,
-        'nickname': 'User2',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 3,
-        'user_id': 56,
-        'post_id': 21,
-        'content': 'Content of comment 3',
-        'double_comment': 0,
-        'nickname': 'User3',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 4,
-        'user_id': 39,
-        'post_id': 32,
-        'content': 'Content of comment 4',
-        'double_comment': 1,
-        'nickname': 'User4',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 5,
-        'user_id': 68,
-        'post_id': 24,
-        'content': 'Content of comment 5',
-        'double_comment': 0,
-        'nickname': 'User5',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 6,
-        'user_id': 40,
-        'post_id': 32,
-        'content': 'Content of comment 6',
-        'double_comment': 0,
-        'nickname': 'User6',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 7,
-        'user_id': 14,
-        'post_id': 1,
-        'content': 'Content of comment 7',
-        'double_comment': 0,
-        'nickname': 'User7',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 8,
-        'user_id': 20,
-        'post_id': 3,
-        'content': 'Content of comment 8',
-        'double_comment': 1,
-        'nickname': 'User8',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 9,
-        'user_id': 40,
-        'post_id': 13,
-        'content': 'Content of comment 9',
-        'double_comment': 1,
-        'nickname': 'User9',
-        'time': "2024-01-17 14:34:00"},
-    {'comment_id': 10,
-        'user_id': 57,
-        'post_id': 46,
-        'content': 'Content of comment 10',
-        'double_comment': 1,
-        'nickname': 'User10',
-        'time': "2024-01-17 14:34:00"
-    }
-];
-
 const PostDetailPage = () => {
     const location = useLocation();
     const postReference = new URLSearchParams(location.search).get('post_id');
     const [items, setItems] = useState(tempItems);
-    const [comments,setComments] = useState(tempComment);
 
     useEffect(() => {
         console.log("정보 업데이트 함수 실행"); // 화면 첫 로딩시
@@ -152,7 +77,7 @@ const PostDetailPage = () => {
                 </div>
                 <div>
                     <CommentBox
-                        items = {comments}
+                        id = {items.post_id}
                     />
                 </div>
             </div>
