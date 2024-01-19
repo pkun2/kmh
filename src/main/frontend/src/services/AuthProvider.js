@@ -10,11 +10,13 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
 
     const login = async (items) => {
-        console.log(items);
-        const response = await postData(items, "/api/auth/register");
-        console.log(response);
-        setUid();
-        setToken();
+        console.log("items: ", items);
+        const response = await postData(items, "api/auth/login");
+        console.log("response: ", response);
+        const combinedToken = response.data.grantType + " " + response.data.accessToken;
+        setUid("임시 uid"); // uid를 쓸 지 몰라서 일단 이렇게 해둔
+        setToken(combinedToken);
+        console.log(combinedToken);
     };
 
     const logout = async () => {
@@ -23,15 +25,13 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
     };
 
-    const getAuth = () => {
+    const getToken = () => {
 
-        return {
-
-        }
+        return (token);
     }
 
     return (
-        <AuthContext.Provider value={{ uid, token, login, logout, getAuth }}>
+        <AuthContext.Provider value={{ uid, token, login, logout, getToken }}>
             {children}
         </AuthContext.Provider>
     );

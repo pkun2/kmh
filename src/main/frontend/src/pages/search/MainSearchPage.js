@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getData } from "../../services";
 import { CommonButton, SearchResultBox, PageNameBox } from "../../components";
+import { useAuth } from "../../services";
 
 const options = [
     { value: 'option1', label: 'Option 1' },
@@ -134,6 +135,7 @@ const MainSearchPage = () => {
     const searchParams = new URLSearchParams(location.search).get('searchInput');
     const [searchList, setSearchList] = useState(tempList);
     const navigate = useNavigate();
+    const { getToken } = useAuth()
 
     const handleSearch = async (event) => {
         event.preventDefault();
@@ -155,6 +157,11 @@ const MainSearchPage = () => {
         navigate(`/postdetail?post_id=${encodeURIComponent(searchList[index].number)}`)
     }
 
+    const test = () => {
+        const token = getToken();
+        console.log(token);
+    }
+
     return (
         <>
             <div style = {{
@@ -162,6 +169,7 @@ const MainSearchPage = () => {
                 marginLeft: 5,
                 }}
             >
+                <buttom onClick = {test}>테스트</buttom>
                 <PageNameBox
                     items = {{title: "전체 채널 검색"}}
                     styles = {{

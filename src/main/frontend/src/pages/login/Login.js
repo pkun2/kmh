@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { CommonButton, TextInput } from "../../components";
+import { useAuth } from "../../services";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import styles from "../../styles/styles";
@@ -8,6 +9,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAuth();
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -18,15 +20,7 @@ const LoginPage = () => {
             password: password
         }
 
-        try {
-            const request = await axios.post('http://localhost:8080/api/auth/login', items);
-            const accessToken = request.headers['Authorization'];
-            console.log(accessToken);
-            console.log(request.data);
-            navigate("/home");
-        } catch (error) {
-            console.error('Error sending data: ', error);
-        }
+        await login(items);
     }
 
     const handleFindID = () => {
