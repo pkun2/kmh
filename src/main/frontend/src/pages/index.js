@@ -1,5 +1,5 @@
 import HomePage from "./home";
-import { WritePage} from "./write";
+import { WritePage } from "./write";
 import { PostPage, PostDetailPage } from "./post";
 import { LoginPage, SignUpPage } from "./login";
 import NoticePage from "./notice";
