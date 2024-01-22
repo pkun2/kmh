@@ -29,9 +29,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api").permitAll() // /api
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/api/**").permitAll() // /api
                         .requestMatchers("/api/auth/login").permitAll() // 로그인 경로는 인증없이 호출 가능
                         .requestMatchers("/api/auth/register").permitAll() // 회원가입 경로는 인증없이 호출 가능
+                        .requestMatchers("/api/posts/latest").permitAll() // /api/posts/latest에 대한 접근을 허용
                         .requestMatchers("/api/auth/test").hasRole("USER")
                         .requestMatchers("/api/posts/latest").permitAll() // 게시글 목록은 인증없이
                         .requestMatchers(("/api/posts/**")).permitAll() // 게시글 상세 내용도 인증없이
