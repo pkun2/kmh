@@ -10,7 +10,6 @@ export const callLogin = async (items) => {
             'Content-Type': 'application/json'
         }
     }
-
     try {
         const response = await axios.post(url, items, config);
         sessionStorage.setItem('accessToken', response.data.accessToken);

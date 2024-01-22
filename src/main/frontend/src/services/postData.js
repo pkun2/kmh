@@ -1,19 +1,19 @@
 import axios from "axios";
-import { getToken } from "./";
+import { getToken, getRefreshToken } from "./";
 
-axios.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    (error) => {
-        if(error.response.status === 401) {
-            console.log("인터셉터 확인");
-            return error;
-        }
-
-        return error;
-    }
-)
+// axios.interceptors.response.use(
+//     (response) => {
+//         return response;
+//     },
+//     (error) => {
+//         if(error.response.status === 401) {
+//             console.log("인터셉터 확인");
+//             return error;
+//         }
+//
+//         return error;
+//     }
+// )
 
 const postData = async (items, endpoint) => {
     let ok = true;
