@@ -1,0 +1,49 @@
+
+  
+  .titleInput {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .categorySelector {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .selectedCategory {
+    padding: 0.5rem;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .categoryList {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+  }
+  
+  .categoryList div {
+    padding: 2px;
+    outline: "none";
+  }
+  
+  .categoryList div:last-child {
+    border-bottom: none;
+  }
+  
+  .uploadButton {
+    margin-top: 1rem;
+    background-color: #ffffff;
+    border: "1px solid gray";
+    cursor: pointer;
+  }
+  
+  

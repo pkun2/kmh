@@ -1,7 +1,7 @@
 package com.website.kmh.controller;
 
-import com.website.kmh.entity.Account;
-import com.website.kmh.entity.Post;
+import com.website.kmh.domain.Account;
+import com.website.kmh.domain.Post;
 import com.website.kmh.service.AccountService;
 import com.website.kmh.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +25,25 @@ public class PostController {
         return postService.getLatestPosts();
     }
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<Post> getPostById(@PathVariable("postId") Long postId) {
+        Post post = postService.getPostById(postId);
+        if (post != null) {
+            return new ResponseEntity<>(post, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     //임시 절차임
     @Autowired
     private AccountService accountService;
 
     @PostMapping("/test")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        // UserService를 통해 id가 2인 User 객체를 가져옵니다.
-        Account user = accountService.getUserById(3);
+        // 지금 로그인 저장이 안되니까 임시로 user_id 2인 정보 가져옴
+        Account user = accountService.getUserById(2);
 
         // Post 객체의 user 필드에 사용자 정보를 설정합니다.
         post.setUser(user);

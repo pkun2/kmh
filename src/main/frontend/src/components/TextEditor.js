@@ -1,6 +1,6 @@
 import  Editor  from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-
+import '../pages/write/ckeditor.css';
 
 const TextEditor = ({setContent}) => {
     const edrtorConfiguration = {
@@ -10,19 +10,25 @@ const TextEditor = ({setContent}) => {
 				'|',
 				'bold',
 				'italic',
+				'underline',
+				'strikethrough',
+				'alignment',
 				'|',
-				'fontBackgroundColor',
+				'specialCharacters',
 				'fontColor',
-				'fontFamily',
+				'fontBackgroundColor',
 				'fontSize',
+				'fontFamily',
+				'highlight',
 				'|',
 				'imageUpload',
-				'mediaEmbed',
-				'link',
-				'insertTable',
-				'findAndReplace',
+				'blockQuote',
 				'undo',
-				'redo'
+				'redo',
+				'|',
+				'imageInsert',
+				'link',
+				'htmlEmbed'
 			]
 		},
 		language: 'ko',
@@ -32,14 +38,8 @@ const TextEditor = ({setContent}) => {
 				'toggleImageCaption',
 				'imageStyle:inline',
 				'imageStyle:block',
-				'imageStyle:side'
-			]
-		},
-		table: {
-			contentToolbar: [
-				'tableColumn',
-				'tableRow',
-				'mergeTableCells'
+				'imageStyle:side',
+				'linkImage'
 			]
 		},
 		placeholder: '내용을 입력하세요.',

@@ -34,8 +34,8 @@ const WritePage = () => {
       viewCount: 0,
       categoryTag: tags[0],
       channel: {
-        channel_id: 1,
-        channel_name: "ho",
+        channel_id: 7,
+        channel_name: "test",
       },
       goodCount: 0,
       badCount: 0,
@@ -54,8 +54,8 @@ const WritePage = () => {
   };
 
   return (
-    <div className={styles.app}>
-      <input type="text" value={title} onChange={handleTitleChange} placeholder="제목" />
+    <div>
+      <input type="text" className={styles.titleInput} value={title} onChange={handleTitleChange} placeholder="제목" />
       <div className={styles.categorySelector} onClick={handleCategoryClick}>
         <div className={styles.selectedCategory}>{tags[0]}</div>
         {showCategoryList && (
@@ -67,7 +67,7 @@ const WritePage = () => {
         )}
       </div>
       <TextEditor setContent={setContent} />
-      <button onClick={handleUpload}>업로드</button>
+      <button className={styles.uploadButton} onClick={handleUpload}>업로드</button>
     </div>
   );
 }

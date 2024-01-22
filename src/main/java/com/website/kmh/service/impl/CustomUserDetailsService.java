@@ -1,6 +1,6 @@
 package com.website.kmh.service.impl;
 
-import com.website.kmh.entity.Account;
+import com.website.kmh.domain.Account;
 import com.website.kmh.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
