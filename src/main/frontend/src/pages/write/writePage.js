@@ -43,7 +43,7 @@ const WritePage = () => {
 
     console.log(postData);
 
-    axios.post('http://localhost:8080/api/posts/test', postData)
+    axios.post('http://localhost:8080/api/posts/write', postData)
       .then(response => {
         console.log(response.data);
         navigate('../home');

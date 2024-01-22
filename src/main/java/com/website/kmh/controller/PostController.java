@@ -7,6 +7,9 @@ import com.website.kmh.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,12 +43,13 @@ public class PostController {
     @Autowired
     private AccountService accountService;
 
-    @PostMapping("/test")
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        // 지금 로그인 저장이 안되니까 임시로 user_id 2인 정보 가져옴
-        Account user = accountService.getUserById(2);
+    @PostMapping("/write")
+    public ResponseEntity<Post> createPost(@RequestBody Post post, Authentication authentication) {
+        // 인증된 사용자 정보 가져옴(user_id 가져오기 위함)
+        Account principal = (Account) authentication.getPrincipal();
+        Account user = accountService.getUserByUsername(principal.getUsername());
 
-        // Post 객체의 user 필드에 사용자 정보를 설정합니다.
+        // post 객체의 user 필드에 사용자 정보 설정
         post.setUser(user);
 
         Post newPost = postService.createPost(post);

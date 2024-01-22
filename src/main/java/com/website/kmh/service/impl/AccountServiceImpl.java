@@ -55,6 +55,11 @@ public class AccountServiceImpl implements AccountService {
         return jwtToken;
     }
 
+    @Override
+    public Account getUserByUsername(String nickname) {
+        return null;
+    }
+
     public Account getUserById(long id) {
         Optional<Account> userOptional = accountRepository.findById(id);
 
