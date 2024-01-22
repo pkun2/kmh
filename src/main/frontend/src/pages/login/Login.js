@@ -20,8 +20,14 @@ const LoginPage = () => {
 
         try {
             const request = await axios.post('http://localhost:8080/api/auth/login', items);
-            const accessToken = request.headers['Authorization'];
+            // const accessToken = request.headers['Authorization'];
+            const accessToken = request.data.accessToken;
+
             console.log(accessToken);
+            
+            // 토큰을 localStorage에 저장
+            localStorage.setItem('token', accessToken);
+
             console.log(request.data);
             navigate("/home");
         } catch (error) {

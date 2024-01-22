@@ -56,8 +56,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getUserByUsername(String nickname) {
-        return null;
+    public Account getUserByNickname(String nickname) {
+        return accountRepository.findByNickname(nickname)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with nickname: " + nickname));
     }
 
     public Account getUserById(long id) {

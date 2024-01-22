@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +44,18 @@ public class PostController {
 
     @PostMapping("/write")
     public ResponseEntity<Post> createPost(@RequestBody Post post, Authentication authentication) {
-        // 인증된 사용자 정보 가져옴(user_id 가져오기 위함)
-        Account principal = (Account) authentication.getPrincipal();
-        Account user = accountService.getUserByUsername(principal.getUsername());
+        if (authentication == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
-        // post 객체의 user 필드에 사용자 정보 설정
+        // details에서 user_id 가져옴
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String nickname = userDetails.getUsername();
+
+        // 유저 정보 가져옴
+        Account user = accountService.getUserByNickname(nickname);
+
+        // Post 객체의 user 필드에 사용자 정보를 설정합니다.
         post.setUser(user);
 
         Post newPost = postService.createPost(post);
