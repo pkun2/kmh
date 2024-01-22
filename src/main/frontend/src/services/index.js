@@ -1,5 +1,5 @@
 import postData from "./postData";
 import getData from "./getData";
-import {useAuth, AuthProvider} from "./AuthProvider"
+import { callLogin, getToken, callLogout } from "./AuthProvider";
 
-export { postData, getData, useAuth, AuthProvider }
+export { postData, getData, callLogin, getToken, callLogout }

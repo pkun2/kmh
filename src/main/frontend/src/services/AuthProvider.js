@@ -1,43 +1,34 @@
-import React, { createContext, useContext, useState } from 'react';
-import { postData } from "./";
+import React from "react";
+import axios from "axios";
+import { postData, getData } from "./"
 
-// AuthContext 생성
-const AuthContext = createContext();
-
-// AuthProvider 컴포넌트 생성
-export const AuthProvider = ({ children }) => {
-    const [uid, setUid] = useState(null);
-    const [token, setToken] = useState(null);
-
-    const login = async (items) => {
-        console.log("items: ", items);
-        const response = await postData(items, "api/auth/login");
-        console.log("response: ", response);
+export const callLogin = async (items) => {
+    let ok = true;
+    const response = await postData(items, "api/auth/login");
+    if(response.status === true) {
         const combinedToken = response.data.grantType + " " + response.data.accessToken;
-        setUid("임시 uid"); // uid를 쓸 지 몰라서 일단 이렇게 해둔
-        setToken(combinedToken);
-        console.log(combinedToken);
-    };
-
-    const logout = async () => {
-        // 서버로 로그아웃 통보 과정 필요할듯
-        setUid(null);
-        setToken(null);
-    };
-
-    const getToken = () => {
-
-        return (token);
+        sessionStorage.setItem('userToken', combinedToken);
+    } else {
+        ok = !ok;
     }
 
-    return (
-        <AuthContext.Provider value={{ uid, token, login, logout, getToken }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+    return { status : ok }
+}
 
-// useAuth Hook 생성
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
+export const getToken = () => {
+    let ok = true;
+    let text = ''
+    const userToken = sessionStorage.getItem('userToken');
+    if(userToken) {
+        text = "load userToken success!";
+    } else {
+        ok = !ok;
+        text = "load userToken fail!";
+    }
+
+    return { status : ok, data : text};
+}
+
+export const callLogout = () => {
+    sessionStorage.removeItem('userToken');
+}

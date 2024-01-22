@@ -9,7 +9,6 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useAuth();
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -20,7 +19,6 @@ const LoginPage = () => {
             password: password
         }
 
-        await login(items);
     }
 
     const handleFindID = () => {
