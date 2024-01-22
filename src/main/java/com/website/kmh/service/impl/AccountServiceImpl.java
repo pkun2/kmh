@@ -2,6 +2,7 @@ package com.website.kmh.service.impl;
 
 import com.website.kmh.dto.JwtToken;
 import com.website.kmh.domain.Account;
+import com.website.kmh.dto.UserUpdateRequest;
 import com.website.kmh.repository.AccountRepository;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;
@@ -65,5 +66,15 @@ public class AccountServiceImpl implements AccountService {
 
         // ID에 해당하는 사용자를 반환합니다.
         return userOptional.get();
+    }
+
+    public  Account updateAccount(Long userId, UserUpdateRequest updateRequest) {
+        Account account = accountRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException(("해당 계정을 찾을 수 없습니다.")));
+
+        account.setEmail(updateRequest.getEmail());
+        account.setNickname(updateRequest.getNickname());
+
+        return accountRepository.save(account);
     }
 }

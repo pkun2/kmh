@@ -1,8 +1,10 @@
 package com.website.kmh.controller;
 
+import com.website.kmh.domain.Account;
 import com.website.kmh.dto.JwtToken;
 import com.website.kmh.dto.LoginDto;
 import com.website.kmh.dto.RegisterDto;
+import com.website.kmh.dto.UserUpdateRequest;
 import com.website.kmh.security.SecurityUtil;
 import com.website.kmh.service.RegisterService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,12 @@ public class AuthController {
     public AuthController(AccountService accountService, RegisterService registerService) {
         this.accountService = accountService;
         this.registerService = registerService;
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Account> updateProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest updateRequest) {
+        Account updatedUser = accountService.updateUserProfile(userId, updateRequest);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @PostMapping("/register")
