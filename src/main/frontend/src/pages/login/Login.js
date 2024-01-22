@@ -3,7 +3,7 @@ import { CommonButton, TextInput } from "../../components";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import styles from "../../styles/styles";
-import { callLogin, getToken, postData } from "../../services";
+import { callLogin, getToken, getRefreshToken, postData } from "../../services";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -44,7 +44,11 @@ const LoginPage = () => {
     }
 
     const test2 = async () => {
-        const response = postData({}, "");
+        const token = getRefreshToken();
+        console.log(token);
+    }
+    const test3 = async () => {
+        const response = await postData({}, "");
         console.log(response);
     }
 
@@ -64,7 +68,7 @@ const LoginPage = () => {
                     </div>
                     <div style={{marginTop: 10, marginBottom: 10}}>
                         <input
-                            type="text"
+                            type="password"
                             style={{border: 'none', backgroundColor: "#DDDDDD", width: 300, height: 50, fontSize: 18}}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -90,8 +94,9 @@ const LoginPage = () => {
                             비밀번호 찾기
                         </div>
                     </div>
-                    <button onClick={test}>테스트</button>
-                    <button onClick={test2}>테스트2</button>
+                    <button onClick={test}>access</button>
+                    <button onClick={test2}>refresh</button>
+                    <button onClick={test3}>header</button>
                 </div>
                 <div style={{backgroundColor: "#CCCCCC", width: "40%", height: "100%"}}>
                 </div>
