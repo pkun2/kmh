@@ -6,5 +6,5 @@ import com.website.kmh.domain.Account;
 public interface AccountService {
     JwtToken login(String email, String password);
 
-    Account getUserByNickname(String nickname);
+    Account getUserById(long i);
 }

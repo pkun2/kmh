@@ -55,12 +55,6 @@ public class AccountServiceImpl implements AccountService {
         return jwtToken;
     }
 
-    @Override
-    public Account getUserByNickname(String nickname) {
-        return accountRepository.findByNickname(nickname)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with nickname: " + nickname));
-    }
-
     public Account getUserById(long id) {
         Optional<Account> userOptional = accountRepository.findById(id);
 

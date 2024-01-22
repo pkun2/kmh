@@ -14,7 +14,7 @@ export const callLogin = async (items) => {
 
     try {
         const response = await axios.post(url, items, config);
-        const userToken = response.data.grantType + " " + response.data.accessToken;
+        const userToken = response.data.accessToken;
         const refreshToken = response.data.refreshToken;
         const jsonToken = JSON.stringify({
             userToken : userToken,
