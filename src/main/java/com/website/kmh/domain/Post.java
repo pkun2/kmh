@@ -31,7 +31,7 @@ public class Post {
     private Date createdAt;
 
     @Column(name = "view_count", nullable = false, columnDefinition = "INT DEFAULT 0")
-    private int viewCount;
+    private int viewCount = 0;
 
     @Column(name = "category_tag")
     private String categoryTag;
