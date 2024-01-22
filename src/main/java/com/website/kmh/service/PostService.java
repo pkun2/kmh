@@ -2,7 +2,6 @@ package com.website.kmh.service;
 
 import com.website.kmh.domain.Post;
 import com.website.kmh.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
 
-    @Autowired
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
@@ -32,11 +30,18 @@ public class PostService {
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
             System.out.println("Retrieved post: " + post);
+
+            incrementViewCount(post);
+
             return post;
         } else {
             System.out.println("Post not found for postId: " + postId);
             return null;
         }
+    }
+
+    private void incrementViewCount(Post post) {
+       post.setViewCount(post.getViewCount() + 1);
     }
 
 }

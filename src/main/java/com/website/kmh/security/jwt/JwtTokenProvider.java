@@ -1,6 +1,8 @@
 package com.website.kmh.security.jwt;
 
+import com.website.kmh.domain.MyUserDetails;
 import com.website.kmh.dto.JwtToken;
+import com.website.kmh.service.impl.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -31,6 +33,9 @@ public class JwtTokenProvider {
 
     // Member 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
     public JwtToken generateToken(Authentication authentication) {
+        // UserDetails 객체 가져오기 (MyUserDetails로 캐스팅)
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // 사용자 ID 가져오기
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -41,7 +46,7 @@ public class JwtTokenProvider {
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + 900000);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(userId.toString())
                 .claim("auth", authorities)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -112,6 +117,11 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public Long getUserIdFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return Long.parseLong(claims.getSubject());
     }
 
 }
