@@ -1,5 +1,6 @@
 package com.website.kmh.service.impl;
 
+import com.website.kmh.domain.AccountProfile;
 import com.website.kmh.dto.JwtToken;
 import com.website.kmh.domain.Account;
 import com.website.kmh.dto.UserUpdateRequest;
@@ -76,5 +77,15 @@ public class AccountServiceImpl implements AccountService {
         account.setNickname(updateRequest.getNickname());
 
         return accountRepository.save(account);
+    }
+
+    @Override
+    public AccountProfile getUserProfile(Long userId) {
+        // 유저 정보 조회 로직
+        Account account = accountRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // AccountProfile 객체 생성 및 반환
+        return new AccountProfile(account);
     }
 }
