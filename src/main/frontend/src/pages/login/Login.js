@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import { CommonButton, TextInput } from "../../components";
-import { useAuth } from "../../services";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import styles from "../../styles/styles";
+import { callLogin, getToken, postData } from "../../services";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -19,6 +19,8 @@ const LoginPage = () => {
             password: password
         }
 
+        const response = await callLogin(items);
+        console.log(response);
     }
 
     const handleFindID = () => {
@@ -36,10 +38,20 @@ const LoginPage = () => {
         navigate("/SignUp");
     }
 
+    const test = () => {
+        const token =  getToken();
+        console.log(token);
+    }
+
+    const test2 = async () => {
+        const response = postData({}, "");
+        console.log(response);
+    }
+
     return (
         <>
             <div style={{display: "flex", width: 600, height: 400, border: "2px solid #000099", borderRadius: 2}}>
-                <div style = {{width: "55%", paddingLeft: "5%"}}>
+                <div style={{width: "55%", paddingLeft: "5%"}}>
                     <h2>LOGIN</h2>
                     <div style={{marginTop: 10, marginBottom: 10}}>
                         <input
@@ -47,7 +59,7 @@ const LoginPage = () => {
                             style={{border: 'none', backgroundColor: "#DDDDDD", width: 300, height: 50, fontSize: 18}}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder=" ID"
+                            placeholder=" E-Mail"
                         />
                     </div>
                     <div style={{marginTop: 10, marginBottom: 10}}>
@@ -78,6 +90,8 @@ const LoginPage = () => {
                             비밀번호 찾기
                         </div>
                     </div>
+                    <button onClick={test}>테스트</button>
+                    <button onClick={test2}>테스트2</button>
                 </div>
                 <div style={{backgroundColor: "#CCCCCC", width: "40%", height: "100%"}}>
                 </div>
