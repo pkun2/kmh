@@ -8,7 +8,7 @@ function ProfilePage() {
     // 고정된 user_id값. 나중에 바뀌어야 함.
     const userId = 3;
 
-    axios.get(`/api/user/${userId}`)
+    axios.get(`/api/auth/${userId}`)
       .then(response => {
         setUser(response.data);
       })
