@@ -16,11 +16,9 @@ export const callLogin = async (items) => {
         const response = await axios.post(url, items, config);
         const userToken = response.data.accessToken;
         const refreshToken = response.data.refreshToken;
-        const jsonToken = JSON.stringify({
-            userToken : userToken,
-            refreshToken : refreshToken
-        });
-        sessionStorage.setItem('auth', jsonToken);
+
+        sessionStorage.setItem('userToken', userToken)
+        sessionStorage.setItem('refreshToken', refreshToken);
         info = "login succeed!";
     } catch (error) {
         ok = !ok;

@@ -1,9 +1,13 @@
 package com.website.kmh.controller;
 
+import com.website.kmh.domain.Account;
+import com.website.kmh.domain.AccountProfile;
 import com.website.kmh.dto.JwtToken;
 import com.website.kmh.dto.LoginDto;
 import com.website.kmh.dto.RegisterDto;
+import com.website.kmh.dto.UserUpdateRequest;
 import com.website.kmh.security.SecurityUtil;
+import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.RegisterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,9 +24,26 @@ public class AuthController {
     private final AccountService accountService;
     private final RegisterService registerService;
 
-    public AuthController(AccountService accountService, RegisterService registerService) {
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public AuthController(AccountService accountService, RegisterService registerService, JwtTokenProvider jwtTokenProvider) {
         this.accountService = accountService;
         this.registerService = registerService;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<AccountProfile> getUserProfile(@RequestHeader("Authorization") String bearerToken) {
+        String token = bearerToken.substring(7); // "Bearer " 제거
+        Long userId = jwtTokenProvider.getUserIdFromToken(token);
+        AccountProfile accountProfile = accountService.getUserProfile(userId);
+        return ResponseEntity.ok(accountProfile);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Account> updateProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest updateRequest) {
+        Account updatedUser = accountService.updateAccount(userId, updateRequest);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @PostMapping("/register")
