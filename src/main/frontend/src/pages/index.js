@@ -6,7 +6,7 @@ import NoticePage from "./notice";
 import ProfilePage from "./profile";
 import { MainSearchPage } from "./search";
 import {TrpgMain, TrpgMake} from "./trpg";
-import ChannelPage from "./channel";
+import {ChannelPage, CreateChannelPage} from "./channel";
 import Header from "./header";
 import Footer from "./footer";
 import { APITestPage } from "./apitest";
@@ -24,6 +24,7 @@ export {
   TrpgMain,
   TrpgMake,
   ChannelPage,
+  CreateChannelPage,
   Header,
   Footer,
   WritePage,
