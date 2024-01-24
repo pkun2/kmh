@@ -2,13 +2,12 @@ package com.website.kmh.controller;
 
 import com.website.kmh.domain.Account;
 import com.website.kmh.domain.Post;
+import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;
 import com.website.kmh.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
+
+    private final JwtTokenProvider jwtTokenProvider;
     private final PostService postService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
         this.postService = postService;
     }
 
@@ -42,12 +44,16 @@ public class PostController {
     @Autowired
     private AccountService accountService;
 
-    @PostMapping("/write")
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        // 지금 로그인 저장이 안되니까 임시로 user_id 2인 정보 가져옴
-        Account user = accountService.getUserById(23);
+    @PostMapping("/create")
+    public ResponseEntity<Post> createPost(@RequestBody Post post, @RequestHeader("Authorization") String bearerToken) {
+        String token = bearerToken.substring(7); // "Bearer " 제거
+        //클라이언트의 헤더에 있는 토큰을 바탕으로 id를 가져옴
+        Long userId = jwtTokenProvider.getUserIdFromToken(token);
 
-        // Post 객체의 user 필드에 사용자 정보를 설정합니다.
+        //해당하는 계정을 db로 부터 가져옴
+        Account user = accountService.getUserById(userId);
+
+        // Post 객체의 user 필드에 사용자 정보를 설정
         post.setUser(user);
 
         Post newPost = postService.createPost(post);
