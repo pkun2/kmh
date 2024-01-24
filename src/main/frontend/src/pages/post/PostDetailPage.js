@@ -58,7 +58,7 @@ const PostDetailPage = () => {
                                 minHeight: 300
                             }}
                         >
-                            <div dangerouslySetInnerHTML={{ __html: items.content }} />;
+                            <div dangerouslySetInnerHTML={{ __html: items.content }} />
 
                             <div>
                                 {/* 임시 이미지 */}

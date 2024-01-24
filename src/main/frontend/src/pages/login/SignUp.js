@@ -42,7 +42,7 @@ const SignUpPage = () => {
                             style={{border: 'none', backgroundColor: "#DDDDDD", width: 300, height: 50, fontSize: 18}}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder=" ID"
+                            placeholder=" E-Mail"
                         />
                     </div>
                     <div style={{marginTop: 10, marginBottom: 10}}>

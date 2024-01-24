@@ -1,12 +1,37 @@
 import axios from "axios";
+import { getToken, getRefreshToken } from "./";
+
+// axios.interceptors.response.use(
+//     (response) => {
+//         return response;
+//     },
+//     (error) => {
+//         if(error.response.status === 401) {
+//             console.log("인터셉터 확인");
+//             return error;
+//         }
+//
+//         return error;
+//     }
+// )
 
 const postData = async (items, endpoint) => {
+    let ok = true;
+    let info = "";
+    let data;
     const url = `http://localhost:8080/${endpoint}`;
+    const token = getToken().data;
     const config = {
-        header : {
-            'Content-Type': 'application/json'
+        headers : {
+            'Content-Type': 'application/json',
         }
     }
+    if(token) {
+        config.headers['Authorization'] = "Bearer " + token;
+    } else {
+        console.error("토큰 없음");
+    }
+    console.log(config);
 
     try {
         const response = await axios.post(url, items, config);
