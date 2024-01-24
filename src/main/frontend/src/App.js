@@ -15,6 +15,7 @@ import {
   MainSearchPage,
   SignUpPage,
   ChannelPage,
+  CreateChannelPage,
   Header,
   Footer,
 } from "./pages";
@@ -39,9 +40,8 @@ function App() {
               <Route path="/trpg" element={<TrpgMain/>}/>
               <Route path="/trpg/make" element={<TrpgMake/>}/>
               <Route path="/apitest" element={<APITestPage/>}/>
-              <Route path="/channel" element={<ChannelPage/>
-
-              }/>
+              <Route path="/channel" element={<ChannelPage/>}/>
+              <Route path="/createChannel" element={<CreateChannelPage/>}/>
             </Routes>
           </div>
           <div>

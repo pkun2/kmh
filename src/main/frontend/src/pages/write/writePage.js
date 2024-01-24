@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import TextEditor from '../../components/TextEditor';
 
 import styles from './writePage.module.css';
+import {postData} from "../../services";
 
 const WritePage = () => {
   const [title, setTitle] = useState("");
@@ -27,30 +28,23 @@ const WritePage = () => {
     setShowCategoryList(false);
   };
 
-  const handleUpload = () => {
-    const postData = {
+  const handleUpload = async () => {
+    const items = {
       title: title,
       content: content.replace(/<\/?p>/g, ""),
       viewCount: 0,
       categoryTag: tags[0],
       channel: {
-        channel_id: 7,
+        channel_id: 10,
         channel_name: "test",
       },
       goodCount: 0,
       badCount: 0,
     };
 
-    console.log(postData);
+    const response = await postData(items, "api/posts/create");
 
-    axios.post('http://localhost:8080/api/posts/create', postData)
-      .then(response => {
-        console.log(response.data);
-        navigate('../home');
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    console.log(response);
   };
 
   return (
