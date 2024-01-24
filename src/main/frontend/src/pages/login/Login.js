@@ -3,7 +3,7 @@ import { CommonButton, TextInput } from "../../components";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import styles from "../../styles/styles";
-import { callLogin, getToken, getRefreshToken, postData, useSession } from "../../services";
+import { callLogin, useSession } from "../../services";
 
 const LoginPage = () => {
     const navigate = useNavigate();

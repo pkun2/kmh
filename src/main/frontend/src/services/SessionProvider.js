@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { callLogout } from "./AuthProvider";
 
 const SessionContext = createContext();
 
@@ -24,7 +25,7 @@ export const SessionProvider = ({ children }) => {
 
     const getTimeout = () => {
         const currentTime = new Date();
-        if(currentTime > time) {
+        if(currentTime < time) {
             // 로그아웃 로직
             console.log("시간 만료");
             return false;
@@ -34,9 +35,10 @@ export const SessionProvider = ({ children }) => {
         }
     };
 
-    const deleteTimer = () => {
+    const deleteTimer = ({route}) => {
         console.log("로그 아웃 시 호출");
         setTime(null);
+        callLogout({route});
     }
 
     return (

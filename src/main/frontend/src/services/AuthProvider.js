@@ -65,3 +65,14 @@ export const callLogout = ({route}) => {
     sessionStorage.removeItem('refreshToken');
     route()
 }
+
+export const isLogin = () => {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const refreshToken = sessionStorage.getItem('refreshToken');
+
+    if (accessToken !== null && refreshToken !== null) {
+        return true
+    } else {
+        return false;
+    }
+}
