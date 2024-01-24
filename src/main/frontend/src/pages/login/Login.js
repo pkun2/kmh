@@ -3,12 +3,13 @@ import { CommonButton, TextInput } from "../../components";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import styles from "../../styles/styles";
-import { callLogin, getToken, getRefreshToken, postData } from "../../services";
+import { callLogin, getToken, getRefreshToken, postData, useSession } from "../../services";
 
 const LoginPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { startTimer } = useSession();
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -20,6 +21,12 @@ const LoginPage = () => {
         }
 
         const response = await callLogin(items);
+        if(response.status === true) {
+            startTimer();
+            navigate("/home");
+        } else {
+            // 로그인 실패 로직
+        }
         console.log(response);
     }
 
@@ -36,20 +43,6 @@ const LoginPage = () => {
     const handleSignUp = () => {
         console.log("회원가입");
         navigate("/SignUp");
-    }
-
-    const test = () => {
-        const token =  getToken();
-        console.log(token);
-    }
-
-    const test2 = async () => {
-        const token = getRefreshToken();
-        console.log(token);
-    }
-    const test3 = async () => {
-        const response = await postData({}, "");
-        console.log(response);
     }
 
     return (
@@ -94,9 +87,6 @@ const LoginPage = () => {
                             비밀번호 찾기
                         </div>
                     </div>
-                    <button onClick={test}>access</button>
-                    <button onClick={test2}>refresh</button>
-                    <button onClick={test3}>header</button>
                 </div>
                 <div style={{backgroundColor: "#CCCCCC", width: "40%", height: "100%"}}>
                 </div>
