@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getToken } from "../../services";
 
 function ProfilePage() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = sessionStorage.getItem('userToken'); // JWT 액세스 토큰
+      const token = getToken().data;
       try {
         const response = await axios.get('/api/auth/profile', {
           headers: {

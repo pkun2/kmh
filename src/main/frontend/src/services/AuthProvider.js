@@ -1,4 +1,3 @@
-import React from "react";
 import axios from "axios";
 
 export const callLogin = async (items) => {
@@ -11,14 +10,10 @@ export const callLogin = async (items) => {
             'Content-Type': 'application/json'
         }
     }
-
     try {
         const response = await axios.post(url, items, config);
-        const userToken = response.data.accessToken;
-        const refreshToken = response.data.refreshToken;
-
-        sessionStorage.setItem('userToken', userToken)
-        sessionStorage.setItem('refreshToken', refreshToken);
+        sessionStorage.setItem('accessToken', response.data.accessToken);
+        sessionStorage.setItem('refreshToken', response.data.refreshToken)
         info = "login succeed!";
     } catch (error) {
         ok = !ok;
@@ -36,19 +31,37 @@ export const callSingUp = () => {
 export const getToken = () => {
     let ok = true;
     let text = ''
-    let data = {};
-    const userToken = sessionStorage.getItem('auth');
-    if(userToken) {
-        text = "load userToken succeed!!";
-        data = JSON.parse(userToken);
+    let data = "";
+    let token = sessionStorage.getItem('accessToken');
+    if(token) {
+        text = "load accessToken succeed!!";
+        data = token
     } else {
         ok = !ok;
-        text = "load userToken failed!";
+        text = "load accessToken failed!";
     }
 
-    return { status : ok, info : text, data : data};
+    return { status : ok, info : text, data : data };
 }
 
-export const callLogout = () => {
-    sessionStorage.removeItem('userToken');
+export const getRefreshToken = () => {
+    let ok = true;
+    let text = ''
+    let data = "";
+    let token = sessionStorage.getItem('refreshToken');
+    if(token) {
+        text = "load refreshToken succeed!!";
+        data = token
+    } else {
+        ok = !ok;
+        text = "load refreshToken failed!";
+    }
+
+    return { status : ok, info : text, data : data };
+}
+
+export const callLogout = ({route}) => {
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+    route()
 }
