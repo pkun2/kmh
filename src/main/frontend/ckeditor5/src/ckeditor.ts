@@ -22,13 +22,12 @@ import {
 	AutoImage,
 	Image,
 	ImageCaption,
-	ImageInsert,
 	ImageResize,
 	ImageStyle,
 	ImageToolbar,
 	ImageUpload
 } from '@ckeditor/ckeditor5-image';
-import { AutoLink, Link, LinkImage } from '@ckeditor/ckeditor5-link';
+import { AutoLink, Link } from '@ckeditor/ckeditor5-link';
 import { Mention } from '@ckeditor/ckeditor5-mention';
 import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
 import { SpecialCharacters } from '@ckeditor/ckeditor5-special-characters';
@@ -59,14 +58,12 @@ class Editor extends ClassicEditor {
 		HtmlEmbed,
 		Image,
 		ImageCaption,
-		ImageInsert,
 		ImageResize,
 		ImageStyle,
 		ImageToolbar,
 		ImageUpload,
 		Italic,
 		Link,
-		LinkImage,
 		Mention,
 		Paragraph,
 		SimpleUploadAdapter,
@@ -99,7 +96,6 @@ class Editor extends ClassicEditor {
 				'undo',
 				'redo',
 				'|',
-				'imageInsert',
 				'link',
 				'htmlEmbed'
 			]
@@ -107,12 +103,12 @@ class Editor extends ClassicEditor {
 		language: 'ko',
 		image: {
 			toolbar: [
-				'imageTextAlternative',
-				'toggleImageCaption',
 				'imageStyle:inline',
 				'imageStyle:block',
 				'imageStyle:side',
-				'linkImage'
+				'|',
+				'toggleImageCaption',
+				'imageTextAlternative'
 			]
 		},
 		placeholder: '내용을 입력하세요.',

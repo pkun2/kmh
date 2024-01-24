@@ -26,7 +26,6 @@ const TextEditor = ({setContent}) => {
 				'undo',
 				'redo',
 				'|',
-				'imageInsert',
 				'link',
 				'htmlEmbed'
 			]
@@ -34,12 +33,12 @@ const TextEditor = ({setContent}) => {
 		language: 'ko',
 		image: {
 			toolbar: [
-				'imageTextAlternative',
-				'toggleImageCaption',
 				'imageStyle:inline',
 				'imageStyle:block',
 				'imageStyle:side',
-				'linkImage'
+				'|',
+				'toggleImageCaption',
+				'imageTextAlternative'
 			]
 		},
 		placeholder: '내용을 입력하세요.',
