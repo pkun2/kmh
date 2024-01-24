@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import { getToken } from "../../services";
 
 function ProfilePage() {
+  const navigate = useNavigate()
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -21,7 +23,12 @@ function ProfilePage() {
     };
 
     fetchProfile();
-  }, []); // useEffect는 컴포넌트 마운트 시에 한 번만 실행됩니다.
+  }, []); // useEffect는 컴포넌트 마운트 시에 한 번만 실행
+
+  const handleCreateChannel = () => {
+    navigate("/createChannel");
+
+  }
 
   return (
       <div>
@@ -33,6 +40,7 @@ function ProfilePage() {
               <p>닉네임: {user.nickname}</p>
             </div>
         )}
+        <button onClick={handleCreateChannel}>채널 만들기</button>
       </div>
   );
 }

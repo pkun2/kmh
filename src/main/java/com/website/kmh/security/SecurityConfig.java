@@ -35,9 +35,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/register").permitAll() // 회원가입 경로는 인증없이 호출 가능
                         .requestMatchers("/api/posts/latest").permitAll() // /api/posts/latest에 대한 접근을 허용
                         .requestMatchers("/api/auth/test").hasRole("USER")
-                        .requestMatchers("/api/posts/test").permitAll() // 게시글 목록은 인증없이
-                        .requestMatchers("/api/posts/profile").permitAll() // 프로필 내용을 인증 없이
-                        .requestMatchers(("/api/posts/**")).permitAll() // 게시글 상세 내용도 인증없이
+                        .requestMatchers("/api/posts/**").permitAll() // 게시글 상세 내용도 인증없이
+                        .requestMatchers("/api/channel/**").permitAll()
                         .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
                 )
 
