@@ -13,7 +13,7 @@ export const callLogin = async (items) => {
     try {
         const response = await axios.post(url, items, config);
         sessionStorage.setItem('accessToken', response.data.accessToken);
-        sessionStorage.setItem('refreshToken', response.data.refreshToken)
+        sessionStorage.setItem('refreshToken', response.data.refreshToken);
         info = "login succeed!";
     } catch (error) {
         ok = !ok;
