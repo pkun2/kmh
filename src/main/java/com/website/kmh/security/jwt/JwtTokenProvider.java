@@ -44,7 +44,7 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 900000);
+        Date accessTokenExpiresIn = new Date(now + 900000); //15분
         String accessToken = Jwts.builder()
                 .setSubject(userId.toString())
                 .claim("auth", authorities)
@@ -54,7 +54,7 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 900000))
+                .setExpiration(new Date(now + 900000000)) //10일
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 

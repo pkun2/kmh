@@ -31,7 +31,6 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/**").permitAll() // /api
                         .requestMatchers("/api/auth/login").permitAll() // 로그인 경로는 인증없이 호출 가능
                         .requestMatchers("/api/auth/register").permitAll() // 회원가입 경로는 인증없이 호출 가능
                         .requestMatchers("/api/posts/latest").permitAll() // /api/posts/latest에 대한 접근을 허용
