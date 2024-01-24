@@ -20,18 +20,20 @@ const postData = async (items, endpoint) => {
     let info = "";
     let data;
     const url = `http://localhost:8080/${endpoint}`;
-    const token = getToken().data.accesstoken;
+    const token = getToken().data;
     const config = {
-        header : {
+        headers : {
             'Content-Type': 'application/json',
         }
     }
     if(token) {
-        config.header['Authorization'] = token
+        config.header['Authorization'] = "Bearer " + token;
     } else {
         console.error("토큰 없음");
     }
-    console.log(config);
+    console.log("items : \n", items);
+    console.log("headers : \n", config);
+
 
     try {
         const response = await axios.post(url, items, config);
