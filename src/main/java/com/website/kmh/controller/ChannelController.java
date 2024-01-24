@@ -1,22 +1,30 @@
 package com.website.kmh.controller;
 
+import com.website.kmh.domain.Account;
+import com.website.kmh.domain.Post;
+import com.website.kmh.dto.ChannelDto;
 import com.website.kmh.domain.Channel;
+import com.website.kmh.security.jwt.JwtTokenProvider;
+import com.website.kmh.service.AccountService;
 import com.website.kmh.service.ChannelService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/channel")
 public class ChannelController {
 
     private final ChannelService channelService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    public ChannelController(ChannelService channelService) {
+    public ChannelController(ChannelService channelService, JwtTokenProvider jwtTokenProvider, AccountService accountService) {
         this.channelService = channelService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @GetMapping("/get")
@@ -27,11 +35,15 @@ public class ChannelController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<String> postChannel(@RequestBody Channel request) {
+    public ResponseEntity<String> postChannel(@RequestBody ChannelDto channelDto, @RequestHeader("Authorization") String bearerToken) {
+        String token = bearerToken.substring(7); // "Bearer " 제거
+
+        //클라이언트의 헤더에 있는 토큰을 바탕으로 id를 가져옴
+        Long userId = jwtTokenProvider.getUserIdFromToken(token);
+
         Channel savedChannel = channelService.createChannel(
-                request.getChannel_id(),
-                request.getChannel_name(),
-                request.getUser_id()
+            channelDto.getChannelName(),
+            userId
         );
 
         if (savedChannel != null) {
