@@ -9,6 +9,7 @@ import com.website.kmh.dto.UserUpdateRequest;
 import com.website.kmh.security.SecurityUtil;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.RegisterService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,13 @@ public class AuthController {
         log.info("request username = {}, password = {}", email, password);
         log.info("jwtToken accessToken = {}, refreshToken = {}", jwtToken.getAccessToken(), jwtToken.getRefreshToken());
         return jwtToken;
+    }
+
+    @PostMapping("/refresh")
+    public JwtToken refresh(HttpServletRequest request) {
+        String currentToken = request.getHeader("Authorization").substring(7);
+        Long userId = jwtTokenProvider.getUserIdFromToken(currentToken);
+        return accountService.refresh(userId);
     }
 
     @PostMapping("/test")

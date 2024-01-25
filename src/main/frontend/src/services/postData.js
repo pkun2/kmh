@@ -27,13 +27,10 @@ const postData = async (items, endpoint) => {
         }
     }
     if(token) {
-        config.header['Authorization'] = "Bearer " + token;
+        config.headers['Authorization'] = "Bearer " + token;
     } else {
         console.error("토큰 없음");
     }
-    console.log("items : \n", items);
-    console.log("headers : \n", config);
-
 
     try {
         const response = await axios.post(url, items, config);
