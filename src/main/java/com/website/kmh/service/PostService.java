@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import org.jsoup.Jsoup;
 
 @Service
 public class PostService {
@@ -20,8 +21,14 @@ public class PostService {
         return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
+    // 게시글 만들기
     public Post createPost(Post post) {
         return postRepository.save(post);
+    }
+
+    // title과 content에서 값 찾음
+    public List<Post> searchPosts(String keyword) {
+        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
     }
 
     public Post getPostById(Long postId) {

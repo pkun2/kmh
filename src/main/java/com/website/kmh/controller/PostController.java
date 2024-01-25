@@ -29,6 +29,7 @@ public class PostController {
         return postService.getLatestPosts();
     }
 
+    // 게시글 상세 내용 불러오기
     @GetMapping("/{postId}")
     public ResponseEntity<Post> getPostById(@PathVariable("postId") Long postId) {
         Post post = postService.getPostById(postId);
@@ -39,11 +40,16 @@ public class PostController {
         }
     }
 
+    // 게시글 내 검색
+    @GetMapping("/search")
+    public List<Post> searchPosts(@RequestParam("keyword") String keyword) {
+        return postService.searchPosts(keyword);
+    }
 
-    //임시 절차임
     @Autowired
     private AccountService accountService;
 
+    // 게시글 만들기
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestBody Post post, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring(7); // "Bearer " 제거

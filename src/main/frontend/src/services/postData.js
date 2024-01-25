@@ -27,7 +27,7 @@ const postData = async (items, endpoint) => {
         }
     }
     if(token) {
-        config.header['Authorization'] = "Bearer " + token;
+        config.headers['Authorization'] = "Bearer " + token;
     } else {
         console.error("토큰 없음");
     }
