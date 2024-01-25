@@ -6,17 +6,24 @@ import { getToken } from "../../services";
 function ProfilePage() {
   const navigate = useNavigate()
   const [user, setUser] = useState(null);
+  const [subChannel, setSubChannel] = useState([]);
 
   useEffect(() => {
     const fetchProfile = async () => {
       const token = getToken().data;
       try {
-        const response = await axios.get('/api/auth/profile', {
+        const responseUser = await axios.get('/api/auth/profile', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        setUser(response.data);
+        const responseChannelSub = await  axios.get('/api/auth/subscriptions', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setUser(responseUser.data);
+        setSubChannel(responseChannelSub.data);
       } catch (error) {
         console.error('Error fetching profile', error);
       }
@@ -41,8 +48,17 @@ function ProfilePage() {
             </div>
         )}
         <button onClick={handleCreateChannel}>채널 만들기</button>
+        <div>
+          <p>구독한 채널:</p>
+          <ul>
+            {subChannel.map((channel, index) => (
+                <li key={index}>{channel}</li> // 채널 이름을 표시합니다.
+            ))}
+          </ul>
       </div>
-  );
+</div>
+)
+  ;
 }
 
 export default ProfilePage;

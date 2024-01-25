@@ -26,7 +26,7 @@ const CreateChannelPage = () => {
                 }
             });
 
-            setMessage('채널이 성공적으로 생성되었습니다. 채널 ID: ' + response.data.channelId);
+            setMessage('채널이 성공적으로 생성되었습니다.');
         } catch (error) {
             console.error('Error creating channel', error);
             setMessage('채널 생성에 실패했습니다.');
