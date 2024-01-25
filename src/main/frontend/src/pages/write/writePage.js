@@ -35,16 +35,32 @@ const WritePage = () => {
       viewCount: 0,
       categoryTag: tags[0],
       channel: {
-        channel_id: 10,
-        channel_name: "test",
+        channel_id: 2,
+        channel_name: "테스트",
       },
       goodCount: 0,
       badCount: 0,
     };
 
-    const response = await postData(items, "api/posts/create");
+    const token = localStorage.getItem("token");
 
-    console.log(response);
+    const config = {
+      headers: { Authorization: `Bearer ${token}`}
+    };
+
+    try {
+      const response = await postData(items, "api/posts/create", config);
+      console.log(response);
+
+      // 백엔드와 통신에 성공에 200을 받으면, 페이지 이동
+      if (response.status == true) {
+        navigate('/post');
+      } else {
+        console.log("오류 발생! 백엔드와 통신 오류!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
