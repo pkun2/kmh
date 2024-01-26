@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChannelDto {
+public class CreateChannelDto {
     private String channelName;
 }

@@ -12,12 +12,12 @@ function ProfilePage() {
     const fetchProfile = async () => {
       const token = getToken().data;
       try {
-        const responseUser = await axios.get('/api/auth/profile', {
+        const responseUser = await axios.get('/api/auth/profile/user', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        const responseChannelSub = await  axios.get('/api/auth/subscriptions', {
+        const responseChannelSub = await  axios.get('/api/auth/profile/subscribed', {
           headers: {
             Authorization: `Bearer ${token}`
           }

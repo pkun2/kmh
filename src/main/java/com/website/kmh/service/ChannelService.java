@@ -31,8 +31,7 @@ public class ChannelService {
 
     public Channel getChannelById(long channelId) {
         Optional<Channel> channel = channelRepository.findById(channelId);
-
-        // 찾은 채널을 반환. 채널이 존재하지 않는 경우, 예외를 발생.
+        // ID에 해당하는 사용자를 반환합니다.
         return channel.orElseThrow(() -> new RuntimeException("Channel not found with id: " + channelId));
     }
 }
