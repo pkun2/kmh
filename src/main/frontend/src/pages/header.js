@@ -37,7 +37,7 @@ export default function Header() {
 
     const handleChannel = (selectedChannel) => { // 채널 선택시 선택된 채널 콘솔에 표시, 채널 이동
         console.log(`선택된 채널: ${channels[selectedChannel].channelId}`);
-        navigate(channels[selectedChannel].channelId);
+        navigate(`post?channel_id=${encodeURIComponent(channels[selectedChannel].channelId)}`);
     }
 
     const channelList = channels.map(channel => ({

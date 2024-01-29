@@ -1,37 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import { getData } from "../../services";
 import { CommonButton, PageNameBox, SearchResultBox } from "../../components";
 
 const PostPage = () => {
+    const location = useLocation();
     const [searchList, setSearchList] = useState([]);
-    const [channelInfo, setChannelInfo] = useState({
-        channel_id: 7,
-        channel_name: "test",
-        user_id: 2,
-    });
+    const [channelName, setChannelName] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
+        const channelReference = new URLSearchParams(location.search).get('channel_id');
+
         const fetchData = async () => {
             try {
                 // 30개까지만 요청
-                const response = await getData({ limit: 30 }, 'api/posts/latest');
+                const response = await getData({ limit: 30 }, `api/posts/latest/${channelReference}`);
 
+                console.log(response)
                 // 응답 데이터가 객체이고 data 속성이 배열인 경우에만 처리
                 if (response.status && Array.isArray(response.data)) {
                     const data = response.data.map(item => ({
-                        number: item.postId,
+                        number: item.id,
                         tag: item.categoryTag,
                         title: item.title || "",
-                        nickname: item.user.nickname || "",
+                        nickname: item.nickname || "",
                         view: item.viewCount,
                         like: item.goodCount
                     }));
                     setSearchList(data);
 
-                    if (response.data.length > 0 && response.data[0].channel) {
-                        setChannelInfo(response.data[0].channel);
+                    if (response.data.length > 0) {
+                        setChannelName(response.data[0].channelName);
                     }
                 } else {
                     console.error("API 응답 구조가 예상과 다릅니다:", response);
@@ -42,7 +42,7 @@ const PostPage = () => {
         };
 
         fetchData();
-    }, []);
+    }, [location]);
 
     const handlePost = (index) => {
         navigate(`/postdetail?post_id=${encodeURIComponent(searchList[index].number)}`);
@@ -59,7 +59,7 @@ const PostPage = () => {
                 marginLeft: 5,
             }}>
                 <PageNameBox
-                    items={{ title: `${channelInfo.channel_name} 채널` }}
+                    items={{ title: `${channelName} 채널` }}
                     styles={{
                         padding: 8,
                         borderBottom: "2px solid #000099",

@@ -29,8 +29,6 @@ const PostDetailPage = () => {
         fetchData();
     }, [postReference]);
 
-
-
     return (
         <>
             <div style={{
@@ -40,7 +38,7 @@ const PostDetailPage = () => {
                 {items && (
                     <>
                         <PageNameBox
-                            items={{ title: `${items.channel.channel_name} 채널` }}
+                            items={{ title: `${items.channel.name} 채널` }}
                             styles={{
                                 paddingTop: 7,
                                 paddingBottom: 7,

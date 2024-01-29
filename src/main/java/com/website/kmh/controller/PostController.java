@@ -2,9 +2,11 @@ package com.website.kmh.controller;
 
 import com.website.kmh.domain.Account;
 import com.website.kmh.domain.Post;
+import com.website.kmh.dto.PostDto;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;
 import com.website.kmh.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
@@ -24,9 +27,10 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/latest")
-    public List<Post> getLatestPost() {
-        return postService.getLatestPosts();
+    @GetMapping("/latest/{channelId}")
+    public ResponseEntity<List<PostDto>> getPostsByChannelId(@PathVariable("channelId") Long channelId) {
+        List<PostDto> posts = postService.findPostsByChannelId(channelId);
+        return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/{postId}")
