@@ -57,6 +57,30 @@ public class AccountServiceImpl implements AccountService {
         return jwtToken;
     }
 
+    @Transactional
+    public JwtToken refresh(Long userId) {
+        // 1. username을 기반으로 저장된 Account를 찾음
+        Account account = accountRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with uid: " + userId));
+
+        String email = account.getUsername(); // 이메일
+
+        // 3. Authentication 객체 생성
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, account.getPassword() );
+
+        // 4. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        // 5. 인증 정보를 기반으로 JWT 토큰 생성
+        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+
+        // 6. JWT 토큰을 클라이언트에게 전달
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken.getAccessToken());
+
+        return jwtToken;
+    }
+
     public Account getUserById(long id) {
         Optional<Account> userOptional = accountRepository.findById(id);
 
