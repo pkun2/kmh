@@ -8,6 +8,7 @@ import PageNameBox from "./PageNameBox";
 import PostInfoBox from "./PostInfoBox";
 import CommentBox from "./CommentBox";
 import PagingBox from "./PagingBox";
+import Pagination from "./Pagination";
 
 export {
     CommonButton,
@@ -19,5 +20,6 @@ export {
     PageNameBox,
     PostInfoBox,
     CommentBox,
-    PagingBox
+    PagingBox,
+    Pagination,
 }

@@ -37,9 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/test").hasRole("USER")
                         .requestMatchers("/api/posts/**").permitAll() // 게시글 상세 내용도 인증없이
                         .requestMatchers("/api/channel/**").permitAll()
-                        .requestMatchers("/api/posts/test").permitAll() // 게시글 목록은 인증없이
-                        .requestMatchers("/api/posts/profile").permitAll() // 프로필 내용을 인증 없이
-                        .requestMatchers("/api/image/upload").permitAll() // 인증 필요! 임시!
+                        //.requestMatchers("/api/image/upload").permitAll() // 인증 필요! 임시!
                         .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
                 )
 

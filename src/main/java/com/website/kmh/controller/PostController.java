@@ -6,10 +6,16 @@ import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;
 import com.website.kmh.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,9 +30,36 @@ public class PostController {
         this.postService = postService;
     }
 
+    // 게시글 가져와 /post에 츌력해주는 get 요청. 기본임
     @GetMapping("/latest")
-    public List<Post> getLatestPost() {
-        return postService.getLatestPosts();
+    public Page<Post> getLatestPost(
+            @RequestParam(name = "p", defaultValue = "1") int page, // 페이지 번호
+            @RequestParam(name = "sort", defaultValue = "createdAt") List<String> sortBys, // 어떤 것을 기준으로 정렬할 것인지
+            @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders, // 오름차순과 내림차순(오름차순: asc, 내림차순: desc)
+            @RequestParam(name = "limit", defaultValue = "30") int limit // 페이지 당 보여줄 게시글 갯수
+    ) {
+        List<Order> orders = new ArrayList<>();
+        for (int i = 0; i < sortBys.size(); i++) {
+            orders.add(new Sort.Order(Sort.Direction.fromString(sortOrders.get(i)), sortBys.get(i)));
+        }
+        // cratedAt이 아닌 다른 정렬을 사용했을 때, 조회수가 같을 경우 createdAt로 내림차순 정렬 한 번 더 수행
+        orders.add(new Sort.Order(Sort.Direction.DESC, "createdAt"));
+        Sort sort = Sort.by(orders);
+        return postService.getLatestPosts(PageRequest.of(page - 1, limit, sort));
+    }
+
+
+    // 게시글 내 검색
+    @GetMapping("/search")
+    public Page<Post> searchPosts(
+            @RequestParam("keyword") String keyword,
+            @RequestParam(name = "p", defaultValue = "0") int page,
+            @RequestParam(name = "sort", defaultValue = "createdAt") String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = "desc") String sortOrder,
+            @RequestParam(name = "limit", defaultValue = "30") int limit
+    ) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        return postService.searchPosts(keyword, PageRequest.of(page - 1, limit, sort));
     }
 
     // 게시글 상세 내용 불러오기
@@ -40,11 +73,6 @@ public class PostController {
         }
     }
 
-    // 게시글 내 검색
-    @GetMapping("/search")
-    public List<Post> searchPosts(@RequestParam("keyword") String keyword) {
-        return postService.searchPosts(keyword);
-    }
 
     @Autowired
     private AccountService accountService;

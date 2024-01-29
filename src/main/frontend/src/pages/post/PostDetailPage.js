@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getData } from "../../services";
 import { CommonButton, PageNameBox, PostInfoBox, CommentBox } from "../../components";
 
@@ -8,6 +8,13 @@ const PostDetailPage = () => {
     const postReference = new URLSearchParams(location.search).get('post_id');
     const [items, setItems] = useState(null);
     const [comments, setComments] = useState([]);
+
+    const navigate = useNavigate();
+
+    const handleReMain = () => { // 채널 명 누를 시 자기 자신으로 이동
+        navigate(`/post${postReference}`);
+        // 추후 수정 필요!!!!!!!!!!!!!!
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,6 +55,7 @@ const PostDetailPage = () => {
                                 fontWeight: "bold",
                                 fontSize: 18
                             }}
+                            handleClick={handleReMain}
                         />
                         <PostInfoBox
                             items={items}
