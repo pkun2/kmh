@@ -24,6 +24,7 @@ function ProfilePage() {
         });
         setUser(responseUser.data);
         setSubChannel(responseChannelSub.data);
+        console.log(responseChannelSub.data)
       } catch (error) {
         console.error('Error fetching profile', error);
       }

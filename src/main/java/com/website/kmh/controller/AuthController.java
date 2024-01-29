@@ -46,7 +46,7 @@ public class AuthController {
         String token = bearerToken.substring(7); // "Bearer " 제거
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
         List<String> subscribedChannelNames  = userChannelService.getProfileSubChannel(userId); //channelId를 바탕으로 구독한 채널 가져오기
-        return ResponseEntity.ok(subscribedChannelNames );
+        return ResponseEntity.ok(subscribedChannelNames);
     }
 
 

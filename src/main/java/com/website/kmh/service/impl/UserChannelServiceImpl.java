@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +28,18 @@ public class UserChannelServiceImpl implements UserChannelService {
         this.accountService = accountService;
         this.channelService = channelService;
         this.channelRepository = channelRepository;
+    }
+
+    @Override
+    public Map<Long, String> getProfileSubChannelMap(Long userId) {
+        // UserChannel 엔티티에서 사용자 ID에 해당하는 채널을 조회
+        List<UserChannel> subscribedChannels = userChannelRepository.findByAccountId(userId);
+
+        // 채널 ID와 채널 이름을 매핑
+        return subscribedChannels.stream()
+                .collect(Collectors.toMap(
+                        userChannel -> userChannel.getChannel().getId(),
+                        userChannel -> userChannel.getChannel().getName()));
     }
 
     @Override

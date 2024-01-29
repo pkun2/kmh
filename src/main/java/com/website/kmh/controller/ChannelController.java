@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,6 +28,14 @@ public class ChannelController {
         this.channelService = channelService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userChannelService = userChannelService;
+    }
+
+    @GetMapping("/header/subscribed")
+    public ResponseEntity<Map<Long, String>> getProfileSub(@RequestHeader("Authorization") String bearerToken) {
+        String token = bearerToken.substring(7); // "Bearer " 제거
+        Long userId = jwtTokenProvider.getUserIdFromToken(token);
+        Map<Long, String> subscribedChannel  = userChannelService.getProfileSubChannelMap(userId); //userId를 바탕으로 구독한 채널 가져오기
+        return ResponseEntity.ok(subscribedChannel);
     }
 
     @GetMapping("/get")

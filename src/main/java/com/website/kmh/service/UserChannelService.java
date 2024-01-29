@@ -4,6 +4,7 @@ import com.website.kmh.domain.UserChannel;
 import com.website.kmh.dto.ChannelInfoDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserChannelService {
 
@@ -15,4 +16,6 @@ public interface UserChannelService {
     List<Long> getSubscribedChannelIds(Long userId);
 
     void CancelSubChannel(Long userId, Long channelId);
+
+    Map<Long, String> getProfileSubChannelMap(Long userId);
 }
