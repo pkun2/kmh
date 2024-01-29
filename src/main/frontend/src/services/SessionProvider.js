@@ -5,34 +5,53 @@ import { postData } from "./";
 const SessionContext = createContext();
 
 export const SessionProvider = ({ children }) => {
-    const [time, setTime] = useState(null);
-    const [tokenTime, setTokenTime] = useState(null);
+    const [timerId, setTimerId] = useState(null);
 
     useEffect(() => {
-        // 타이머 초기화 함수
-        const resetTimer = () => {
+        const time = sessionStorage.getItem('time'); // 세션 스토리지에서 남은 시간 불러오기
+        const tokenTime = sessionStorage.getItem('tokenTime');
 
-            // 이전 타이머가 있으면 종료
-            if (timerId) {
-                clearTimeout(timerId);
-            }
+        if((time != null) && (tokenTime != null)) { // 이게 로그인 상태로, 시간 값이 있을경우
+            const nowTime = new Date();
+            const duration = new Date(tokenTime) - nowTime;
+            setTimer({duration : duration});
 
-            // 10초마다 실행
-            timerId = setTimeout(() => {
-                resetTokenTime();
-                resetTimer(); // 새로운 타이머 생성
-            }, 5 * 1000);
-        };
-        let timerId;
-
-        if(tokenTime !== null) {
-            console.log("토큰 타이머 설정");
-            resetTimer();
         } else {
-            clearTimeout(timerId);
+            console.log("두 번째 경우");
+            // 에러 핸들링
         }
+    }, [])
 
-    }, [tokenTime]);
+    const resetTokenTime = async () => {
+        console.log("타이머 만료");
+        const response = await postData({}, "api/auth/refresh");
+        if(response.status === true) {
+            const tokenTime = calculateTokenTime();
+            sessionStorage.setItem('tokenTime', tokenTime.toString());
+            sessionStorage.setItem('accessToken', response.data.accessToken);
+            sessionStorage.setItem('refreshToken', response.data.refreshToken);
+        } else {
+            console.log("오류");
+            console.log(response.data);
+        }
+    }
+
+    const setTimer = ({duration}) => {
+        console.log("duration : ", duration);
+        setTimerId(setTimeout(() => {
+            const time = new Date(sessionStorage.getItem('time'));
+            const nowTime = new Date();
+            if(time > nowTime) {
+                const nowTime = new Date();
+                const tokenTime = calculateTokenTime()
+                resetTokenTime();
+                setTimer({duration : tokenTime - nowTime});
+            } else {
+                console.log("시간 초과, 토큰 및 시간 삭제");
+                // 과정
+            }
+        }, duration));
+    }
 
     const calculateTime = () => {
         const currentTime = new Date();
@@ -42,65 +61,40 @@ export const SessionProvider = ({ children }) => {
     const calculateTokenTime = () => {
         const currentTime = new Date();
         return new Date(currentTime.getTime() + 14 * 60 * 1000);
-        const timeID = setTimeout(() => {
-            console.log("타이머 만료");
-        }, 10 * 1000)
     }
 
     const startTimer = () => {
-        const t = calculateTime();
-        const tt= calculateTokenTime();
-        setTime(t);
-        setTokenTime(tt);
-        console.log("시간 설정 : \n", t);
+        const nowTime = new Date();
+        const time = calculateTime();
+        const tokenTime = calculateTokenTime();
+        sessionStorage.setItem('time', time.toString());
+        sessionStorage.setItem('tokenTime', tokenTime.toString());
+        setTimer({duration : tokenTime - nowTime})
     };
 
     const resetTimer = () => {
+        const remainTime = localStorage.getItem('time');
+        // if(localStorage.getItem('time') < 현재 시간)
         const t = calculateTime();
         console.log("시간 리셋 : \n", t);
-        setTime(t);
+        localStorage.setItem('time', t.toString());
     };
-
-    const resetTokenTime = async () => {
-        console.log("타이머 만료");
-        if(time > tokenTime) {
-            const response = await postData({}, "api/auth/refresh");
-            if(response.status === true) {
-                console.log("토큰 갱신 :\n");
-                const preA = sessionStorage.getItem('accessToken');
-                const preR = sessionStorage.getItem('refreshToken');
-                console.log("기존 access 토큰 :\n" + preA);
-                console.log("기존 refresh 토큰 :\n" + preR);
-                sessionStorage.setItem('accessToken', response.data.accessToken);
-                sessionStorage.setItem('refreshToken', response.data.refreshToken);
-                const curA = sessionStorage.getItem('accessToken');
-                const curR = sessionStorage.getItem('refreshToken');
-                console.log("변경된 access 토큰 :\n" + curA);
-                console.log("변경된 refresh 토큰 :\n" + curR);
-            } else {
-                console.log("오류");
-                console.log(response.data);
-            }
-        } else {
-            console.log("토큰 갱신 안함");
-        }
-    }
 
     const getTimeout = () => {
         const currentTime = new Date();
-        if(currentTime < time) {
-            // 로그아웃 로직
-            console.log("시간 만료");
-            return false;
-        } else {
-            resetTimer();
-            return true;
-        }
+        // if(currentTime < time) {
+        //     // 로그아웃 로직
+        //     console.log("시간 만료");
+        //     return false;
+        // } else {
+        //     resetTimer();
+        //     return true;
+        // }
     };
 
     const deleteTimer = ({route}) => {
         console.log("로그 아웃 시 호출");
-        setTime(null);
+        // setTime(null);
         callLogout({route});
     }
 
