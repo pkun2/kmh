@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon_Search } from "../assets";
 
-const SearchBox = ({handleChange, handleClick, styles, styles2}) => {
+const SearchBox = ({handleChange, handleClick, styles, styles2, onKeyPress}) => {
 
     const inStyles = {
         display: "flex",
@@ -34,6 +34,7 @@ const SearchBox = ({handleChange, handleClick, styles, styles2}) => {
                     }}
                     onChange={(e) => handleChange(e.target.value)}
                     placeholder="Search..."
+                    onKeyPress={onKeyPress}
                 />
                 <div
                     onClick = {handleClick}
