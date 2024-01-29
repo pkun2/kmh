@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { getData, isLogin, useSession } from "../../services";
+import { getToken, useSession } from "../../services";
 
 function ProfilePage() {
     const navigate = useNavigate()
     const [user, setUser] = useState(null);
-    const { getTimeout, deleteTimer } = useSession();
+    const [subChannel, setSubChannel] = useState([]);
+    const { getTimeout_KeepPage, getTimeout_ExpirePage } = useSession();
 
     useEffect(() => {
-        if(isLogin()) {
-            console.log("로그인 상태 체크");
-            console.log("현재 로그인 상태");
-            if(getTimeout()) {
-
-            } else {
-                console.log("세션 만료, 로그인 창으로 이동");
-                deleteTimer({route: () => navigate("/login")});
-            }
+        if(getTimeout_ExpirePage()) {
+            console.log("로그인 유효함");
         } else {
-            console.log("현재 로그인 상태x");
+            console.log("로그인 유효하지 않음");
             navigate("/login");
         }
+
         const fetchProfile = async () => {
-            const response = await getData({}, "api/auth/profile")
-            if(response.status === true) {
-                setUser(response.data);
-            } else {
-                // 정보 불러오기 실패, 처리 과정 필요
+            const token = getToken().data;
+            try {
+                const responseUser = await axios.get('/api/auth/profile/user', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                const responseChannelSub = await  axios.get('/api/auth/profile/subscribed', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setUser(responseUser.data);
+                setSubChannel(responseChannelSub.data);
+                console.log(responseChannelSub.data)
+            } catch (error) {
+                console.error('Error fetching profile', error);
             }
         };
 
@@ -37,10 +44,6 @@ function ProfilePage() {
     const handleCreateChannel = () => {
         navigate("/createChannel");
 
-    }
-
-    const test = () => {
-        deleteTimer({route: () => navigate("/login")})
     }
 
     return (
@@ -54,9 +57,17 @@ function ProfilePage() {
                 </div>
             )}
             <button onClick={handleCreateChannel}>채널 만들기</button>
-            <button onClick={test}>로그아웃 테스트</button>
+            <div>
+                <p>구독한 채널:</p>
+                <ul>
+                    {subChannel.map((channel, index) => (
+                        <li key={index}>{channel}</li> // 채널 이름을 표시합니다.
+                    ))}
+                </ul>
+            </div>
         </div>
-    );
+    )
+        ;
 }
 
 export default ProfilePage;
