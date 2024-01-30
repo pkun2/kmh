@@ -2,9 +2,11 @@ package com.website.kmh.controller;
 
 import com.website.kmh.domain.Account;
 import com.website.kmh.domain.Post;
+import com.website.kmh.dto.PostDto;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;
 import com.website.kmh.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,21 +20,25 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final PostService postService;
+    private final AccountService accountService;
 
-    public PostController(PostService postService, JwtTokenProvider jwtTokenProvider) {
+    public PostController(PostService postService, JwtTokenProvider jwtTokenProvider, AccountService accountService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.postService = postService;
+        this.accountService = accountService;
     }
 
     // 게시글 가져와 /post에 츌력해주는 get 요청. 기본임
-    @GetMapping("/latest")
-    public Page<Post> getLatestPost(
+    @GetMapping("/latest/{channelId}")
+    public ResponseEntity<Page<PostDto>> getLatestPost(
+            @PathVariable("channelId") Long channelId,
             @RequestParam(name = "p", defaultValue = "1") int page, // 페이지 번호
             @RequestParam(name = "sort", defaultValue = "createdAt") List<String> sortBys, // 어떤 것을 기준으로 정렬할 것인지
             @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders, // 오름차순과 내림차순(오름차순: asc, 내림차순: desc)
@@ -45,7 +51,9 @@ public class PostController {
         // cratedAt이 아닌 다른 정렬을 사용했을 때, 조회수가 같을 경우 createdAt로 내림차순 정렬 한 번 더 수행
         orders.add(new Sort.Order(Sort.Direction.DESC, "createdAt"));
         Sort sort = Sort.by(orders);
-        return postService.getLatestPosts(PageRequest.of(page - 1, limit, sort));
+
+        Page<PostDto> posts = postService.findPostsByChannelId(channelId, PageRequest.of(page - 1, limit, sort));
+        return ResponseEntity.ok(posts);
     }
 
 
@@ -72,11 +80,6 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
-    @Autowired
-    private AccountService accountService;
-
     // 게시글 만들기
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestBody Post post, @RequestHeader("Authorization") String bearerToken) {

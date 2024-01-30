@@ -56,11 +56,11 @@ public class PostService {
         }
     }
 
-    public List<PostDto> findPostsByChannelId(Long channelId) {
-        return postRepository.findByChannelId(channelId)
-                .stream()
-                .map(post -> convertToDto(post)) // Entity를 DTO로 변환
-                .collect(Collectors.toList());
+    public Page<PostDto> findPostsByChannelId(Long channelId, Pageable pageable) {
+        Page<Post> postPage = postRepository.findByChannelId(channelId, pageable);
+
+        // Entity를 DTO로 변환
+        return postPage.map(this::convertToDto);
     }
 
     private PostDto convertToDto(Post post) {

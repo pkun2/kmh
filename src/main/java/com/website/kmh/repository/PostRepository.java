@@ -19,10 +19,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByChannel(Channel channel);
 
-    Page<Post> findAll(Pageable pageable);
-
     // 검색을 위한 함수, html을 제외하고 검색
     Page<Post> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
     List<Post> findAllByOrderByCreatedAtDesc();
-    List<Post> findByChannelId(Long channelId);
+    Page<Post> findByChannelId(Long channelId, Pageable pageable);
 }

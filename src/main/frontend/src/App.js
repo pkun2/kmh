@@ -31,8 +31,8 @@ function App() {
               <Route path="/home" element={<HomePage/>}/>
               <Route path="/write" element={<WritePage/>}/>
               <Route path="/login" element={<LoginPage/>}/>
-              <Route path="/post" element={<PostPage />} />
-              <Route path="/postdetail" element={<PostDetailPage />} />
+              <Route path=":channelId/post" element={<PostPage />} />
+              <Route path=":channelId/postdetail" element={<PostDetailPage />} />
               <Route path="/signup" element={<SignUpPage/>}/>
               <Route path="/notice" element={<NoticePage/>}/>
               <Route path="/profile" element={<ProfilePage/>}/>

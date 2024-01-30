@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useNavigate, useLocation, useParams} from "react-router-dom";
 import { getData } from "../../services";
 import { CommonButton, PageNameBox, PostInfoBox, CommentBox } from "../../components";
 
 const PostDetailPage = () => {
+    const { channelId } = useParams();
     const location = useLocation();
     const postReference = new URLSearchParams(location.search).get('post_id');
     const [items, setItems] = useState(null);
@@ -12,7 +13,7 @@ const PostDetailPage = () => {
     const navigate = useNavigate();
 
     const handleReMain = () => { // 채널 명 누를 시 자기 자신으로 이동
-        navigate(`/post${postReference}`);
+        navigate(`/${channelId}/post`);
         // 추후 수정 필요!!!!!!!!!!!!!!
     }
 
