@@ -38,6 +38,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/posts/**").permitAll() // 게시글 상세 내용도 인증없이
                         .requestMatchers("/api/channel/**").permitAll()
                         //.requestMatchers("/api/image/upload").permitAll() // 인증 필요! 임시!
+                        .requestMatchers("/api/posts/profile").permitAll() // 프로필 내용을 인증 없이
+                        .requestMatchers("/api/auth/refresh").permitAll()
                         .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
                 )
 

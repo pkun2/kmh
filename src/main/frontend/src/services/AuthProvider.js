@@ -60,8 +60,9 @@ export const getRefreshToken = () => {
     return { status : ok, info : text, data : data };
 }
 
-export const callLogout = ({route}) => {
+export const callLogout = () => {
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('refreshToken');
-    route()
+    sessionStorage.removeItem('time');
+    sessionStorage.removeItem('tokenTime');
 }
