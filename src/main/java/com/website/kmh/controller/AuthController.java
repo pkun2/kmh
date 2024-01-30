@@ -6,7 +6,9 @@ import com.website.kmh.domain.UserChannel;
 import com.website.kmh.dto.*;
 import com.website.kmh.security.SecurityUtil;
 import com.website.kmh.security.jwt.JwtTokenProvider;
+import com.website.kmh.service.MailService;
 import com.website.kmh.service.RegisterService;
+import com.website.kmh.vo.EmailVO;
 import jakarta.servlet.http.HttpServletRequest;
 import com.website.kmh.service.UserChannelService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +29,14 @@ public class AuthController {
     private final RegisterService registerService;
     private final UserChannelService userChannelService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MailService mailService;
 
-    public AuthController(AccountService accountService, RegisterService registerService, UserChannelService userChannelService, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(AccountService accountService, RegisterService registerService, UserChannelService userChannelService, JwtTokenProvider jwtTokenProvider, MailService mailService) {
         this.accountService = accountService;
         this.registerService = registerService;
         this.userChannelService = userChannelService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.mailService = mailService;
     }
     @GetMapping("/profile/user")
     public ResponseEntity<AccountProfile> getUserProfile(@RequestHeader("Authorization") String bearerToken) {
@@ -87,8 +91,15 @@ public class AuthController {
         return accountService.refresh(userId);
     }
 
+    @PostMapping("/email")
+    public void email(@RequestBody EmailVO emailVO) {
+        log.info("request receiver = {}, title = {}", emailVO.getReceiver(), emailVO.getTitle());
+        mailService.CreateMail(emailVO);
+    }
+
     @PostMapping("/test")
     public String test() {
         return SecurityUtil.getCurrentUsername();
     }
+
 }
