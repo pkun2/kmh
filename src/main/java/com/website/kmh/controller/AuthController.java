@@ -9,6 +9,7 @@ import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.MailService;
 import com.website.kmh.service.RegisterService;
 import com.website.kmh.vo.EmailVO;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import com.website.kmh.service.UserChannelService;
 import lombok.extern.slf4j.Slf4j;
@@ -92,9 +93,9 @@ public class AuthController {
     }
 
     @PostMapping("/email")
-    public void email(@RequestBody EmailVO emailVO) {
+    public void email(@RequestBody EmailVO emailVO) throws MessagingException {
         log.info("request receiver = {}, title = {}", emailVO.getReceiver(), emailVO.getTitle());
-        mailService.CreateMail(emailVO);
+        mailService.createMail(emailVO);
     }
 
     @PostMapping("/test")
