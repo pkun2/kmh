@@ -1,10 +1,14 @@
 import React from "react";
 
-const PageNameBox = ({items, styles}) => {
+const PageNameBox = ({items, styles, handleClick}) => {
+    const boxStyles = {
+        ...styles,
+        cursor: "pointer",
+    };
 
     return (
         <>
-            <div style={styles}
+            <div style={boxStyles} onClick={handleClick}
             >
                 {items.title}
             </div>

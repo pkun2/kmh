@@ -45,7 +45,7 @@ public class SshFileUploader {
             session.disconnect();
 
             System.out.println("File uploaded successfully!");
-            return "http://" + host + ":" + port + remoteDirectory + upload.getOriginalFilename();
+            return "http://" + host + ":" + port + "/images" + remoteDirectory + upload.getOriginalFilename();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
