@@ -28,6 +28,28 @@ export const callSingUp = () => {
     const url = "http://localhost:8080/api/auth/register";
 }
 
+export const callSendCode = async (items) => {
+    let info;
+    let ok = true;
+    let data = {};
+    const url = "http://localhost:8080/api/auth/email";
+    const config = {
+        header : {
+            'Content-Type': 'application/json'
+        }
+    }
+    try {
+        const response = await axios.post(url, items, config);
+        info = "Send Code Succeed!";
+        data = response.data;
+    } catch (error) {
+        ok = !ok;
+        info = "Send Code Failed!";
+        data = error;
+    }
+    return { status : ok, info : info, data : data }
+}
+
 export const getToken = () => {
     let ok = true;
     let text = ''

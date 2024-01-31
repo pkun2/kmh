@@ -6,7 +6,11 @@ import com.website.kmh.domain.UserChannel;
 import com.website.kmh.dto.*;
 import com.website.kmh.security.SecurityUtil;
 import com.website.kmh.security.jwt.JwtTokenProvider;
+import com.website.kmh.service.MailService;
 import com.website.kmh.service.RegisterService;
+import com.website.kmh.vo.EmailCodeVO;
+import com.website.kmh.vo.EmailVO;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import com.website.kmh.service.UserChannelService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import com.website.kmh.service.AccountService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -27,12 +32,14 @@ public class AuthController {
     private final RegisterService registerService;
     private final UserChannelService userChannelService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MailService mailService;
 
-    public AuthController(AccountService accountService, RegisterService registerService, UserChannelService userChannelService, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(AccountService accountService, RegisterService registerService, UserChannelService userChannelService, JwtTokenProvider jwtTokenProvider, MailService mailService) {
         this.accountService = accountService;
         this.registerService = registerService;
         this.userChannelService = userChannelService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.mailService = mailService;
     }
     @GetMapping("/profile/user") //내프로필에 아이디, 닉네임, 이메일이 보임
     public ResponseEntity<AccountProfile> getUserProfile(@RequestHeader("Authorization") String bearerToken) {
@@ -85,8 +92,31 @@ public class AuthController {
         return accountService.refresh(userId); //토큰 재발급 진행
     }
 
+    @PostMapping("/email")
+    public String email(@RequestBody EmailVO emailVO) throws MessagingException {;
+        mailService.createMail(emailVO);
+        return "으헤~";
+    }
+
+    @PostMapping("/emailCode")
+    public boolean emailCode(@RequestBody EmailCodeVO emailCodeVO) {
+        String authCode = mailService.getCachedAuthCode(emailCodeVO.getReceiver());
+        if(authCode == null) {
+            log.info("Cache : null");
+            return false;
+        } else {
+            if(Objects.equals(emailCodeVO.getAuthCode(), authCode)) {
+                mailService.evictCachedAuthCode(emailCodeVO.getReceiver());
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     @PostMapping("/test")
     public String test() {
         return SecurityUtil.getCurrentUsername();
     }
+
 }
