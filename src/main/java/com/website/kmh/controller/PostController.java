@@ -1,10 +1,13 @@
 package com.website.kmh.controller;
 
 import com.website.kmh.domain.Account;
+import com.website.kmh.domain.Channel;
 import com.website.kmh.domain.Post;
+import com.website.kmh.dto.CreatePostDto;
 import com.website.kmh.dto.PostDto;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;
+import com.website.kmh.service.ChannelService;
 import com.website.kmh.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +31,13 @@ public class PostController {
     private final JwtTokenProvider jwtTokenProvider;
     private final PostService postService;
     private final AccountService accountService;
+    private final ChannelService channelService;
 
-    public PostController(PostService postService, JwtTokenProvider jwtTokenProvider, AccountService accountService) {
+    public PostController(PostService postService, JwtTokenProvider jwtTokenProvider, AccountService accountService, ChannelService channelService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.postService = postService;
         this.accountService = accountService;
+        this.channelService = channelService;
     }
 
     // 게시글 가져와 /post에 츌력해주는 get 요청. 기본임
@@ -75,6 +80,10 @@ public class PostController {
     public ResponseEntity<Post> getPostById(@PathVariable("postId") Long postId) {
         Post post = postService.getPostById(postId);
         if (post != null) {
+            //조회수를 늘리기
+            post.setViewCount(post.getViewCount());
+            postService.savePost(post);
+
             return new ResponseEntity<>(post, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -82,16 +91,29 @@ public class PostController {
     }
     // 게시글 만들기
     @PostMapping("/create")
-    public ResponseEntity<Post> createPost(@RequestBody Post post, @RequestHeader("Authorization") String bearerToken) {
+    public ResponseEntity<Post> createPost(@RequestBody CreatePostDto createPostDto, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring(7); // "Bearer " 제거
         //클라이언트의 헤더에 있는 토큰을 바탕으로 id를 가져옴
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
-
         //해당하는 계정을 db로 부터 가져옴
         Account user = accountService.getUserById(userId);
 
-        // Post 객체의 user 필드에 사용자 정보를 설정
+        // Post 객체 생성 및 필드 설정
+        Post post = new Post();
+        post.setTitle(createPostDto.getTitle());
+        post.setContent(createPostDto.getContent());
+        post.setCategoryTag(createPostDto.getCategoryTag());
+        post.setGoodCount(createPostDto.getGoodCount());
+        post.setBadCount(createPostDto.getBadCount());
+        post.setViewCount(createPostDto.getViewCount());
+
+        // Channel 객체를 찾아서 설정
+        Channel channel = channelService.getChannelById(createPostDto.getChannelId());
+        post.setChannel(channel);
+
+        // 사용자 정보 설정
         post.setUser(user);
+        // 필요한 다른 설정들...
 
         Post newPost = postService.createPost(post);
         return new ResponseEntity<>(newPost, HttpStatus.CREATED);

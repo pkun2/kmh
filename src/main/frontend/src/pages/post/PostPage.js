@@ -16,7 +16,7 @@ const PostPage = () => {
     const [totalPostCount, setTotalPostCount] = useState(0); // 총 게시글 수
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호, 기본은 1페이지
     const [selectedSort, setSelectedSort] = useState('등록순'); // 페이지 정렬 기준
-    const [postPage, setPostPage] = useState(4); // 한 페이지 당 로딩할 게시글 수
+    const [postPage, setPostPage] = useState(30); // 한 페이지 당 로딩할 게시글 수
 
     const handleSearch = () => { // 검색어 입력 시 이동 함수
         console.log("검색어 : ", searchInput);
@@ -144,7 +144,7 @@ const PostPage = () => {
     };
 
     const handleWrite = () => {
-        navigate('/write');
+        navigate(`/${channelId}/write`);
     };
 
     return (

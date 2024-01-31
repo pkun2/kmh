@@ -38,6 +38,9 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public Post savePost(Post post) {
+        return postRepository.save(post);
+    }
 
 
     public Post getPostById(Long postId) {

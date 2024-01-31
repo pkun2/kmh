@@ -6,8 +6,10 @@ import TextEditor from '../../components/TextEditor';
 
 import styles from './writePage.module.css';
 import {postData} from "../../services";
+import {useParams} from "react-router-dom";
 
 const WritePage = () => {
+  const { channelId } = useParams();
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState(['자유']);
   const [content, setContent] = useState(" ");
@@ -34,10 +36,7 @@ const WritePage = () => {
       content: content.replace(/<\/?p>/g, ""),
       viewCount: 0,
       categoryTag: tags[0],
-      channel: {
-        channel_id: 2,
-        channel_name: "테스트",
-      },
+      channelId: channelId,
       goodCount: 0,
       badCount: 0,
     };
@@ -54,7 +53,7 @@ const WritePage = () => {
 
       // 백엔드와 통신에 성공에 200을 받으면, 페이지 이동
       if (response.status == true) {
-        navigate('/post');
+        navigate(`/${channelId}/post`);
       } else {
         console.log("오류 발생! 백엔드와 통신 오류!");
       }

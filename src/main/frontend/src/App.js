@@ -29,7 +29,7 @@ function App() {
           <div>
             <Routes>
               <Route path="/home" element={<HomePage/>}/>
-              <Route path="/write" element={<WritePage/>}/>
+              <Route path=":channelId/write" element={<WritePage/>}/>
               <Route path="/login" element={<LoginPage/>}/>
               <Route path=":channelId/post" element={<PostPage />} />
               <Route path=":channelId/postdetail" element={<PostDetailPage />} />

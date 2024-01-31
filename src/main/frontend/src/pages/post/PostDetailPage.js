@@ -14,7 +14,6 @@ const PostDetailPage = () => {
 
     const handleReMain = () => { // 채널 명 누를 시 자기 자신으로 이동
         navigate(`/${channelId}/post`);
-        // 추후 수정 필요!!!!!!!!!!!!!!
     }
 
     useEffect(() => {
