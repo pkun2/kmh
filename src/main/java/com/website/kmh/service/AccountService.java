@@ -7,11 +7,11 @@ import com.website.kmh.dto.UserUpdateRequest;
 
 public interface AccountService {
 
-    Account updateAccount(Long userId, UserUpdateRequest updateRequest);
-    JwtToken login(String email, String password);
-    AccountProfile getUserProfile(Long userId);
+    Account updateAccount(Long userId, UserUpdateRequest updateRequest); //프로필 변경
+    JwtToken login(String email, String password); // 로그인진행후 토큰 발급
+    AccountProfile getUserProfile(Long userId); // 프로필 가져오기
 
-    JwtToken refresh(Long userId);
+    JwtToken refresh(Long userId); // 토큰 재발급
 
-    Account getUserById(long i);
+    Account getUserById(long id); //유저로 부터 id가져오기
 }

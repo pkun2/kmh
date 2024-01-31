@@ -2,6 +2,7 @@ package com.website.kmh.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
 @Entity(name = "comments")
 public class Comment {
 

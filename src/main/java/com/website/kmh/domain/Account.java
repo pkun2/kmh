@@ -51,12 +51,6 @@ public class Account implements UserDetails {
         return password;
     }
 
-
-    public void setPassword(String password) {
-        // 비밀번호 암호화 로직 적용 (예: BCryptPasswordEncoder 사용)
-        // this.password = passwordEncoder.encode(password);
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;

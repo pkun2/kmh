@@ -16,7 +16,7 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public Comment createComment(Comment comment) {
+    public Comment createComment(Comment comment) { //댓글 작성
         comment.setTime(LocalDateTime.now());
         comment.setDouble_comment(1L);
         return commentRepository.save(comment);

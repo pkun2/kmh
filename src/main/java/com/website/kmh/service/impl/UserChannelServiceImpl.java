@@ -52,12 +52,12 @@ public class UserChannelServiceImpl implements UserChannelService {
     }
 
     @Override
-    public void CancelSubChannel(Long userId, Long channelId) {
+    public void CancelSubChannel(Long userId, Long channelId) { // 구독중인 채널 취소
         userChannelRepository.deleteByAccountIdAndChannelId(userId, channelId);
     }
 
     @Override
-    public UserChannel subscribeChannel(Long userId, Long channelId) {
+    public UserChannel subscribeChannel(Long userId, Long channelId) { //채널 구독
         UserChannel subscription = new UserChannel();
 
         Account user = accountService.getUserById(userId);
@@ -71,30 +71,8 @@ public class UserChannelServiceImpl implements UserChannelService {
         return userChannelRepository.save(subscription);
     }
 
-//    @Override
-//    public List<ChannelInfoDto> getSubChannel(Long userId) {
-//        // 사용자가 구독한 채널의 ID 목록을 가져옴
-//        List<Long> subscribedChannelIds = userChannelRepository.findByAccountId(userId)
-//                .stream()
-//                .map(UserChannel::getChannel)
-//                .map(Channel::getChannel_id)
-//                .collect(Collectors.toList());
-//
-//        // 전체 채널 목록을 가져옴
-//        List<Channel> channels = channelRepository.findAll();
-//
-//        // 채널 목록을 ChannelInfoDto 리스트로 변환
-//        return channels.stream()
-//                .map(channel -> new ChannelInfoDto(
-//                        channel.getChannel_id(),
-//                        channel.getChannel_name(),
-//                        subscribedChannelIds.contains(channel.getChannel_id())
-//                ))
-//                .collect(Collectors.toList());
-//    }
-
     @Override
-    public List<String> getProfileSubChannel(Long userId) {
+    public List<String> getProfileSubChannel(Long userId) { //프로필에서 리스트 형태로 구독중인 채널 반환
         return userChannelRepository.findByAccountId(userId)
                 .stream()
                 .map(userChannel -> userChannel.getChannel().getName())

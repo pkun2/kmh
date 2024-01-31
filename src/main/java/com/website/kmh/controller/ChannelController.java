@@ -30,7 +30,7 @@ public class ChannelController {
         this.userChannelService = userChannelService;
     }
 
-    @GetMapping("/header/subscribed")
+    @GetMapping("/header/subscribed") // 헤더의 Channel에서 구독한 채널을 목록으로 불러옴
     public ResponseEntity<Map<Long, String>> getProfileSub(@RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring(7); // "Bearer " 제거
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
@@ -60,7 +60,7 @@ public class ChannelController {
         return ResponseEntity.ok(channelInfoDtos);
     }
 
-    @PostMapping("/subscribe/{channelId}")
+    @PostMapping("/subscribe/{channelId}") //채널 구독하는 api
     public  ResponseEntity<UserChannel> postSubChannel(@PathVariable("channelId") Long channelId, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring(7); // "Bearer " 제거
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
@@ -68,7 +68,7 @@ public class ChannelController {
         return ResponseEntity.ok(subscription);
     }
 
-    @DeleteMapping("/cancelSub/{channelId}")
+    @DeleteMapping("/cancelSub/{channelId}") // 채널 구독취소하는 api
     public  ResponseEntity<?> postCancelSubChannel(@PathVariable("channelId") Long channelId, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring(7); // "Bearer " 제거
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
@@ -77,13 +77,14 @@ public class ChannelController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/post")
+    @PostMapping("/post") // 채널 생성
     public ResponseEntity<String> postChannel(@RequestBody CreateChannelDto createChannelDto, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring(7); // "Bearer " 제거
 
         //클라이언트의 헤더에 있는 토큰을 바탕으로 id를 가져옴
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
 
+        //채널 생성
         Channel savedChannel = channelService.createChannel(
             createChannelDto.getChannelName(),
             userId

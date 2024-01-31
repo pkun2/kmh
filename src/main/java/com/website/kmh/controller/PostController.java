@@ -59,30 +59,27 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-
-    // 게시글 내 검색
-    @GetMapping("/search")
+    @GetMapping("/search") // 게시글 내 검색
     public Page<Post> searchPosts(
-            @RequestParam("keyword") String keyword,
-            @RequestParam(name = "p", defaultValue = "0") int page,
-            @RequestParam(name = "sort", defaultValue = "createdAt") String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "desc") String sortOrder,
-            @RequestParam(name = "limit", defaultValue = "30") int limit
+            @RequestParam("keyword") String keyword, //검색 단어
+            @RequestParam(name = "p", defaultValue = "0") int page, // 페이지 번호
+            @RequestParam(name = "sort", defaultValue = "createdAt") String sortBy, // 어떤 것을 기준으로 정렬할 것인지
+            @RequestParam(name = "sortOrder", defaultValue = "desc") String sortOrder, // 오름차순과 내림차순(오름차순: asc, 내림차순: desc)
+            @RequestParam(name = "limit", defaultValue = "30") int limit // 페이지 당 보여줄 게시글 갯수
     ) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
         return postService.searchPosts(keyword, PageRequest.of(page - 1, limit, sort));
     }
 
-    // 게시글 상세 내용 불러오기
-    @GetMapping("/{postId}")
+    @GetMapping("/{postId}") // 게시글 상세 내용 불러오기
     public ResponseEntity<Post> getPostById(@PathVariable("postId") Long postId) {
-        Post post = postService.getPostById(postId);
-        if (post != null) {
+        Post post = postService.getPostById(postId); //id를 바탕으로 게시글을 불러옴
+        if (post != null) { // 해당게시글이 존재하면
             //조회수를 늘리기
             post.setViewCount(post.getViewCount());
             postService.savePost(post);
 
-            return new ResponseEntity<>(post, HttpStatus.OK);
+            return new ResponseEntity<>(post, HttpStatus.OK); //상세내용을 가져옴
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -98,12 +95,12 @@ public class PostController {
 
         // Post 객체 생성 및 필드 설정
         Post post = new Post();
-        post.setTitle(createPostDto.getTitle());
-        post.setContent(createPostDto.getContent());
-        post.setCategoryTag(createPostDto.getCategoryTag());
-        post.setGoodCount(createPostDto.getGoodCount());
-        post.setBadCount(createPostDto.getBadCount());
-        post.setViewCount(createPostDto.getViewCount());
+        post.setTitle(createPostDto.getTitle()); // 제목
+        post.setContent(createPostDto.getContent()); // 내용
+        post.setCategoryTag(createPostDto.getCategoryTag()); // 카테고리(채널 구분)
+        post.setGoodCount(createPostDto.getGoodCount()); // 추천
+        post.setBadCount(createPostDto.getBadCount()); // 비추천
+        post.setViewCount(createPostDto.getViewCount()); // 조회수
 
         // Channel 객체를 찾아서 설정
         Channel channel = channelService.getChannelById(createPostDto.getChannelId());
@@ -111,7 +108,6 @@ public class PostController {
 
         // 사용자 정보 설정
         post.setUser(user);
-        // 필요한 다른 설정들...
 
         Post newPost = postService.createPost(post);
         return new ResponseEntity<>(newPost, HttpStatus.CREATED);

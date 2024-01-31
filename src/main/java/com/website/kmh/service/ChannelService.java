@@ -5,9 +5,9 @@ import com.website.kmh.domain.Channel;
 import java.util.List;
 
 public interface ChannelService {
-    Channel createChannel(String channel_name, Long user_id);
+    Channel createChannel(String channel_name, Long user_id); // 채널만들기
 
-    List<Channel> findAll();
+    List<Channel> findAll(); // 전체 채널 불러오기
 
-    Channel getChannelById(long channelId);
+    Channel getChannelById(long channelId); // id를 바탕으로 채널 가져오기
 }

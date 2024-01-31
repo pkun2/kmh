@@ -35,12 +35,13 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(post);
     }
 
+    // 작성한 게시글 저장
     public Post savePost(Post post) {
         return postRepository.save(post);
     }
 
 
-    public Post getPostById(Long postId) {
+    public Post getPostById(Long postId) { 
         Optional<Post> postOptional = postRepository.findById(postId);
 
         if (postOptional.isPresent()) {
@@ -56,7 +57,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    public Page<PostDto> findPostsByChannelId(Long channelId, Pageable pageable) {
+    public Page<PostDto> findPostsByChannelId(Long channelId, Pageable pageable) { // 특정 채널에 포함된 게시글 가져오기
         Page<Post> postPage = postRepository.findByChannelId(channelId, pageable);
 
         // Entity를 DTO로 변환
@@ -87,6 +88,7 @@ public class PostServiceImpl implements PostService {
                 .build();
     }
 
+    // 조회수 증가
     private void incrementViewCount(Post post) {
         post.setViewCount(post.getViewCount() + 1);
     }
