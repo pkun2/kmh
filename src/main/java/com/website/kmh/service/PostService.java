@@ -1,54 +1,15 @@
 package com.website.kmh.service;
 
 import com.website.kmh.domain.Post;
-import com.website.kmh.repository.PostRepository;
-import org.springframework.stereotype.Service;
+import com.website.kmh.dto.PostDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
-import org.jsoup.Jsoup;
-
-@Service
-public class PostService {
-    private final PostRepository postRepository;
-
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
-
-    //최신 게시글 목록 조회 서비스 메서드
-    public List<Post> getLatestPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc();
-    }
-
-    // 게시글 만들기
-    public Post createPost(Post post) {
-        return postRepository.save(post);
-    }
-
-    // title과 content에서 값 찾음
-    public List<Post> searchPosts(String keyword) {
-        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
-    }
-
-    public Post getPostById(Long postId) {
-        Optional<Post> postOptional = postRepository.findById(postId);
-
-        if (postOptional.isPresent()) {
-            Post post = postOptional.get();
-            System.out.println("Retrieved post: " + post);
-
-            incrementViewCount(post);
-
-            return post;
-        } else {
-            System.out.println("Post not found for postId: " + postId);
-            return null;
-        }
-    }
-
-    private void incrementViewCount(Post post) {
-       post.setViewCount(post.getViewCount() + 1);
-    }
+public interface PostService {
+    Page<Post> searchPosts(String keyword, Pageable pageable); // 게시글 검색
+    Post createPost(Post post); // 게시글 작성
+    Post savePost(Post post); // 게시글 저장
+    Post getPostById(Long postId); // id를 바탕으로 게시글의 상세정보 반환
+    Page<PostDto> findPostsByChannelId(Long channelId, Pageable pageable); // 해당 채널의 게시글 검색
 
 }

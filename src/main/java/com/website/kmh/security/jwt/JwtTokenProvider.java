@@ -119,6 +119,7 @@ public class JwtTokenProvider {
         }
     }
 
+    // 토큰으로 부터 userId 가져오기
     public Long getUserIdFromToken(String token) {
         Claims claims = parseClaims(token);
         return Long.parseLong(claims.getSubject());

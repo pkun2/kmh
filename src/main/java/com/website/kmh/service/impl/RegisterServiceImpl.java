@@ -24,7 +24,7 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
 
-    public void register(RegisterDto registerDto) {
+    public void register(RegisterDto registerDto) { //회원 가입
         try {
             if (accountRepository.existsByEmail(registerDto.getEmail())) {
                 throw new RuntimeException("이미 사용중인 아이디입니다.");

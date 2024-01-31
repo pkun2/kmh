@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import {useNavigate, useLocation, useParams} from "react-router-dom";
 import { getData } from "../../services";
-import { CommonButton, PageNameBox, PostInfoBox, CommentBox } from "../../components";
+import { PageNameBox, PostInfoBox, CommentBox, CommentWrite } from "../../components";
 
 const PostDetailPage = () => {
+    const { channelId } = useParams();
     const location = useLocation();
     const postReference = new URLSearchParams(location.search).get('post_id');
     const [items, setItems] = useState(null);
-    const [comments, setComments] = useState([]);
+    //const [comments, setComments] = useState([]);
+    //const [isLoading, setIsLoading] = useState(true); // 로딩 함수
+
+    const navigate = useNavigate();
+
+    const handleReMain = () => { // 채널 명 누를 시 자기 자신으로 이동
+        navigate(`/${channelId}/post`);
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,8 +37,6 @@ const PostDetailPage = () => {
         fetchData();
     }, [postReference]);
 
-
-
     return (
         <>
             <div style={{
@@ -40,7 +46,7 @@ const PostDetailPage = () => {
                 {items && (
                     <>
                         <PageNameBox
-                            items={{ title: `${items.channel.channel_name} 채널` }}
+                            items={{ title: `${items.channel.name} 채널` }}
                             styles={{
                                 paddingTop: 7,
                                 paddingBottom: 7,
@@ -48,6 +54,7 @@ const PostDetailPage = () => {
                                 fontWeight: "bold",
                                 fontSize: 18
                             }}
+                            handleClick={handleReMain}
                         />
                         <PostInfoBox
                             items={items}
@@ -66,8 +73,11 @@ const PostDetailPage = () => {
                         </div>
                         <div>
                             <CommentBox
-                                items={comments}
+                                postId={postReference}
+                                userId={2}
+                                nickname={"jang"}
                             />
+                            {/*postId={postReference}*/}
                         </div>
                     </>
                 )}

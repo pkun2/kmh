@@ -41,15 +41,15 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
         this.mailService = mailService;
     }
-    @GetMapping("/profile/user")
+    @GetMapping("/profile/user") //내프로필에 아이디, 닉네임, 이메일이 보임
     public ResponseEntity<AccountProfile> getUserProfile(@RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring(7); // "Bearer " 제거
-        Long userId = jwtTokenProvider.getUserIdFromToken(token);
-        AccountProfile accountProfile = accountService.getUserProfile(userId);
+        Long userId = jwtTokenProvider.getUserIdFromToken(token); // 액세스 토큰으로 부터 유저 id를 가져옴
+        AccountProfile accountProfile = accountService.getUserProfile(userId); // 유저 id를 바탕으로 프로필 정보를 가져옴
         return ResponseEntity.ok(accountProfile);
     }
 
-    @GetMapping("/profile/subscribed")
+    @GetMapping("/profile/subscribed") //내 프로필에 구독한 채널 항목을 리스트로 띄워줌
     public ResponseEntity<List<String>> getProfileSub(@RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring(7); // "Bearer " 제거
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
@@ -60,38 +60,36 @@ public class AuthController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Account> updateProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest updateRequest) {
-        Account updatedUser = accountService.updateAccount(userId, updateRequest);
+        Account updatedUser = accountService.updateAccount(userId, updateRequest); //
         return ResponseEntity.ok(updatedUser);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register") //회원가입
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         try {
-            registerService.register(registerDto);
-            log.info("회원가입 정보: {}", registerDto);
+            registerService.register(registerDto); //회원 가입요청
             return ResponseEntity.ok("회원가입이 완료되었습니다.");
-        } catch (DuplicateKeyException e) {
-            return ResponseEntity.badRequest().body("이미 사용중인 아이디입니다.");
+        } catch (DuplicateKeyException e) {// 이미 사용중인 이메일인 경우
+            return ResponseEntity.badRequest().body("이미 사용중인 이메일입니다.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("회원가입 중 오류가 발생했습니다.");
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login") //로그인
     public JwtToken login(@RequestBody LoginDto loginDto) {
         String email = loginDto.getEmail();
         String password = loginDto.getPassword();
-        JwtToken jwtToken = accountService.login(email, password);
-        log.info("request username = {}, password = {}", email, password);
-        log.info("jwtToken accessToken = {}, refreshToken = {}", jwtToken.getAccessToken(), jwtToken.getRefreshToken());
+        JwtToken jwtToken = accountService.login(email, password); // 로그인 진행후 jwt 토큰을 access 토큰과 refresh 토큰 반환
+
         return jwtToken;
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("/refresh") //토큰 재발급
     public JwtToken refresh(HttpServletRequest request) {
-        String currentToken = request.getHeader("Authorization").substring(7);
-        Long userId = jwtTokenProvider.getUserIdFromToken(currentToken);
-        return accountService.refresh(userId);
+        String currentToken = request.getHeader("Authorization").substring(7); //헤더의 정의된 jwt토큰으로 부터 access토큰을 가져옴
+        Long userId = jwtTokenProvider.getUserIdFromToken(currentToken); //해당 access토큰으로 부터 userId를 가져옴
+        return accountService.refresh(userId); //토큰 재발급 진행
     }
 
     @PostMapping("/email")
