@@ -13,6 +13,7 @@ import com.website.kmh.service.CommentService;
 import com.website.kmh.service.ChannelService;
 import com.website.kmh.service.PostService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -43,9 +44,6 @@ public class PostController {
 
     @Autowired
     private CommentService commentService;
-
-    @Autowired
-    private AccountService accountService;
 
 
     // 게시글 가져와 /post에 츌력해주는 get 요청. 기본임
