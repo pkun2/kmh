@@ -11,5 +11,7 @@ public interface AccountService {
     JwtToken login(String email, String password);
     AccountProfile getUserProfile(Long userId);
 
+    JwtToken refresh(Long userId);
+
     Account getUserById(long i);
 }
