@@ -16,11 +16,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // userId 가져오기 위한 함수
     Optional<Post> findById(Long id);
-
-    List<Post> findByChannel(Channel channel);
-
-    Page<Post> findAll(Pageable pageable);
-
     // 검색을 위한 함수, html을 제외하고 검색
     Page<Post> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
+    // channelId와 정렬기준 등이 포함된 것들을 토대로 가져옴
+    Page<Post> findByChannelId(Long channelId, Pageable pageable);
 }

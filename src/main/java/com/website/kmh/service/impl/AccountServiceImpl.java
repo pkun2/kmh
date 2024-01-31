@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public JwtToken login(String email, String password) {
+    public JwtToken login(String email, String password) { //로그인
         // 1. username을 기반으로 저장된 Account를 찾음
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
@@ -58,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Transactional
-    public JwtToken refresh(Long userId) {
+    public JwtToken refresh(Long userId) { //토큰 재발급
         // 1. username을 기반으로 저장된 Account를 찾음
         Account account = accountRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with uid: " + userId));
@@ -81,7 +81,7 @@ public class AccountServiceImpl implements AccountService {
         return jwtToken;
     }
 
-    public Account getUserById(long id) {
+    public Account getUserById(long id) { //uid 바탕으로 계정 가져오기
         Optional<Account> userOptional = accountRepository.findById(id);
 
         // ID에 해당하는 사용자가 없는 경우, 예외를 발생시킵니다.
@@ -93,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
         return userOptional.get();
     }
 
-    public  Account updateAccount(Long userId, UserUpdateRequest updateRequest) {
+    public  Account updateAccount(Long userId, UserUpdateRequest updateRequest) { //해당 유저id를 바탕으로 유저의 이메일과 닉네임을 변경
         Account account = accountRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException(("해당 계정을 찾을 수 없습니다.")));
 
@@ -104,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountProfile getUserProfile(Long userId) {
+    public AccountProfile getUserProfile(Long userId) { // userId를 바탕으로 유저의 프로필 가져옴
         // 유저 정보 조회 로직
         Account account = accountRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));

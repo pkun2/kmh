@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getData } from "../../services";
 import { CommonButton, PageNameBox, SearchResultBox, SearchBox, Pagination } from "../../components";
 
 const PostPage = () => {
+    const { channelId } = useParams();
     const [searchList, setSearchList] = useState([]);
-    const [channelInfo, setChannelInfo] = useState({
-        channel_id: 2,
-        channel_name: "테스트",
-        user_id: 2,
-    });
+    const [channelName, setChannelName] = useState();
     const navigate = useNavigate(); // 페이지 이동
     const location = useLocation(); // ?post=2 같이 이동하기 위해 사용
     const searchKeyword = new URLSearchParams(location.search).get('keyword');
@@ -19,7 +16,7 @@ const PostPage = () => {
     const [totalPostCount, setTotalPostCount] = useState(0); // 총 게시글 수
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호, 기본은 1페이지
     const [selectedSort, setSelectedSort] = useState('등록순'); // 페이지 정렬 기준
-    const [postPage, setPostPage] = useState(4); // 한 페이지 당 로딩할 게시글 수
+    const [postPage, setPostPage] = useState(30); // 한 페이지 당 로딩할 게시글 수
 
     const handleSearch = () => { // 검색어 입력 시 이동 함수
         console.log("검색어 : ", searchInput);
@@ -32,22 +29,14 @@ const PostPage = () => {
         }
     };
 
-    const handlePost = (index) => { // 각각의 페이지 누를 시 페이지 상세 페이지로 이동
-        navigate(`/postdetail?post_id=${encodeURIComponent(searchList[index].number)}`);
-    };
-
-    const handleWrite = () => { // 글쓰기 누를 시 글쓰기 페이지로 이동
-        navigate('/write');
-    };
-
     const handleReMain = () => { // 채널 명 누를 시 자기 자신으로 이동
-        navigate(`/post${channelInfo.channel_id}`);
+        navigate(`/${channelId}/post`);
     }
 
     // 최근, 조회, 추천순 정렬
     const handleSortChange = (selectedSort) => {
         setSelectedSort(selectedSort);
-        let url = '/post';
+        let url = '';
         switch (selectedSort) {
             case '등록순':
                 url += '?';
@@ -66,7 +55,7 @@ const PostPage = () => {
 
     // 페이지 이동, p=5
     const handlePageChange = (page) => {
-        let url = '/post';
+        let url = '';
         const params = new URLSearchParams(location.search);
         const sort = params.get('sort');
         const keyword = params.get('keyword');
@@ -87,6 +76,7 @@ const PostPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // 30개까지만 요청
                 let response;
                 // response 중 채우지 않은 값은 빈 값으로 보냄
                 let sortCondition = {};
@@ -102,54 +92,61 @@ const PostPage = () => {
                     switch (sort) {
                         case 'hitAll':
                             const sortHit = 'viewCount';
-                            response = await getData({ p: p, limit: postPage, sort: sortHit, ...sortCondition }, 'api/posts/latest');
+                            response = await getData({ p: p, limit: postPage, sort: sortHit, ...sortCondition }, `api/posts/latest/${channelId}`);
                             console.log('hitAll: ', response);
                             break;
                         case 'ratingAll':
                             const sortRating = 'goodCount';
-                            response = await getData({ p: p, limit: postPage, sort: sortRating, ...sortCondition }, 'api/posts/latest');
+                            response = await getData({ p: p, limit: postPage, sort: sortRating, ...sortCondition }, `api/posts/latest/${channelId}`);
                             console.log('ratingAll: ', response);
                             break;
                         default:
                             const sortRecent = 'createdAt';
-                            response = await getData({ p: p, limit: postPage, sort: sortRecent, ...sortCondition }, 'api/posts/latest');
+                            response = await getData({ p: p, limit: postPage, sort: sortRecent, ...sortCondition }, `api/posts/latest/${channelId}`);
                             break;
                     }
                 }
                 // 얘는 초기화면용
                 else {
-                    response = await getData({ limit: postPage, ...sortCondition }, 'api/posts/latest');
+                    response = await getData({ limit: postPage, ...sortCondition }, `api/posts/latest/${channelId}`);
                     console.log('기본', response);
                 }
+                console.log(response.data)
                 // 응답 데이터가 객체이고 data 속성이 배열인 경우에만 처리
-                if (response.status && response.data && Array.isArray(response.data.content)) {
+                if (response.status && response.data && response.data.content) {
                     // 총 게시글 수 가져오기
                     setTotalPostCount(response.data.totalElements);
 
                     const data = response.data.content.map(item => ({
-                        number: item.postId,
+                        number: item.id,
                         tag: item.categoryTag,
                         title: item.title || "",
-                        nickname: item.user.nickname || "",
+                        nickname: item.nickname || "",
                         view: item.viewCount,
                         like: item.goodCount
                     }));
                     setSearchList(data);
-
-                    if (response.data.content.length > 0 && response.data.content[0].channel) {
-                        setChannelInfo(response.data.content[0].channel);
+                    if (response.data.content.length > 0 && response.data.content[0].channelName) {
+                        setChannelName(response.data.content[0].channelName);
                     }
                 } else {
                     console.error("API 응답 구조가 예상과 다릅니다:", response);
                 }
-
             } catch (error) {
                 console.error("API 호출 중 오류 발생:", error);
             }
         };
 
         fetchData();
-    }, [searchKeyword, location.search]); // 검색 및 설정 변경 시 업데이트
+    }, [searchKeyword, location.search]);
+
+    const handlePost = (index) => {
+        navigate(`/${channelId}/postdetail?post_id=${encodeURIComponent(searchList[index].number)}`);
+    };
+
+    const handleWrite = () => {
+        navigate(`/${channelId}/write`);
+    };
 
     return (
         <>
@@ -158,7 +155,7 @@ const PostPage = () => {
                 marginLeft: 5,
             }}>
                 <PageNameBox
-                    items={{ title: `${channelInfo.channel_name} 채널` }}
+                    items={{ title: `${channelName} 채널` }}
                     styles={{
                         padding: 8,
                         borderBottom: "2px solid #000099",
