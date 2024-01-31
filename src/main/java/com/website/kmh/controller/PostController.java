@@ -1,15 +1,19 @@
 package com.website.kmh.controller;
 
 import com.website.kmh.domain.Account;
+import com.website.kmh.domain.Comment;
 import com.website.kmh.domain.Channel;
 import com.website.kmh.domain.Post;
+import com.website.kmh.dto.CommentDto;
 import com.website.kmh.dto.CreatePostDto;
 import com.website.kmh.dto.PostDto;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.AccountService;
+import com.website.kmh.service.CommentService;
 import com.website.kmh.service.ChannelService;
 import com.website.kmh.service.PostService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -37,6 +41,10 @@ public class PostController {
         this.accountService = accountService;
         this.channelService = channelService;
     }
+
+    @Autowired
+    private CommentService commentService;
+
 
     // 게시글 가져와 /post에 츌력해주는 get 요청. 기본임
     @GetMapping("/latest/{channelId}")
@@ -84,6 +92,13 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    // 게시글 상세 내용 중 댓글 불러오기
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<List<CommentDto>> getCommentsByPostId(@PathVariable("postId") Long postId) {
+        List<CommentDto> comments = commentService.getCommentsByPostId(postId);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
     // 게시글 만들기
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestBody CreatePostDto createPostDto, @RequestHeader("Authorization") String bearerToken) {
