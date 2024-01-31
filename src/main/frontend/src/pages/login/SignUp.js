@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { CommonButton, SignUpMenu } from "../../components";
 import { postData } from "../../services";
 import { useNavigate } from 'react-router-dom';
+import { callSendCode } from "../../services";
 
 const SignUpPage = () => {
     const navigate = useNavigate();
@@ -10,7 +11,8 @@ const SignUpPage = () => {
     const [passwordCheck, setPasswordCheck] = useState(false);
     const [email, setEmail] = useState('');
     const [emailDomain, setEmailDomain] = useState('');
-    const [EmailCheck, setEmailCheck] = useState(false);
+    const [emailAuthSequence, setEmailAuthSequence] = useState(false);
+    const [emailCheck, setEmailCheck] = useState(false);
     const [nickname, setNickname] = useState('');
     const [nicknameCheck, setNicknameCheck] = useState(false);
     const [currentMenu, setCurrentMenu] = useState(0);
@@ -21,7 +23,7 @@ const SignUpPage = () => {
         console.log(`버튼 눌림\nID : ${email}@${emailDomain}\nPassword : ${password}`);
 
         const items = {
-            email: email,
+            email: email + "@" + emailDomain,
             nickname: nickname,
             password: password
         }
@@ -42,8 +44,23 @@ const SignUpPage = () => {
         return false;
     }
 
-    const handleClick = () => {
-        setCurrentMenu(currentMenu + 1);
+    const handleSendCode = async () => {
+        console.log("인증 메일 발송 버튼 눌림");
+        // 이메일 유효 검증 과정 필요
+        const items = {
+            receiver: email + "@" + emailDomain
+        }
+        const response = await callSendCode(items);
+        if(response.status === true) {
+            setEmailAuthSequence(true);
+        } else {
+            console.log("에러남");
+            alert("메일 안보내짐");
+        }
+    }
+
+    const handleAuthenticationCode = () => {
+        console.log("인증 버튼 눌림");
     }
 
     return (
@@ -59,7 +76,7 @@ const SignUpPage = () => {
                                 backgroundColor: "#DDDDDD",
                                 width: "10vw",
                                 minWidth: "100px",
-                                height: 50,
+                                height: 30,
                                 fontSize: 18
                             }}
                             value={email}
@@ -74,7 +91,7 @@ const SignUpPage = () => {
                                 backgroundColor: "#DDDDDD",
                                 minWidth: "100px",
                                 width: "10vw",
-                                height: 50,
+                                height: 30,
                                 fontSize: 18
                             }}
                             value={emailDomain}
@@ -89,7 +106,7 @@ const SignUpPage = () => {
                                 backgroundColor: "#DDDDDD",
                                 minWidth: "100px",
                                 width: "10vw",
-                                height: 50,
+                                height: 30,
                                 fontSize: 18
                             }}
                             value={emailDomain}
@@ -98,6 +115,51 @@ const SignUpPage = () => {
                         />
                     </div>
                 </div>
+                {(emailAuthSequence === true) ?
+                    <div style={{marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "column"}}>
+                    인증 번호
+                        <div style = {{display: "flex", alignItems: "center"}}>
+                            <input
+                                type="text"
+                                style={{
+                                    border: "1px solid black",
+                                    backgroundColor: "#DDDDDD",
+                                    minWidth: "216px",
+                                    width: "20vw",
+                                    height: 30,
+                                    fontSize: 18
+                                }}
+                                value={nickname}
+                                onChange={(e) => setNickname(e.target.value)}
+                                placeholder=" Nickname"
+                            />
+                            <CommonButton
+                                handleClick={handleAuthenticationCode}
+                                items={{title: "인증"}}
+                                styles={{
+                                    width: "10vw",
+                                    minWidth: "100px",
+                                    marginLeft: "5px",
+                                    height: 34,
+                                    backgroundColor: '#0099FF',
+                                    color: 'white',
+                                    border: 'none'
+                                }}
+                                fonts={{
+                                    fontSize: '18px',
+                                    fontWeight: 'bold'
+                                }}
+                            />
+                        </div>
+                    남은 시간 :
+                    </div> :
+                    <CommonButton
+                        handleClick={handleSendCode}
+                        items={{title: "인증 메일 발송"}}
+                        styles={{width: 316, height: 30, backgroundColor: '#0099FF', color: 'white', border: 'none'}}
+                        fonts={{fontSize: '18px', fontWeight: 'bold'}}
+                    />
+                }
                 <div style={{marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "column"}}>
                     닉네임 (최대 6자)
                     <input
@@ -107,7 +169,7 @@ const SignUpPage = () => {
                             backgroundColor: "#DDDDDD",
                             minWidth: "316px",
                             width: "15vw",
-                            height: 50,
+                            height: 30,
                             fontSize: 18
                         }}
                         value={nickname}
@@ -119,7 +181,7 @@ const SignUpPage = () => {
                     비밀번호
                     <input
                         type="text"
-                        style={{border: "1px solid black", backgroundColor: "#DDDDDD", width: "15vw", height: 50, fontSize: 18}}
+                        style={{border: "1px solid black", backgroundColor: "#DDDDDD", width: "15vw", height: 30, fontSize: 18}}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder=" Password"
@@ -132,7 +194,7 @@ const SignUpPage = () => {
                     비밀번호 확인
                     <input
                         type="text"
-                        style={{border: "1px solid black", backgroundColor: "#DDDDDD", width: "15vw", height: 50, fontSize: 18}}
+                        style={{border: "1px solid black", backgroundColor: "#DDDDDD", width: "15vw", height: 30, fontSize: 18}}
                         value={password2}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder=" Password"
@@ -146,9 +208,6 @@ const SignUpPage = () => {
                 />
                 <div style={{marginTop: 10, width: 304, height: 1, backgroundColor: "black"}}>
                 </div>
-                <button onClick={handleClick}>
-                    +
-                </button>
             </div>
         </>
     );

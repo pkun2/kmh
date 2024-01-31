@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/refresh").permitAll()
                         .requestMatchers("/api/image/upload").permitAll() // 인증 필요! 임시!
                         .requestMatchers("/api/auth/email").permitAll()
+                        .requestMatchers("/api/auth/emailCode").permitAll()
                         .anyRequest().authenticated() // 나머지 경로는 jwt 인증 해야함
                 )
 

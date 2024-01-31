@@ -8,6 +8,7 @@ import com.website.kmh.security.SecurityUtil;
 import com.website.kmh.security.jwt.JwtTokenProvider;
 import com.website.kmh.service.MailService;
 import com.website.kmh.service.RegisterService;
+import com.website.kmh.vo.EmailCodeVO;
 import com.website.kmh.vo.EmailVO;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import com.website.kmh.service.AccountService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -93,9 +95,25 @@ public class AuthController {
     }
 
     @PostMapping("/email")
-    public void email(@RequestBody EmailVO emailVO) throws MessagingException {
-        log.info("request receiver = {}, title = {}", emailVO.getReceiver(), emailVO.getTitle());
+    public String email(@RequestBody EmailVO emailVO) throws MessagingException {;
         mailService.createMail(emailVO);
+        return "으헤~";
+    }
+
+    @PostMapping("/emailCode")
+    public boolean emailCode(@RequestBody EmailCodeVO emailCodeVO) {
+        String authCode = mailService.getCachedAuthCode(emailCodeVO.getReceiver());
+        if(authCode == null) {
+            log.info("Cache : null");
+            return false;
+        } else {
+            if(Objects.equals(emailCodeVO.getAuthCode(), authCode)) {
+                mailService.evictCachedAuthCode(emailCodeVO.getReceiver());
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     @PostMapping("/test")
