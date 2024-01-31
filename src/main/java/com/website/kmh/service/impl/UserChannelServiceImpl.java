@@ -3,7 +3,6 @@ package com.website.kmh.service.impl;
 import com.website.kmh.domain.Account;
 import com.website.kmh.domain.Channel;
 import com.website.kmh.domain.UserChannel;
-import com.website.kmh.dto.ChannelInfoDto;
 import com.website.kmh.repository.ChannelRepository;
 import com.website.kmh.repository.UserChannelRepository;
 import com.website.kmh.service.AccountService;
