@@ -96,6 +96,7 @@ const PostPage = () => {
                 const p = parseInt(params.get('p'), 10) || 1;
                 if (searchKeyword) {
                     response = await getData({ p: p, limit: postPage, keyword: searchKeyword }, 'api/posts/search');
+                    console.log(response);
                 }
                 else if (sort) {
                     switch (sort) {

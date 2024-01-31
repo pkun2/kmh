@@ -2,18 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { DropDownBox, SearchBox, CommonButton } from "../components";
 import axios from "axios"; // 드롭다운 메뉴, 검색 박스, 일반 버튼
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // 아이콘
+import { faBell, faUser } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
     const [isLogin, setLogin] = useState(true);
     const [channels, setChannels] = useState([]); // DB 에서 가져올 채널 map
     const [searchInput, setSearchInput] = useState(''); // 검색어
+    const [notifications, setNotifications] = useState(0); // 알림 갯수를 상태로 관리
+    const [token, setToken] = useState(sessionStorage.getItem('accessToken')); // 토큰을 상태로 관리
     const navigate = useNavigate();
 
-    const token = sessionStorage.getItem('accessToken');
+    // 로그인 상태를 확인하는 함수
+    function checkLogin() {
+        return token !== null;
+    }
+
+    // 알림 갯수를 불러오는 함수(구현 필요)
 
     useEffect(() => {
+        // token 값이 변경될 때마다 sessionStorage 업데이트
         fetchChannels();
-    }, []);
+        // fetchNotifications(); 알림용 함수, 구현 필요
+    }, [token]);
 
     const fetchChannels = async () => {
         try {
@@ -45,87 +56,101 @@ export default function Header() {
         value: channel.channelName
     }));
 
-  const handleTRPG = () => { // TRPG 페이지로 이동
-    navigate("./trpg");
-  }
+    const handleTRPG = () => { // TRPG 페이지로 이동
+        navigate("./trpg");
+    }
 
-  return (
-      <>
-        <div
-            style = {{
-              display: "flex",
-              alignItems: "center",
-              justifyContent:"space-between",
-              width: "98vw",
-              height: "5vh",
-            }}
-        >
-          <Link
-            style = {{
-                color: "black",
-                minWidth: 120,
-                textDecoration: "none",
-                fontWeight: "bold",
-                fontSize: "4vh"
-            }}
-            to="./home">KMH HOME</Link>
-          <SearchBox
-              handleChange={setSearchInput}
-              handleClick={handleSearch}
-              styles = {{
-                  width: "50vw",
-                  height: "4vh",
-                  border: "2px solid #000099",
-                  borderRadius: 5,
-              }}
-              styles2 = {{
-                  borderLeft: "2px solid #000099",
-                  backgroundColor: "#000099"
-              }}
-          />
-            <Link
-                style = {{
-                    color: "black",
-                    textDecoration: "none",
-                    fontSize: "3vh"
+    return (
+        <>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "98vw",
+                    height: "5vh",
                 }}
-                to="./login">LOGIN</Link>
-        </div>
-        <div
-            style= {{
-                display: "flex",
-                alignItems: "center",
-                width: "98vw",
-                height: "5vh",
-                backgroundColor: "#000099",
-                paddingRight: "1vw",
-                paddingLeft: "1vw",
-                borderTop: "1px Solid #AAAAAA",
-                borderBottom: "1px Solid #AAAAAA",
-            }}
-        >
-            <DropDownBox
-                items = {{title: "Channel", list: channelList}}
-                boxStyles={{
+            >
+                <Link
+                    style={{
+                        color: "black",
+                        minWidth: 120,
+                        textDecoration: "none",
+                        fontWeight: "bold",
+                        fontSize: "4vh"
+                    }}
+                    to="./home">KMH HOME</Link>
+                <SearchBox
+                    handleChange={setSearchInput}
+                    handleClick={handleSearch}
+                    styles={{
+                        width: "50vw",
+                        height: "4vh",
+                        border: "2px solid #000099",
+                        borderRadius: 5,
+                    }}
+                    styles2={{
+                        borderLeft: "2px solid #000099",
+                        backgroundColor: "#000099"
+                    }}
+                />
+                <div>
+                    {checkLogin() ? ( // 로그인 상태에 따라 다른 컴포넌트 렌더링
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '20%', margin: '20' }}>
+                            <Link to="./notice" style={{ color: 'blue', textDecoration: 'none' }}>
+                                <FontAwesomeIcon icon={faBell} size='2x' style={{ marginRight: '10px' }} /> {/* marginRight로 간격 조절 */}
+                                {notifications > 0 && <span>{notifications}</span>}
+                            </Link>
+                            <Link to="./profile" style={{ color: 'blue', textDecoration: 'none' }}>
+                                <FontAwesomeIcon icon={faUser} size='2x' style={{ marginLeft: '10px' }} /> {/* marginLeft로 간격 조절 */}
+                            </Link>
+                        </div>
+                    ) : (
+                        <Link
+                            style={{
+                                color: "black",
+                                textDecoration: "none",
+                                fontSize: "3vh"
+                            }}
+                            to="./login">LOGIN</Link>
+                    )}
+                </div>
+            </div>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "98vw",
                     height: "5vh",
                     backgroundColor: "#000099",
+                    paddingRight: "1vw",
+                    paddingLeft: "1vw",
+                    borderTop: "1px Solid #AAAAAA",
+                    borderBottom: "1px Solid #AAAAAA",
                 }}
-                boxFonts={{
-                    color: "white",
-                    fontSize: "100%"
-                }}
-                handleClick = {handleChannel}
-            />
-            <div style = {{width:"1vw"}}></div>
-            <CommonButton
-                handleClick = {() => handleTRPG()}
-                items = {{title: "TRPG"}}
-                styles={{backgroundColor: '#000099', height: "5vh"}}
-                fonts={{color: "white", fontSize: '100%'}}
-            />
-        </div>
-        <nav>
-        </nav>
-      </>
-  );
+            >
+                <DropDownBox
+                    items={{ title: "Channel", list: channelList }}
+                    boxStyles={{
+                        height: "5vh",
+                        backgroundColor: "#000099",
+                    }}
+                    boxFonts={{
+                        color: "white",
+                        fontSize: "100%"
+                    }}
+                    handleClick={handleChannel}
+                />
+                <div style={{ width: "1vw" }}></div>
+                <CommonButton
+                    handleClick={() => handleTRPG()}
+                    items={{ title: "TRPG" }}
+                    styles={{ backgroundColor: '#000099', height: "5vh" }}
+                    fonts={{ color: "white", fontSize: '100%' }}
+                />
+            </div>
+            <nav>
+            </nav>
+        </>
+    );
 }
