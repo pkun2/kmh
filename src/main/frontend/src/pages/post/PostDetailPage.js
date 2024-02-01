@@ -23,9 +23,12 @@ const PostDetailPage = () => {
                 console.log(postReference);
                 const response = await getData({}, `api/posts/${postReference}`);
                 console.log("API Response:", response);
-
+    
                 if (response.status && response.data) {
                     setItems(response.data);
+    
+                    // URL 변경
+                    window.history.pushState({}, '', `/${response.data.channel.name}/postdetail?post_id=${response.data.postId}`);
                 } else {
                     console.error("게시글 정보를 가져오는데 실패했습니다.");
                 }
@@ -33,9 +36,10 @@ const PostDetailPage = () => {
                 console.error("데이터를 불러오는 중 에러가 발생했습니다.", error);
             }
         };
-
+    
         fetchData();
     }, [postReference]);
+    
 
     return (
         <>
