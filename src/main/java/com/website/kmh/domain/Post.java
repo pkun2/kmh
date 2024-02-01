@@ -9,7 +9,11 @@ import java.util.Date;
 @Setter
 @Getter
 @Entity
-@Table(name = "posts")
+@Table(name = "posts", indexes = {
+        @Index(columnList = "channel_id", name = "idx_channel_id"),
+        @Index(columnList = "created_at", name = "idx_created_at"),
+        @Index(columnList = "user_id", name = "idx_author_id")
+})
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
