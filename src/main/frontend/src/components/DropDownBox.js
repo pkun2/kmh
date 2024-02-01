@@ -38,7 +38,7 @@ const DropDownBox = ({handleClick, items, boxStyles, dropStyles, boxFonts, drops
              onMouseEnter={() => setIsHovering(true)}
              onMouseLeave={() => setIsHovering(false)}
         >
-            <button style={inStyles.dropbtn}>Channel</button>
+            <button style={inStyles.dropbtn}>{items.title}</button>
             {items && Array.isArray(items.list) && (
                 <div style={inStyles.dropdownContent}>
                     {items.list.map((item, index) => (

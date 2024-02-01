@@ -137,12 +137,21 @@ export default function Header() {
                 }}
             >
                 {checkLogin() && channelList.length > 0 ? (
-                    <DropDownBox
-                        items={{ title: "채널", list: channelList }}
-                        boxStyles={{ height: "5vh", backgroundColor: "#000099" }}
-                        boxFonts={{ color: "white", fontSize: "100%" }}
-                        handleClick={handleChannel}
-                    />
+                    <>
+                        <DropDownBox
+                            items={{ title: "구독 채널", list: channelList }}
+                            boxStyles={{ height: "5vh", backgroundColor: "#000099" }}
+                            boxFonts={{ color: "white", fontSize: "100%" }}
+                            handleClick={handleChannel}
+                        />
+                        <CommonButton
+                            handleClick={() => handleGotoChannel()}
+                            items={{ title: "채널 목록" }}
+                            styles={{ backgroundColor: '#000099', height: "5vh" }}
+                            fonts={{ color: "white", fontSize: '100%' }}
+                        />
+
+                    </>
                 ) : (
                     <CommonButton
                         handleClick={() => handleGotoChannel()}
