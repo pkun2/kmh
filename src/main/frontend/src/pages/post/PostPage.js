@@ -29,7 +29,7 @@ const PostPage = () => {
         }
     };
 
-    const handleReMain = () => { // 채널 명 누를 시 자기 자신으로 이동
+    const handleReMain = () => { // 채널 명 누를 시 현재 페이지의 초기 페이지로 이동
         navigate(`/${channelId}/post`);
     }
 
