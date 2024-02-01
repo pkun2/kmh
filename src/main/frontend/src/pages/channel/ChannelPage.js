@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ChannelPage.css';
+import {useNavigate} from "react-router-dom";
 
 const ChannelPage = () => {
     const [channels, setChannels] = useState([]);
 
+    const navigate = useNavigate()
+
     const token = sessionStorage.getItem('accessToken');
+    let headers = {};
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+
     const fetchChannels = async () => {
         try {
             // 전체 채널 목록 가져오기
             const channelResponse = await axios.get('http://localhost:8080/api/channel/get', {
-                headers: { Authorization: `Bearer ${token}` }
+                    headers: headers
             });
             setChannels(channelResponse.data);
         } catch (error) {
@@ -64,10 +72,16 @@ const ChannelPage = () => {
     };
 
     const handleSubscription = (channel) => {
-        if (channel.subscribed) {
-            unsubscribeFromChannel(channel.channelId);
-        } else {
-            subscribeToChannel(channel.channelId);
+        if (!token) {
+            alert("로그인이 필요합니다.")
+            navigate("/login")
+        }
+        else {
+            if (channel.subscribed) {
+                unsubscribeFromChannel(channel.channelId);
+            } else {
+                subscribeToChannel(channel.channelId);
+            }
         }
     };
 

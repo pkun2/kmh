@@ -22,7 +22,10 @@ export default function Header() {
 
     useEffect(() => {
         // token 값이 변경될 때마다 sessionStorage 업데이트
-        fetchChannels();
+        if (checkLogin()) {
+            fetchChannels();
+        }
+
         // fetchNotifications(); 알림용 함수, 구현 필요
     }, [token]);
 
@@ -58,6 +61,10 @@ export default function Header() {
 
     const handleTRPG = () => { // TRPG 페이지로 이동
         navigate("./trpg");
+    }
+
+    const handleGotoChannel = () => {
+        navigate("/channel");
     }
 
     return (
@@ -129,18 +136,21 @@ export default function Header() {
                     borderBottom: "1px Solid #AAAAAA",
                 }}
             >
-                <DropDownBox
-                    items={{ title: "Channel", list: channelList }}
-                    boxStyles={{
-                        height: "5vh",
-                        backgroundColor: "#000099",
-                    }}
-                    boxFonts={{
-                        color: "white",
-                        fontSize: "100%"
-                    }}
-                    handleClick={handleChannel}
-                />
+                {checkLogin() && channelList.length > 0 ? (
+                    <DropDownBox
+                        items={{ title: "채널", list: channelList }}
+                        boxStyles={{ height: "5vh", backgroundColor: "#000099" }}
+                        boxFonts={{ color: "white", fontSize: "100%" }}
+                        handleClick={handleChannel}
+                    />
+                ) : (
+                    <CommonButton
+                        handleClick={() => handleGotoChannel()}
+                        items={{ title: "채널 바로가기" }}
+                        styles={{ backgroundColor: '#000099', height: "5vh" }}
+                        fonts={{ color: "white", fontSize: '100%' }}
+                    />
+                )}
                 <div style={{ width: "1vw" }}></div>
                 <CommonButton
                     handleClick={() => handleTRPG()}
