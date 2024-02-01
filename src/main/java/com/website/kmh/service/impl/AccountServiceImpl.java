@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -111,5 +112,20 @@ public class AccountServiceImpl implements AccountService {
 
         // AccountProfile 객체 생성 및 반환
         return new AccountProfile(account);
+    }
+
+    @Transactional
+    public boolean isNicknameAvailable(String nickname) {
+        // 닉네임에 한글, 영어, 숫자 이외의 문자가 포함되어 있는지 검사
+        String regex = "^[a-zA-Z0-9가-힣]*$";
+        if (!nickname.matches(regex)) {
+            return false;
+        }
+        // 데이터베이스에서 닉네임 중복 검사
+        return !accountRepository.existsByNickname(nickname);
+    }
+
+    public boolean isEmailAvailable(String email) {
+        return !accountRepository.existsByEmail(email);
     }
 }
