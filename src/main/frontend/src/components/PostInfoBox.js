@@ -56,7 +56,7 @@ const PostInfoBox = ({items}) => {
                             borderRight: "1px solid #DDDDDD",
                         }}
                     >
-                        {items.user.nickname}
+                        {items.nickname}
                     </div>
                     <div
                         style={{

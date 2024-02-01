@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from "react";
 import {useNavigate, useLocation, useParams} from "react-router-dom";
 import { getData } from "../../services";
-import { PageNameBox, PostInfoBox, CommentBox, CommentWrite } from "../../components";
+import { PageNameBox, PostInfoBox, CommentBox } from "../../components";
 
 const PostDetailPage = () => {
     const { channelId } = useParams();
     const location = useLocation();
     const postReference = new URLSearchParams(location.search).get('post_id');
     const [items, setItems] = useState(null);
-    //const [comments, setComments] = useState([]);
-    //const [isLoading, setIsLoading] = useState(true); // 로딩 함수
 
     const navigate = useNavigate();
 
-    const handleReMain = () => { // 채널 명 누를 시 자기 자신으로 이동
+    const handleReMain = () => { // 채널 명 누를 시 채널의 초기 페이지로 이동
         navigate(`/${channelId}/post`);
     }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log(postReference);
                 const response = await getData({}, `api/posts/${postReference}`);
                 console.log("API Response:", response);
     
@@ -28,7 +25,9 @@ const PostDetailPage = () => {
                     setItems(response.data);
     
                     // URL 변경
-                    window.history.pushState({}, '', `/${response.data.channel.name}/postdetail?post_id=${response.data.postId}`);
+                    window.history.pushState({}, '', `/${response.data.channelName}/postdetail?post_id=${response.data.id}`);
+                    // 지금 url을 문자가 아닌 channel_id로 바꾸고 싶을 때 사용
+                    // window.history.pushState({}, '', `/${response.data.channel.id}/postdetail?post_id=${response.data.postId}`);
                 } else {
                     console.error("게시글 정보를 가져오는데 실패했습니다.");
                 }
@@ -50,7 +49,7 @@ const PostDetailPage = () => {
                 {items && (
                     <>
                         <PageNameBox
-                            items={{ title: `${items.channel.name} 채널` }}
+                            items={{ title: `${items.channelName} 채널` }}
                             styles={{
                                 paddingTop: 7,
                                 paddingBottom: 7,
@@ -81,7 +80,6 @@ const PostDetailPage = () => {
                                 userId={2}
                                 nickname={"jang"}
                             />
-                            {/*postId={postReference}*/}
                         </div>
                     </>
                 )}
