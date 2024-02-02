@@ -7,9 +7,9 @@ import SearchResultBox from "./SearchResultBox";
 import PageNameBox from "./PageNameBox";
 import PostInfoBox from "./PostInfoBox";
 import CommentBox from "./CommentBox";
-import CommentWrite from "./CommentWrite";
 import PagingBox from "./PagingBox";
 import Pagination from "./Pagination";
+import Subscription from "./Subscription";
 import LoadingComponent from "./LoadingComponent";
 
 export {
@@ -22,7 +22,7 @@ export {
     PageNameBox,
     PostInfoBox,
     CommentBox,
-    CommentWrite,
+    Subscription,
     PagingBox,
     Pagination,
     LoadingComponent

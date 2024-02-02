@@ -34,17 +34,15 @@ public class PostController {
     private final PostService postService;
     private final AccountService accountService;
     private final ChannelService channelService;
+    private final CommentService commentService;
 
-    public PostController(PostService postService, JwtTokenProvider jwtTokenProvider, AccountService accountService, ChannelService channelService) {
+    public PostController(PostService postService, JwtTokenProvider jwtTokenProvider, AccountService accountService, ChannelService channelService, CommentService commentService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.postService = postService;
         this.accountService = accountService;
         this.channelService = channelService;
+        this.commentService = commentService;
     }
-
-    @Autowired
-    private CommentService commentService;
-
 
     // 게시글 가져와 /post에 츌력해주는 get 요청. 기본임
     @GetMapping("/latest/{channelName}")
@@ -76,6 +74,7 @@ public class PostController {
         }
         return ResponseEntity.ok(posts);
     }
+
 
     @GetMapping("/{postId}") // 게시글 상세 내용 불러오기
     public ResponseEntity<PostDto> getPostById(@PathVariable("postId") Long postId) {
@@ -113,7 +112,7 @@ public class PostController {
         post.setViewCount(createPostDto.getViewCount()); // 조회수
 
         // Channel 객체를 찾아서 설정
-        Channel channel = channelService.getChannelById(createPostDto.getChannelId());
+        Channel channel = channelService.getChannelByName(createPostDto.getChannelName());
         post.setChannel(channel);
 
         // 사용자 정보 설정

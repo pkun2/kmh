@@ -5,15 +5,12 @@ import { PageNameBox, PostInfoBox, CommentBox } from "../../components";
 
 const PostDetailPage = () => {
     const { channelName, postId } = useParams();
-    console.log(channelName, postId);
-    const location = useLocation();
-    // const postReference = new URLSearchParams(location.search).get('post_id');
     const [items, setItems] = useState(null);
 
     const navigate = useNavigate();
 
     const handleReMain = () => { // 채널 명 누를 시 채널의 초기 페이지로 이동
-        navigate(`/${channelName}`);
+        navigate(`/${items.channelName}`);
     }
 
     useEffect(() => {
@@ -24,6 +21,10 @@ const PostDetailPage = () => {
     
                 if (response.status && response.data) {
                     setItems(response.data);
+                    console.log(channelName);
+                    if (channelName != response.data.channelName) {
+                        window.history.pushState({}, '', `/${response.data.channelName}/${postId}`);
+                    }
                 } else {
                     console.error("게시글 정보를 가져오는데 실패했습니다.");
                 }
@@ -34,7 +35,6 @@ const PostDetailPage = () => {
     
         fetchData();
     }, [postId]);
-    
 
     return (
         <>

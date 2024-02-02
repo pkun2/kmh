@@ -68,7 +68,7 @@ const styles = {
         fontSize: 10,
         color: color,
         fontWeight: fontWeight
-    })
+    }),
 }
 
 export default styles

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "channels", indexes = {
-        @Index(columnList = "channel_name", name = "idx_channel_name"),
+        @Index(columnList = "channel_name", name = "idx_channel_name")
 })
 public class Channel {
 
@@ -23,10 +23,14 @@ public class Channel {
     @Column(name="user_id")
     private Long userId;
 
-    public Channel(Long id, String name, Long userId) {
+    @Column(name="subscribers")
+    private Long subscribers;
+
+    public Channel(Long id, String name, Long userId, Long subscribers) {
         this.id = id;
         this.name = name;
         this.userId = userId;
+        this.subscribers = subscribers;
     }
 
     public Channel() {
