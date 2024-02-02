@@ -14,7 +14,7 @@ public class CreatePostDto {
     private String content;
     private Integer viewCount;
     private String categoryTag;
-    private Long channelId;
+    private String channelName;
     private Integer goodCount;
     private Integer badCount;
 }

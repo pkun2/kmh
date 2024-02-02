@@ -41,6 +41,17 @@ public class ChannelController {
         return ResponseEntity.ok(subscribedChannel);
     }
 
+    @GetMapping("/getChannelName")
+    public ResponseEntity<List<Channel>> getPopularChannels() {
+        List<Channel> channels = channelService.getPopularChannels();
+
+        if (channels != null && !channels.isEmpty()) {
+            return ResponseEntity.ok(channels); // 200 OK 상태와 함께 채널 리스트 반환
+        } else {
+            return ResponseEntity.noContent().build(); // 204 No Content 상태 반환
+        }
+    }
+
     @GetMapping("/get")
     public ResponseEntity<List<ChannelInfoDto>> getSubscriptions(@RequestHeader(value = "Authorization", required = false) String bearerToken) {
         List<Channel> channels = channelService.findAll();
