@@ -83,7 +83,7 @@ public class ChannelController {
     @GetMapping("/get/{channelName}")
     public ResponseEntity<ChannelInfoDto> getChannel(@PathVariable("channelName") String channelName, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         System.out.println("channelName: " + channelName);
-        Channel channel = channelService.findByName(channelName);
+        Channel channel = channelService.findChannelByName(channelName);
         System.out.println("channel값값값: " + channel);
 
         Long userId = null;
