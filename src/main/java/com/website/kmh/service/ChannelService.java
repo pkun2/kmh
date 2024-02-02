@@ -12,4 +12,6 @@ public interface ChannelService {
     Channel getChannelById(long channelId); // id를 바탕으로 채널 가져오기
 
     Channel getChannelByName(String channleName);
+
+    List<Channel> getPopularChannels();
 }

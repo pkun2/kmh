@@ -24,9 +24,23 @@ const channel = {
 
 function HomePage() {
   const navigate = useNavigate()
-  const channels = ["테스트", "지존호열", "안녕", "hello", "hoyeol_of_the_god"];
+  const [channels, setChannels] = useState([]);
   const [postsByChannel, setPostsByChannel] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // 채널 정보 가져오기
+    const fetchChannels = async () => {
+      try {
+        const response = await axios.get('/api/channel/getChannelName');
+        setChannels(response.data.map(channel => channel.name));
+      } catch (error) {
+        console.error('fetchChannels 과정중 오류 발생:', error);
+      }
+    };
+
+    fetchChannels();
+  }, []);
 
   useEffect(() => {
     const fetchPostsByChannel = async () => {
@@ -49,7 +63,7 @@ function HomePage() {
     };
 
     fetchPostsByChannel();
-  }, []);
+  }, [channels]);
 
   const renderChannelRows = () => {
     const rows = [];
