@@ -28,6 +28,28 @@ export const callSingUp = () => {
     const url = "http://localhost:8080/api/auth/register";
 }
 
+export const noAuthPostData = async (items, endpoint) => {
+    let info;
+    let ok = true;
+    let data = {};
+    const url = `http://localhost:8080/${endpoint}`;
+    const config = {
+        header : {
+            'Content-Type': 'application/json'
+        }
+    }
+    try {
+        const response = await axios.post(url, items, config);
+        info = "Request Succeed!";
+        data = response.data;
+    } catch (error) {
+        ok = !ok;
+        info = "Request Failed!";
+        data = error;
+    }
+    return { status : ok, info : info, data : data }
+}
+
 export const callSendCode = async (items) => {
     let info;
     let ok = true;
