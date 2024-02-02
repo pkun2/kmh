@@ -4,6 +4,7 @@ const PageNameBox = ({items, styles, handleClick}) => {
     const boxStyles = {
         ...styles,
         cursor: "pointer",
+        display: "inline-block",
     };
 
     return (

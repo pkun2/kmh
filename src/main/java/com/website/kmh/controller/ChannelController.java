@@ -76,7 +76,33 @@ public class ChannelController {
             return channelInfoDto;
         }).collect(Collectors.toList());
 
+        System.out.println("channelInfoDto값: " + channelInfoDtos);
         return ResponseEntity.ok(channelInfoDtos);
+    }
+
+    @GetMapping("/get/{channelName}")
+    public ResponseEntity<ChannelInfoDto> getChannel(@PathVariable("channelName") String channelName, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
+        System.out.println("channelName: " + channelName);
+        Channel channel = channelService.findChannelByName(channelName);
+        System.out.println("channel값값값: " + channel);
+
+        Long userId = null;
+        if (bearerToken != null && !bearerToken.isEmpty()) {
+            String token = bearerToken.substring(7);
+            userId = jwtTokenProvider.getUserIdFromToken(token);
+        }
+
+        boolean subscribed = false;
+        if (userId != null) {
+            List<Long> subscribedChannelIds = userChannelService.getSubscribedChannelIds(userId);
+            subscribed = subscribedChannelIds.contains(channel.getId());
+        }
+
+        ChannelInfoDto channelInfoDto = new ChannelInfoDto(channel.getId(), channel.getName());
+        channelInfoDto.setSubscribed(subscribed);
+
+        System.out.println("channelInfoDto값: " + channelInfoDto);
+        return ResponseEntity.ok(channelInfoDto);
     }
 
     @PostMapping("/subscribe/{channelId}") //채널 구독하는 api

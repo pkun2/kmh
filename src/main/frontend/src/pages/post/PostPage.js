@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getData } from "../../services";
-import { CommonButton, PageNameBox, SearchResultBox, SearchBox, Pagination } from "../../components";
+import { CommonButton, PageNameBox, SearchResultBox, SearchBox, Pagination, Subscription } from "../../components";
 
 const PostPage = () => {
     const { channelName } = useParams();
@@ -15,7 +15,7 @@ const PostPage = () => {
     const [totalPostCount, setTotalPostCount] = useState(0); // 총 게시글 수
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호, 기본은 1페이지
     const [selectedSort, setSelectedSort] = useState('등록순'); // 페이지 정렬 기준
-    const [postPage, setPostPage] = useState(5); // 한 페이지 당 로딩할 게시글 수
+    const [postPage, setPostPage] = useState(30); // 한 페이지 당 로딩할 게시글 수
 
     const handleSearch = () => { // 검색어 입력 시 이동 함수
         console.log("검색어 : ", searchInput);
@@ -140,16 +140,25 @@ const PostPage = () => {
                 marginRight: 5,
                 marginLeft: 5,
             }}>
-                <PageNameBox
-                    items={{ title: `${channelName} 채널` }}
-                    styles={{
-                        padding: 8,
-                        borderBottom: "2px solid #000099",
-                        fontWeight: "bold",
-                        fontSize: 18
-                    }}
-                    handleClick={handleReMain}
-                />
+                <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    borderBottom: "2px solid #000099",
+                    padding: '8px 0',
+                }}>
+                        <PageNameBox
+                            items={{ title: `${channelName} 채널` }}
+                            styles={{
+                                fontWeight: "bold",
+                                fontSize: 18,
+                                marginRight: 'auto',
+                            }}
+                            handleClick={handleReMain}
+                        />
+                        <Subscription
+                            name={channelName}
+                        />
+                </div>
                 <div style={{
                     display: "flex",
                     borderBottom: "2px solid #000099",
