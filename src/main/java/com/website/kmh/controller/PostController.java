@@ -113,7 +113,7 @@ public class PostController {
         post.setViewCount(createPostDto.getViewCount()); // 조회수
 
         // Channel 객체를 찾아서 설정
-        Channel channel = channelService.getChannelById(createPostDto.getChannelId());
+        Channel channel = channelService.getChannelByName(createPostDto.getChannelName());
         post.setChannel(channel);
 
         // 사용자 정보 설정

@@ -10,4 +10,6 @@ public interface ChannelService {
     List<Channel> findAll(); // 전체 채널 불러오기
 
     Channel getChannelById(long channelId); // id를 바탕으로 채널 가져오기
+
+    Channel getChannelByName(String channleName);
 }

@@ -69,12 +69,6 @@ const styles = {
         color: color,
         fontWeight: fontWeight
     }),
-    postCard: () => ({
-        border: "1px solid #ddd",
-        marginBottom: 10,
-        padding: "10px",
-        borderRadius: "5px"
-    })
 }
 
 export default styles
