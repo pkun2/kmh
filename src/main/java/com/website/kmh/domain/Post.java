@@ -50,5 +50,4 @@ public class Post {
 
     @Column(name = "bad_count", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int badCount;
-
 }

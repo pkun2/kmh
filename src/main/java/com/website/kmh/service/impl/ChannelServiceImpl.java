@@ -19,7 +19,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     public Channel createChannel(String channel_name, Long user_id) { // 채널 만들기
-        Channel newChannel = new Channel(null, channel_name, user_id);
+        Channel newChannel = new Channel(null, channel_name, user_id, 0L);
         return channelRepository.save(newChannel);
     }
 
@@ -35,5 +35,15 @@ public class ChannelServiceImpl implements ChannelService {
 
     public Channel findByName(String channelName) {
         return channelRepository.findByName(channelName);
+    }
+
+    public List<Channel> getPopularChannels() {
+        return channelRepository.findTop10ByOrderBySubscribersDesc();
+    }
+
+    public Channel getChannelByName(String channleName) {
+        Optional<Channel> channel = channelRepository.findByName(channleName);
+        // 이름에 해당하는 사용자를 반환.
+        return channel.orElseThrow(() -> new RuntimeException("Channel not found with id: " + channleName));
     }
 }
