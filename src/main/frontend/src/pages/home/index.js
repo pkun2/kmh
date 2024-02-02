@@ -1,98 +1,49 @@
-import React, { useState } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
-// import axios from 'axios';
-import {
-  ChannelPage,
-  SearchPage,
-  ProfilePage,
-  NoticePage,
-  WritePage,
-} from '../../pages';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import './HomePage.css'; // 스타일 파일 추가
+import { getData } from "../../services";
+import PostCard from "../../components/PostCard"
 
 function HomePage() {
-  const [isNoticeModalOpen, setNoticeModalOpen] = useState(false);
+  const channelId = 2
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleCloseNoticeModal = () => {
-    setNoticeModalOpen(false);
-  };
+  useEffect(() => {
+    const fetchPosts = async () => {
+      let response;
 
-//   useEffect(() => {
-//     const fetchPosts = async () => {
-//         try {
-//             const response = await axios.get('http://localhost:8080/api/posts');
-//             setPosts(response.data);
-//         } catch (error) {
-//             console.error('Error fetching posts:', error);
-//         }
-//     };
+      setIsLoading(true);
+      try {
+        response = await getData({limit: 10}, `api/posts/latest/${channelId}`);
+        setPosts(response.data.content);
+      } catch (error) {
+        console.error('fetchPosts 과정중 오류 발생:', error);
+      } finally {
+        setIsLoading(false); //로딩 완료
+      }
+    };
 
-//     fetchPosts();
-// }, []);
+    fetchPosts();
+  }, [channelId]);
 
+  if (isLoading) {
+    return <div>로딩중...</div>;
+  }
   return (
-    <div className="home-container">
-      <Routes>
-        <Route path="/channel" element={<ChannelPage />} />
-        <Route path="/trpg" element={<ChannelPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/write" element={<WritePage />} />
-      </Routes>
-
-      <div className="post-list">
-        {/* 중앙에 글 리스트를 출력하는 부분 (DB로부터 데이터를 불러와서 표시) */}
-        {/* 아래는 예시로 더미 데이터를 사용하였습니다. */}
-        <table>
-          <thead>
-            <tr>
-              <th>글 번호</th>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>작성일</th>
-              <th>조회수</th>
-              <th>추천</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>3</td>
-              <td>아 집에 가고 싶다 근데 이미 집이네</td>
-              <td>장호열</td>
-              <td>2024-01-10</td>
-              <td>10</td>
-              <td>8</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>ㅋㅋ루삥뽕</td>
-              <td>박기량</td>
-              <td>2024-01-11</td>
-              <td>15</td>
-              <td>10</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>위에 틀딱</td>
-              <td>박민주</td>
-              <td>2024-01-12</td>
-              <td>8</td>
-              <td>3</td>
-            </tr>
-          </tbody>
-        </table>
+      <div>
+        <h2>{channelId} 채널</h2>
+        {posts.length > 0 ? (
+            <ul>
+              {posts.map(post => (
+                  <PostCard key={post.id} title={post.title} onClick={() => alert(`게시글 ${post.title} 선택됨`)} />
+              ))}
+            </ul>
+        ) : (
+            <p>이 채널에는 게시글이 없습니다.</p>
+        )}
       </div>
-
-      <div className="write-button">
-        {/* 오른쪽 아래 '글쓰기' 버튼 */}
-        <Link to="/write">
-          <button>글쓰기</button>
-        </Link>
-      </div>
-
-      {/* 알림 모달*/}
-      {isNoticeModalOpen && <NoticePage onClose={handleCloseNoticeModal} />}
-    </div>
   );
 }
 
