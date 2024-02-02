@@ -10,6 +10,7 @@ import CommentBox from "./CommentBox";
 import PagingBox from "./PagingBox";
 import Pagination from "./Pagination";
 import Subscription from "./Subscription";
+import LoadingComponent from "./LoadingComponent";
 
 export {
     CommonButton,
@@ -24,4 +25,5 @@ export {
     Subscription,
     PagingBox,
     Pagination,
+    LoadingComponent
 }

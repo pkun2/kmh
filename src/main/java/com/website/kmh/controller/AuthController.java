@@ -108,13 +108,13 @@ public class AuthController {
         if (emailVO != null && emailVO.getReceiver() != null && !emailVO.getReceiver().isEmpty()) {
             if(accountService.isEmailAvailable(emailVO.getReceiver())) {
                 mailService.createMail(emailVO);
+                return true;
             } else {
                 return false;
             }
         } else {
             return false;
         }
-        return false;
     }
 
 
