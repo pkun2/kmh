@@ -1,3 +1,4 @@
 src/main/frontend/node_modules
 src/main/frontend/ckeditor5/node_modules
 src/main/resources/config/application.properties
+out/production/resources/config/application.properties
