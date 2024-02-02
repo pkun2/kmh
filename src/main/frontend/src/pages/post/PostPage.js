@@ -22,7 +22,7 @@ const PostPage = () => {
         navigate(`/${channelName}?keyword=${searchInput}`);
     }
 
-    const handleKeyPress = (e) => { // 엔터 누를 시 handleSearch, 즉 검색어로 이동
+    const handleKeyPress = (e) => { // 검색어를 입력하고 엔터 누를 시 handleSearch, 즉 검색어로 이동
         if (e.key === "Enter") {
             handleSearch(searchInput);
         }
@@ -127,7 +127,7 @@ const PostPage = () => {
     }, [searchKeyword, location.search]);
 
     const handlePost = (index) => {
-        navigate(`/${channelName}?post_id=${encodeURIComponent(searchList[index].number)}`);
+        navigate(`/${channelName}/${encodeURIComponent(searchList[index].number)}`);
     };
 
     const handleWrite = () => {

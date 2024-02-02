@@ -4,30 +4,26 @@ import { getData } from "../../services";
 import { PageNameBox, PostInfoBox, CommentBox } from "../../components";
 
 const PostDetailPage = () => {
-    const { channelId } = useParams();
+    const { channelName, postId } = useParams();
+    console.log(channelName, postId);
     const location = useLocation();
-    const postReference = new URLSearchParams(location.search).get('post_id');
+    // const postReference = new URLSearchParams(location.search).get('post_id');
     const [items, setItems] = useState(null);
 
     const navigate = useNavigate();
 
     const handleReMain = () => { // 채널 명 누를 시 채널의 초기 페이지로 이동
-        navigate(`/${channelId}/post`);
+        navigate(`/${channelName}`);
     }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getData({}, `api/posts/${postReference}`);
+                const response = await getData({}, `api/posts/${postId}`);
                 console.log("API Response:", response);
     
                 if (response.status && response.data) {
                     setItems(response.data);
-    
-                    // URL 변경
-                    window.history.pushState({}, '', `/${response.data.channelName}/postdetail?post_id=${response.data.id}`);
-                    // 지금 url을 문자가 아닌 channel_id로 바꾸고 싶을 때 사용
-                    // window.history.pushState({}, '', `/${response.data.channel.id}/postdetail?post_id=${response.data.postId}`);
                 } else {
                     console.error("게시글 정보를 가져오는데 실패했습니다.");
                 }
@@ -37,7 +33,7 @@ const PostDetailPage = () => {
         };
     
         fetchData();
-    }, [postReference]);
+    }, [postId]);
     
 
     return (
@@ -76,7 +72,7 @@ const PostDetailPage = () => {
                         </div>
                         <div>
                             <CommentBox
-                                postId={postReference}
+                                postId={postId}
                                 userId={2}
                                 nickname={"jang"}
                             />

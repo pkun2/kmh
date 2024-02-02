@@ -32,7 +32,7 @@ function App() {
               <Route path=":channelName/write" element={<WritePage/>}/>
               <Route path="/login" element={<LoginPage/>}/>
               <Route path=":channelName" element={<PostPage />} />
-              <Route path=":channelName" element={<PostDetailPage />} />
+              <Route path=":channelName/:postId" element={<PostDetailPage />} />
               <Route path="/signup" element={<SignUpPage/>}/>
               <Route path="/notice" element={<NoticePage/>}/>
               <Route path="/profile" element={<ProfilePage/>}/>
