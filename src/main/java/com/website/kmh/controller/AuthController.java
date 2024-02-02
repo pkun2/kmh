@@ -2,6 +2,7 @@ package com.website.kmh.controller;
 
 import com.website.kmh.domain.Account;
 import com.website.kmh.domain.AccountProfile;
+import com.website.kmh.domain.CheckNickname;
 import com.website.kmh.domain.UserChannel;
 import com.website.kmh.dto.*;
 import com.website.kmh.security.SecurityUtil;
@@ -92,11 +93,30 @@ public class AuthController {
         return accountService.refresh(userId); //토큰 재발급 진행
     }
 
-    @PostMapping("/email")
-    public String email(@RequestBody EmailVO emailVO) throws MessagingException {;
-        mailService.createMail(emailVO);
-        return "으헤~";
+    @PostMapping("/checkNickname")
+    public boolean checkNickname(@RequestBody CheckNickname checkNickname) {
+        if (checkNickname != null && checkNickname.getNickname() != null && !checkNickname.getNickname().isEmpty()) {
+            return accountService.isNicknameAvailable(checkNickname.getNickname());
+        } else {
+            return false;
+        }
+
     }
+
+    @PostMapping("/email")
+    public boolean email(@RequestBody EmailVO emailVO) throws MessagingException {
+        if (emailVO != null && emailVO.getReceiver() != null && !emailVO.getReceiver().isEmpty()) {
+            if(accountService.isEmailAvailable(emailVO.getReceiver())) {
+                mailService.createMail(emailVO);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        return false;
+    }
+
 
     @PostMapping("/emailCode")
     public boolean emailCode(@RequestBody EmailCodeVO emailCodeVO) {

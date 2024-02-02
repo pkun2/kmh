@@ -47,9 +47,10 @@ public class PostController {
 
 
     // 게시글 가져와 /post에 츌력해주는 get 요청. 기본임
-    @GetMapping("/latest/{channelId}")
+    @GetMapping("/latest/{channelName}")
     public ResponseEntity<Page<PostDto>> getLatestPost(
-            @PathVariable("channelId") Long channelId,
+            @PathVariable("channelName") String channelName,
+            @RequestParam(name = "keyword", required = false) String keyword, // 검색 키워드
             @RequestParam(name = "p", defaultValue = "1") int page, // 페이지 번호
             @RequestParam(name = "sort", defaultValue = "createdAt") List<String> sortBys, // 어떤 것을 기준으로 정렬할 것인지
             @RequestParam(name = "sortOrder", defaultValue = "desc") List<String> sortOrders, // 오름차순과 내림차순(오름차순: asc, 내림차순: desc)
@@ -63,31 +64,25 @@ public class PostController {
         orders.add(new Sort.Order(Sort.Direction.DESC, "createdAt"));
         Sort sort = Sort.by(orders);
 
-        Page<PostDto> posts = postService.findPostsByChannelId(channelId, PageRequest.of(page - 1, limit, sort));
+        Page<PostDto> posts;
+
+        if (keyword != null) {
+            // 검색어가 있으면, 검색 로직 수행
+            posts = postService.searchPosts(keyword, PageRequest.of(page - 1, limit, sort));
+        }
+        else {
+            // 검색어가 없으면, 다른 로직(정렬, 페이지 이동 등) 수행
+            posts = postService.findPostsByChannelName(channelName, PageRequest.of(page - 1, limit, sort));
+        }
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/search") // 게시글 내 검색
-    public Page<Post> searchPosts(
-            @RequestParam("keyword") String keyword, //검색 단어
-            @RequestParam(name = "p", defaultValue = "0") int page, // 페이지 번호
-            @RequestParam(name = "sort", defaultValue = "createdAt") String sortBy, // 어떤 것을 기준으로 정렬할 것인지
-            @RequestParam(name = "sortOrder", defaultValue = "desc") String sortOrder, // 오름차순과 내림차순(오름차순: asc, 내림차순: desc)
-            @RequestParam(name = "limit", defaultValue = "30") int limit // 페이지 당 보여줄 게시글 갯수
-    ) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
-        return postService.searchPosts(keyword, PageRequest.of(page - 1, limit, sort));
-    }
-
     @GetMapping("/{postId}") // 게시글 상세 내용 불러오기
-    public ResponseEntity<Post> getPostById(@PathVariable("postId") Long postId) {
-        Post post = postService.getPostById(postId); //id를 바탕으로 게시글을 불러옴
-        if (post != null) { // 해당게시글이 존재하면
-            //조회수를 늘리기
-            post.setViewCount(post.getViewCount());
-            postService.savePost(post);
-
-            return new ResponseEntity<>(post, HttpStatus.OK); //상세내용을 가져옴
+    public ResponseEntity<PostDto> getPostById(@PathVariable("postId") Long postId) {
+        PostDto postDto = postService.getPostById(postId); //id를 바탕으로 게시글을 불러옴
+        if (postDto != null) { // 해당게시글이 존재하면
+            //조회수 증가 로직은 PostServiceImpl에서 구현
+            return new ResponseEntity<>(postDto, HttpStatus.OK); //상세내용을 가져옴
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

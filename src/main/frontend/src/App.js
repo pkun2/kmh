@@ -29,10 +29,10 @@ function App() {
           <div>
             <Routes>
               <Route path="/home" element={<HomePage/>}/>
-              <Route path=":channelId/write" element={<WritePage/>}/>
+              <Route path=":channelName/write" element={<WritePage/>}/>
               <Route path="/login" element={<LoginPage/>}/>
-              <Route path=":channelId/post" element={<PostPage />} />
-              <Route path=":channelId/postdetail" element={<PostDetailPage />} />
+              <Route path=":channelName" element={<PostPage />} />
+              <Route path=":channelName/:postId" element={<PostDetailPage />} />
               <Route path="/signup" element={<SignUpPage/>}/>
               <Route path="/notice" element={<NoticePage/>}/>
               <Route path="/profile" element={<ProfilePage/>}/>
