@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,16 +42,21 @@ public class ChannelController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<List<ChannelInfoDto>> getSubscriptions(@RequestHeader("Authorization") String bearerToken) {
-        // 토큰에서 사용자 ID 추출
-        String token = bearerToken.substring(7);
-        Long userId = jwtTokenProvider.getUserIdFromToken(token);
-
-        // 사용자가 구독한 채널 ID 목록 가져오기
-        List<Long> subscribedChannelIds = userChannelService.getSubscribedChannelIds(userId);
-
-        // 전체 채널 목록 조회
+    public ResponseEntity<List<ChannelInfoDto>> getSubscriptions(@RequestHeader(value = "Authorization", required = false) String bearerToken) {
         List<Channel> channels = channelService.findAll();
+        List<Long> subscribedChannelIds;
+
+        if (bearerToken != null && !bearerToken.isEmpty()) {
+            // 토큰에서 사용자 ID 추출
+            String token = bearerToken.substring(7);
+            Long userId = jwtTokenProvider.getUserIdFromToken(token);
+
+            // 사용자가 구독한 채널 ID 목록 가져오기
+            subscribedChannelIds = userChannelService.getSubscribedChannelIds(userId);
+        } else {
+            // 구독 정보가 없는 경우 빈 리스트 초기화
+            subscribedChannelIds = Collections.emptyList();
+        }
 
         // 각 채널에 대해 사용자가 구독 중인지 여부를 ChannelInfoDto 객체에 설정
         List<ChannelInfoDto> channelInfoDtos = channels.stream().map(channel -> {

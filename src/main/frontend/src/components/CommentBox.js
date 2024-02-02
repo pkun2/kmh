@@ -18,7 +18,6 @@ const CommentBox = ({ postId, userId, nickname }) => {
     const commentsPage = 3; // 한 페이지 당 댓글 수
 
     useEffect(() => {
-        console.log("comments", comments);
         setItems(comments);
     }, [comments]);
 
@@ -54,7 +53,6 @@ const CommentBox = ({ postId, userId, nickname }) => {
 
     // 로딩 중에 뜨는 메시지
     if (isLoading) {
-        console.log("로딩중...");
         return <div>댓글 로딩중...</div>;
     }
 

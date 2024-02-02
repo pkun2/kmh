@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
@@ -20,45 +18,57 @@ public class PostServiceImpl implements PostService {
         this.postRepository = postRepository;
     }
 
-    //최신 게시글 목록 조회 서비스 메서드
-    public Page<Post> getLatestPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
-    }
-
-    // title과 content 및 기타등등에서 값 찾음
-    public Page<Post> searchPosts(String keyword, Pageable pageable) {
-        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
-    }
-
     // 게시글 만들기
     public Post createPost(Post post) {
         return postRepository.save(post);
     }
 
-    // 작성한 게시글 저장
-    public Post savePost(Post post) {
-        return postRepository.save(post);
-    }
-
-
-    public Post getPostById(Long postId) { 
+    public PostDto getPostById(Long postId) {
         Optional<Post> postOptional = postRepository.findById(postId);
 
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
-            System.out.println("Retrieved post: " + post);
+
+            // 조회수 증가
+            post.setViewCount(post.getViewCount() + 1);
+
+            // 변경 사항(조회수 증가) 저장
+            Post updatedPost = postRepository.save(post);
 
             incrementViewCount(post);
 
-            return post;
+            PostDto postDto = PostDto.builder()
+                    .id(post.getPostId())
+                    .userId(post.getUser().getId())
+                    .nickname(post.getUser().getNickname())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .createdAt(post.getCreatedAt())
+                    .viewCount(updatedPost.getViewCount())
+                    .categoryTag(post.getCategoryTag())
+                    .channelId(post.getChannel().getId())
+                    .channelName(post.getChannel().getName())
+                    .goodCount(post.getGoodCount())
+                    .badCount(post.getBadCount())
+                    .build();
+
+            return postDto;
         } else {
             System.out.println("Post not found for postId: " + postId);
             return null;
         }
     }
 
-    public Page<PostDto> findPostsByChannelId(Long channelId, Pageable pageable) { // 특정 채널에 포함된 게시글 가져오기
-        Page<Post> postPage = postRepository.findByChannelId(channelId, pageable);
+    // title과 content 및 기타등등에서 값 찾음
+    public Page<PostDto> searchPosts(String keyword, Pageable pageable) {
+        Page<Post> postPage = postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+
+        // Entity를 DTO로 변환
+        return postPage.map(this::convertToDto);
+    }
+
+    public Page<PostDto> findPostsByChannelName(String channelName, Pageable pageable) { // 특정 채널에 포함된 게시글 가져오기
+        Page<Post> postPage = postRepository.findByChannelName(channelName, pageable);
 
         // Entity를 DTO로 변환
         return postPage.map(this::convertToDto);
@@ -69,16 +79,13 @@ public class PostServiceImpl implements PostService {
             return null;
         }
 
-        LocalDateTime createdAt = post.getCreatedAt() != null ?
-                post.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
-
         return PostDto.builder()
                 .id(post.getPostId())
                 .userId(post.getUser().getId())
                 .nickname(post.getUser().getNickname())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .createdAt(createdAt)
+                .createdAt(post.getCreatedAt())
                 .viewCount(post.getViewCount())
                 .categoryTag(post.getCategoryTag())
                 .channelId(post.getChannel().getId())
