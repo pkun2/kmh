@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CommonButton, SignUpMenu } from "../../components";
+import { CommonButton, LoadingComponent } from "../../components";
 import { noAuthPostData } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import { callSendCode } from "../../services";
@@ -9,84 +9,185 @@ const SignUpPage = () => {
     const navigate = useNavigate();
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
+    const [passwordStrength, setPasswordStrength] = useState({isValid : false, strength: 0});
     const [passwordCheck, setPasswordCheck] = useState(false);
+    const [passwordValid, setPasswordValid] = useState(true);
+    const [visiblePassword, setVisiblePassword] = useState(false);
     const [email, setEmail] = useState('');
     const [emailDomain, setEmailDomain] = useState('');
-    const [emailDomainMenu, setEmailDomainMenu] = useState(0);
+    const [emailDomainMenu, setEmailDomainMenu] = useState();
+    const [time, setTime] = useState(295);
+    const [isTimerRunning, setTimerRunning] = useState(false);
     const [emailAuthSequence, setEmailAuthSequence] = useState(false);
-    const [authCode, setAuthCode] = useState();
+    const [authCode, setAuthCode] = useState('');
     const [authCodeCheck, setAuthCodeCheck] = useState(false);
-    const [emailCheck, setEmailCheck] = useState(false);
     const [nickname, setNickname] = useState('');
     const [nicknameCheck, setNicknameCheck] = useState(false);
-    const [currentMenu, setCurrentMenu] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadingTitle, setLoadingTitle] = useState("");
+
 
     useEffect(() => {
-        setPasswordCheck(isSamePassword(password, password2));
-    }, [password, password2]);
+        setPasswordCheck(isSamePassword());
+        setPasswordValid(isValidPassword());
+        setPasswordStrength(isSecurePassword());
+    }, [password])
+
+    useEffect(() => {
+        setPasswordCheck(isSamePassword());
+    }, [password2])
 
     useEffect(() => {
         setNicknameCheck(false);
     }, [nickname])
 
+    useEffect(() => {
+        setAuthCodeCheck(false);
+    },[email, emailDomain])
+
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes} : ${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    };
+
+    useEffect(() => {
+        let timerInterval;
+
+        if (isTimerRunning && time > 0) {
+            timerInterval = setInterval(() => {
+                setTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+            }, 1000);
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null; // 초기화
+
+            // 타이머가 0이 되었을 때의 로직 추가
+            if (time === 0) {
+                console.log("타이머 종료");
+            }
+        }
+
+        return () => {
+            clearInterval(timerInterval);
+            timerInterval = null; // 초기화
+        };
+    }, [isTimerRunning, time]);
+
     const handleSignUp = async (event) => {
         event.preventDefault();
         console.log(`버튼 눌림\nID : ${email}@${emailDomain}\nPassword : ${password}`);
 
-        const items = {
-            email: email + "@" + emailDomain,
-            nickname: nickname,
-            password: password
-        }
+        if(passwordCheck && passwordValid && authCodeCheck && nicknameCheck && passwordStrength.isValid) {
+            const items = {
+                email: email + "@" + emailDomain,
+                nickname: nickname,
+                password: password
+            }
 
-        const response = await noAuthPostData(items, 'api/auth/register');
-        console.log(response);
+            const response = await noAuthPostData(items, 'api/auth/register');
+            if(response.status === true) {
+                console.log(response.data);
+                alert("회원가입 완료!");
+                navigate("/login");
+            } else {
+                alert("에러 발생!");
+            }
+        } else {
+            console.log("뭔가 잘못된");
+        }
     }
 
     const isCorrectEmail = () => {
-        return true
+        const regex = /^[A-Za-z0-9.]+$/;
+        if(regex.test(email) && (regex.test(emailDomain))) {
+            console.log("이메일 적합");
+            return true;
+        } else {
+            console.log("이메일 부적합");
+            return false;
+        }
+    }
+
+    const isCorrectNickname = () => {
+        const regex = /^[A-Za-z0-9ㄱ-힣]+$/;
+        if(regex.test(nickname) && !(/s/.test(nickname))) {
+            if(nickname.length < 7) {
+                console.log(nickname.length);
+                console.log("닉네임 적합");
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            console.log("닉네임 부적합");
+            return false;
+        }
+    }
+
+    const isValidPassword = () => {
+        const regex = /\/\//;
+        return !regex.test(password) // //포함 시 false, 미 포함시 true
     }
 
     const isSecurePassword = () => {
-        return false;
+        const hasMinLength = password.length >= 8;
+        const hasMixedCharacters = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(password);
+        const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        let isValid = true;
+        let strength = 0;
+
+        if (!hasMinLength) {
+            isValid = false;
+        } else {
+            if (hasMixedCharacters) strength++;
+            if (hasSpecialCharacters) strength++;
+        }
+
+        return { isValid, strength };
     }
 
-    const isSamePassword = (pw1, pw2) => {
-        if (pw1 === pw2) {
-            if((pw1.replaceAll("\\s", "").length === 0) && (pw2.replaceAll("\\s", "").length === 0)) {
-                return false;
-            } else {
-                return true;
-            }
+    const isSamePassword = () => {
+        if (password === password2) {
+            return !((password.replaceAll("\\s", "").length === 0) && (password2.replaceAll("\\s", "").length === 0));
         } else {
             return false;
         }
     }
 
     const handleSendCode = async () => {
-        console.log("인증 메일 발송 버튼 눌림");
-        // 이메일 유효 검증 과정 필요 return;
+        if(!isCorrectEmail()) {
+            alert("형식에 맞지 않는 이메일입니다.");
+            return;
+        }
+        setLoadingTitle("메일 전송중...");
+        setIsLoading(true);
         const items = {
             receiver: email + "@" + emailDomain
         }
         const response = await callSendCode(items);
         if(response.status === true) {
             if(response.data === false) {
-                alert("이메일이 형식이 잘못되었거나, 이미 사용중인 이메일입니다.");
+                setIsLoading(false);
+                alert("이미 사용중인 이메일입니다.");
             } else {
+                setTime(290);
+                setTimerRunning(true);
                 setEmailAuthSequence(true);
             }
         } else {
             alert("메일 발송중 오류발생");
         }
-    }
-
-    const handleAuthenticationCode = () => {
-        console.log("인증 버튼 눌림");
+        setIsLoading(false);
     }
 
     const handleCheckNickname = async () => {
+        if(!isCorrectNickname()) {
+            alert("형식에 맞지 않는 닉네임입니다.");
+            return;
+        }
+
         const response = await noAuthPostData({
             nickname: nickname
         }, "api/auth/checkNickname");
@@ -94,16 +195,42 @@ const SignUpPage = () => {
             if(response.data === true) {
                 setNicknameCheck(true);
             } else{
+                alert("중복 닉네임입니다.");
                 setNicknameCheck(false);
-                // 닉네임 중복, 화면에 표시과정 필요할듯
             }
         } else {
             alert("요청중 오류 발생");
         }
     }
 
+    const handleAuthCodeCheck = async () => {
+        const items = {
+            receiver: email + "@" + emailDomain,
+            authCode: authCode
+        }
+        const response = await noAuthPostData(items, "api/auth/emailCode");
+        if(response.status) {
+            console.log(response.status)
+            if(response.data) {
+                console.log(response.data)
+                setAuthCodeCheck(true);
+            }
+        }
+    }
+
+    const handleVisiblePassword = () => {
+        setVisiblePassword(!visiblePassword);
+    }
+
     return (
         <>
+            <LoadingComponent
+                visible={isLoading}
+                items = {{
+                    title: loadingTitle
+                }}
+                fonts = {styles.middleFont("black", "bold")}
+            />
             <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
                 <div style={{marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "column"}}>
                     E-Mail
@@ -153,23 +280,23 @@ const SignUpPage = () => {
                                     style={{
                                         border: "1px solid black",
                                         backgroundColor: "#DDDDDD",
-                                        minWidth: "216px",
+                                        minWidth: "215px",
+                                        marginRight: 10,
                                         width: "20vw",
                                         height: 30,
                                         fontSize: 18
                                     }}
-                                    value={nickname}
-                                    onChange={(e) => setNickname(e.target.value)}
-                                    placeholder=""
+                                    value={authCode}
+                                    onChange={(e) => setAuthCode(e.target.value)}
+                                    placeholder="인증 번호"
                                 />
-                                <CommonButton
-                                    handleClick={handleAuthenticationCode}
+                                {!authCodeCheck ?<CommonButton
+                                    handleClick={handleAuthCodeCheck}
                                     items={{title: "인증"}}
                                     styles={{
                                         width: "10vw",
                                         minWidth: "100px",
-                                        marginLeft: "5px",
-                                        height: 34,
+                                        height: 32,
                                         backgroundColor: '#0099FF',
                                         color: 'white',
                                         border: 'none'
@@ -178,10 +305,27 @@ const SignUpPage = () => {
                                         fontSize: '18px',
                                         fontWeight: 'bold'
                                     }}
-                                />
+                                /> :
+                                    <div
+                                        style={{
+                                            display:"flex",
+                                            alignItems:"center",
+                                            justifyContent:"center",
+                                            width: "10vw",
+                                            minWidth: "100px",
+                                            height: 32,
+                                            backgroundColor: '#009900',
+                                            color: 'white',
+                                            border: 'none',
+                                            fontSize: '18px',
+                                            fontWeight: 'bold'
+                                        }}
+                                    >
+                                        완료
+                                    </div>}
                             </div>
                             <div>
-                                남은 시간 :
+                                남은 시간 {formatTime(time)}
                             </div>
                         </div> :
                         <CommonButton
@@ -222,18 +366,37 @@ const SignUpPage = () => {
                             onChange={(e) => setNickname(e.target.value)}
                             placeholder=" Nickname"
                         />
-                        <CommonButton
-                            handleClick={handleCheckNickname}
-                            items={{title: "중복 확인"}}
-                            styles={{
-                                width: 100,
-                                height: 32,
-                                backgroundColor: '#0099FF',
-                                color: 'white',
-                                border: 'none'
-                            }}
-                            fonts={{fontSize: '18px', fontWeight: 'bold'}}
-                        />
+                        {(nicknameCheck === true) ?
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: 100,
+                                    height: 32,
+                                    backgroundColor: '#009900',
+                                    color: 'white',
+                                    border: 'none',
+                                    fontSize: '18px',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                확인 완료
+                            </div> :
+                            <CommonButton
+                                handleClick={handleCheckNickname}
+                                items={{title: "중복 확인"}}
+                                styles={{
+                                    width: 100,
+                                    height: 32,
+                                    backgroundColor: '#0099FF',
+                                    color: 'white',
+                                    border: 'none'
+                                }}
+                                fonts={{fontSize: '18px', fontWeight: 'bold'}}
+                            />
+
+                        }
                     </div>
                     <div style={{
                         marginTop: 2,
@@ -243,19 +406,29 @@ const SignUpPage = () => {
                         alignItems: "center"
                     }}>
                         <div style={styles.tinyFont("black", "none",)}>
-                            최대 한글 6자, 영어 12자까지 가능합니다.
+                            한글, 영어, 숫자 포함 최대 6자 까지 가능합니다.
                         </div>
                         <div style={styles.tinyFont("black", "none",)}>
-                            특수문자는 포함할 수 없습니다.
+                            공백 및 특수문자는 포함할 수 없습니다.
                         </div>
                     </div>
                 </div>
                 <div style={{marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "column"}}>
-                    <div>
-                        비밀번호
+                    <div style = {{display: "flex", flexDirection: "row"}}>
+                        <div>
+                            비밀번호
+                        </div>
+                        <div style = {{display: "flex", alignItems: "center", ...styles.tinyFont("black", "none")}}>
+                            <input
+                                type="checkbox"
+                                checked={visiblePassword}
+                                onChange={handleVisiblePassword}
+                            />
+                            보이기
+                        </div>
                     </div>
                     <input
-                        type="text"
+                        type={visiblePassword ? 'text' : 'password'}
                         style={{
                             border: "1px solid black",
                             backgroundColor: "#DDDDDD",
@@ -268,16 +441,71 @@ const SignUpPage = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder=" PW"
                     />
-                    <div>
-                        보안 :
+                    <div style={{display: "flex", flexDirection: "row", ...styles.smallFont("black", "none")}}>
+                        <div>
+                            비밀번호 안전도 :
+                        </div>
+                        {(passwordStrength.isValid === true) ?
+                            <>
+                                <div
+                                    style={{
+                                        marginLeft: 5,
+                                        color: (() => {
+                                            switch (passwordStrength.strength) {
+                                                case 0 :
+                                                    return "red"; // 취약일 때 빨간색
+                                                case 1:
+                                                    return "orange"; // 보통일 때 주황색
+                                                case 2:
+                                                    return "green"; // 안전일 때 초록색
+                                                default:
+                                                    return "black"; // 기본값
+                                            }
+                                    })()
+                                }}>
+                                    {/* 강도에 따른 글자 표시 */}
+                                    {(() => {
+                                        switch (passwordStrength.strength) {
+                                            case 0:
+                                                return "취약";
+                                            case 1:
+                                                return "보통";
+                                            case 2:
+                                                return "안전";
+                                            default:
+                                                return "모름";
+                                        }
+                                    })()}
+                                </div>
+                            </> :
+                            <></>
+                        }
                     </div>
                 </div>
                 <div style={{marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "column"}}>
-                    <div>
-                        비밀번호 확인
+                    <div style={{display: "flex", flexDirection: "row"}}>
+                        <div>
+                            비밀번호 확인
+                        </div>
+                        {(password2.length !== 0) ? <div
+                            style = {{
+                                marginLeft :5,
+                                color: (() => {
+                                if(passwordCheck) return "green";
+                                else return "red";
+                                })()
+                            }}
+                        >
+                                {(() => {
+                                    if(passwordCheck) return "일치";
+                                    else return "불일치";
+                                })()}
+                        </div> :
+                            <></>
+                        }
                     </div>
                     <input
-                        type="text"
+                        type={visiblePassword ? 'text' : 'password'}
                         style={{
                             border: "1px solid black",
                             backgroundColor: "#DDDDDD",

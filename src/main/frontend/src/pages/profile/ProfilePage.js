@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { getToken, useSession } from "../../services";
+import { getToken, useSession, callLogout } from "../../services";
 
 function ProfilePage() {
     const navigate = useNavigate()
     const [user, setUser] = useState(null);
     const [subChannel, setSubChannel] = useState([]);
-    const { getTimeout_KeepPage, getTimeout_ExpirePage } = useSession();
+    const { getTimeout_ExpirePage } = useSession();
 
     useEffect(() => {
         if(getTimeout_ExpirePage()) {
-            console.log("로그인 유효함");
         } else {
-            console.log("로그인 유효하지 않음");
             navigate("/login");
         }
 
@@ -43,7 +41,11 @@ function ProfilePage() {
 
     const handleCreateChannel = () => {
         navigate("/createChannel");
+    }
 
+    const handleLogout = () => {
+        callLogout();
+        navigate("/login");
     }
 
     return (
@@ -65,6 +67,9 @@ function ProfilePage() {
                     ))}
                 </ul>
             </div>
+            <button onClick = {handleLogout}>
+                로그아웃
+            </button>
         </div>
     )
         ;
