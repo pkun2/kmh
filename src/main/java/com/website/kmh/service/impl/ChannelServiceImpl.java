@@ -32,4 +32,8 @@ public class ChannelServiceImpl implements ChannelService {
         // ID에 해당하는 사용자를 반환.
         return channel.orElseThrow(() -> new RuntimeException("Channel not found with id: " + channelId));
     }
+
+    public Channel findByName(String channelName) {
+        return channelRepository.findByName(channelName);
+    }
 }

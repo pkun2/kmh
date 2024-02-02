@@ -51,7 +51,7 @@ export default function Header() {
 
     const handleChannel = (selectedChannel) => { // 채널 선택시 선택된 채널 콘솔에 표시, 채널 이동
         console.log(`선택된 채널: ${channels[selectedChannel].channelId}`);
-        window.location.href = `/${encodeURIComponent(channels[selectedChannel].channelId)}/post`;
+        window.location.href = `/${encodeURIComponent(channels[selectedChannel].channelName)}`;
     }
 
     const channelList = channels.map(channel => ({

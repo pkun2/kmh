@@ -12,7 +12,6 @@ import java.util.Date;
 @Entity
 @Table(name = "posts", indexes = {
         @Index(columnList = "channel_id", name = "idx_channel_id"),
-        @Index(columnList = "channel_name", name = "idx_channel_name"),
         @Index(columnList = "created_at", name = "idx_created_at"),
         @Index(columnList = "user_id", name = "idx_author_id")
 })
