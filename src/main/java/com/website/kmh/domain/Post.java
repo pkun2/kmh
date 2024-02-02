@@ -4,12 +4,18 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
 @Getter
 @Entity
-@Table(name = "posts")
+@Table(name = "posts", indexes = {
+        @Index(columnList = "channel_id", name = "idx_channel_id"),
+        @Index(columnList = "channel_name", name = "idx_channel_name"),
+        @Index(columnList = "created_at", name = "idx_created_at"),
+        @Index(columnList = "user_id", name = "idx_author_id")
+})
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +34,7 @@ public class Post {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "view_count", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int viewCount = 0;
@@ -45,4 +51,5 @@ public class Post {
 
     @Column(name = "bad_count", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int badCount;
+
 }

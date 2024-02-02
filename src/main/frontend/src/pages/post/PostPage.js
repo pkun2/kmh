@@ -4,11 +4,10 @@ import { getData } from "../../services";
 import { CommonButton, PageNameBox, SearchResultBox, SearchBox, Pagination } from "../../components";
 
 const PostPage = () => {
-    const { channelId } = useParams();
+    const { channelName } = useParams();
     const [searchList, setSearchList] = useState([]);
-    const [channelName, setChannelName] = useState();
     const navigate = useNavigate(); // 페이지 이동
-    const location = useLocation(); // ?post=2 같이 이동하기 위해 사용
+    const location = useLocation(); // ?p=4와 같이 페이지 이동 위해 사용
     const searchKeyword = new URLSearchParams(location.search).get('keyword');
     const page = Number(new URLSearchParams(location.search).get('p')) || 1; // 페이지 번호를 URL에서 가져옴
 
@@ -16,21 +15,21 @@ const PostPage = () => {
     const [totalPostCount, setTotalPostCount] = useState(0); // 총 게시글 수
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호, 기본은 1페이지
     const [selectedSort, setSelectedSort] = useState('등록순'); // 페이지 정렬 기준
-    const [postPage, setPostPage] = useState(30); // 한 페이지 당 로딩할 게시글 수
+    const [postPage, setPostPage] = useState(5); // 한 페이지 당 로딩할 게시글 수
 
     const handleSearch = () => { // 검색어 입력 시 이동 함수
         console.log("검색어 : ", searchInput);
-        navigate(`/post?keyword=${searchInput}`);
+        navigate(`/${channelName}?keyword=${searchInput}`);
     }
 
-    const handleKeyPress = (e) => { // 엔터 누를 시 handleSearch, 즉 검색어로 이동
+    const handleKeyPress = (e) => { // 검색어를 입력하고 엔터 누를 시 handleSearch, 즉 검색어로 이동
         if (e.key === "Enter") {
             handleSearch(searchInput);
         }
     };
 
     const handleReMain = () => { // 채널 명 누를 시 현재 페이지의 초기 페이지로 이동
-        navigate(`/${channelId}/post`);
+        navigate(`/${channelName}`);
     }
 
     // 최근, 조회, 추천순 정렬
@@ -84,34 +83,24 @@ const PostPage = () => {
                 const params = new URLSearchParams(location.search);
                 const sort = params.get('sort') || 'createdAt'; // sort 값이 없으면 default로 인식
                 const p = parseInt(params.get('p'), 10) || 1;
+                const query = { p: p, limit: postPage, sort: sort, ...sortCondition };
                 if (searchKeyword) {
-                    response = await getData({ p: p, limit: postPage, keyword: searchKeyword }, 'api/posts/search');
-                    console.log(response);
+                    query.keyword = searchKeyword;
                 }
-                else if (sort) {
-                    switch (sort) {
-                        case 'hitAll':
-                            const sortHit = 'viewCount';
-                            response = await getData({ p: p, limit: postPage, sort: sortHit, ...sortCondition }, `api/posts/latest/${channelId}`);
-                            console.log('hitAll: ', response);
-                            break;
-                        case 'ratingAll':
-                            const sortRating = 'goodCount';
-                            response = await getData({ p: p, limit: postPage, sort: sortRating, ...sortCondition }, `api/posts/latest/${channelId}`);
-                            console.log('ratingAll: ', response);
-                            break;
-                        default:
-                            const sortRecent = 'createdAt';
-                            response = await getData({ p: p, limit: postPage, sort: sortRecent, ...sortCondition }, `api/posts/latest/${channelId}`);
-                            break;
-                    }
+                switch (sort) {
+                    case 'hitAll':
+                        query.sort = 'viewCount';
+                        break;
+                    case 'ratingAll':
+                        query.sort = 'goodCount';
+                        break;
+                    default:
+                        query.sort = 'createdAt';
+                        break;
                 }
-                // 얘는 초기화면용
-                else {
-                    response = await getData({ limit: postPage, ...sortCondition }, `api/posts/latest/${channelId}`);
-                    console.log('기본', response);
-                }
-                console.log(response.data)
+
+                response = await getData(query, `api/posts/latest/${channelName}`);
+                console.log('response', response);
                 // 응답 데이터가 객체이고 data 속성이 배열인 경우에만 처리
                 if (response.status && response.data && response.data.content) {
                     // 총 게시글 수 가져오기
@@ -126,9 +115,6 @@ const PostPage = () => {
                         like: item.goodCount
                     }));
                     setSearchList(data);
-                    if (response.data.content.length > 0 && response.data.content[0].channelName) {
-                        setChannelName(response.data.content[0].channelName);
-                    }
                 } else {
                     console.error("API 응답 구조가 예상과 다릅니다:", response);
                 }
@@ -141,11 +127,11 @@ const PostPage = () => {
     }, [searchKeyword, location.search]);
 
     const handlePost = (index) => {
-        navigate(`/${channelId}/postdetail?post_id=${encodeURIComponent(searchList[index].number)}`);
+        navigate(`/${channelName}/${encodeURIComponent(searchList[index].number)}`);
     };
 
     const handleWrite = () => {
-        navigate(`/${channelId}/write`);
+        navigate(`/${channelName}/write`);
     };
 
     return (

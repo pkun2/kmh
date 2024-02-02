@@ -41,7 +41,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/refresh").hasRole("USER")
                         .requestMatchers("/api/posts/profile").permitAll() // 프로필 내용을 인증 없이
                         .requestMatchers("/api/auth/refresh").permitAll()
-                        .requestMatchers("/api/image/upload").permitAll() // 인증 필요! 임시!
                         .requestMatchers("/api/auth/email").permitAll()
                         .requestMatchers("/api/auth/emailCode").permitAll()
                         //.requestMatchers("/api/image/upload").permitAll() // 인증 필요! 임시!
