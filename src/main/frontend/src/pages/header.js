@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { DropDownBox, SearchBox, CommonButton } from "../components";
+import { DropDownBox } from "../components";
 import axios from "axios"; // 드롭다운 메뉴, 검색 박스, 일반 버튼
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // 아이콘
-import { faBell, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
     const [channels, setChannels] = useState([]); // DB 에서 가져올 채널 map
-    const [searchInput, setSearchInput] = useState(''); // 검색어
-    const [notifications, setNotifications] = useState(0); // 알림 갯수를 상태로 관리
     const [token, setToken] = useState(sessionStorage.getItem('accessToken')); // 토큰을 상태로 관리
     const [channelPopular, setChannelPopular] = useState([]);
 
@@ -51,7 +49,7 @@ export default function Header() {
         try {
             const channelResponse = await axios.get('http://localhost:8080/api/channel/getChannelName');
             console.log('channelResponse인데, 전체임', channelResponse);
-    
+
             if (channelResponse.status === 200) {
                 const channelData = channelResponse.data.map(item => ({ id: item.id, name: item.name, subscribers: item.subscribers, value: item.name }));
                 setChannelPopular(channelData);
@@ -59,11 +57,6 @@ export default function Header() {
         } catch (error) {
             console.error("채널 정보를 불러오는 데 실패했습니다.", error);
         }
-    }    
-    
-    const handleSearch = () => { // 검색어 검색 페이지로 전송 및 이동 함수
-        console.log("검색어 : ", searchInput);
-        navigate(`./search?searchInput=${encodeURIComponent(searchInput)}`);
     }
 
     const handleChannel = (selectedChannel) => { // 채널 선택시 선택된 채널 콘솔에 표시, 채널 이동
@@ -80,10 +73,6 @@ export default function Header() {
         key: channel.channelId,
         value: channel.channelName
     }));
-
-    const handleTRPG = () => { // TRPG 페이지로 이동
-        navigate("./trpg");
-    }
 
     const handleGotoChannel = () => {
         navigate("/channel");
@@ -109,27 +98,9 @@ export default function Header() {
                         fontSize: "4vh"
                     }}
                     to="./home">KMH HOME</Link>
-                <SearchBox
-                    handleChange={setSearchInput}
-                    handleClick={handleSearch}
-                    styles={{
-                        width: "50vw",
-                        height: "4vh",
-                        border: "2px solid #000099",
-                        borderRadius: 5,
-                    }}
-                    styles2={{
-                        borderLeft: "2px solid #000099",
-                        backgroundColor: "#000099"
-                    }}
-                />
                 <div>
                     {checkLogin() ? ( // 로그인 상태에 따라 다른 컴포넌트 렌더링
                         <div style={{ display: 'flex', justifyContent: 'space-between', width: '20%', margin: '20' }}>
-                            <Link to="./notice" style={{ color: 'blue', textDecoration: 'none' }}>
-                                <FontAwesomeIcon icon={faBell} size='2x' style={{ marginRight: '10px' }} /> {/* marginRight로 간격 조절 */}
-                                {notifications > 0 && <span>{notifications}</span>}
-                            </Link>
                             <Link to="./profile" style={{ color: 'blue', textDecoration: 'none' }}>
                                 <FontAwesomeIcon icon={faUser} size='2x' style={{ marginLeft: '10px' }} /> {/* marginLeft로 간격 조절 */}
                             </Link>
@@ -170,16 +141,11 @@ export default function Header() {
                         boxStyles={{ height: "5vh", backgroundColor: "#000099" }}
                         boxFonts={{ color: "white", fontSize: "100%" }}
                         handleClick={handleChannelAll}
+                        handleGotoChannel={handleGotoChannel}
                     />
 
+
                 </>
-                <div style={{ width: "1vw" }}></div>
-                <CommonButton
-                    handleClick={() => handleTRPG()}
-                    items={{ title: "TRPG" }}
-                    styles={{ backgroundColor: '#000099', height: "5vh" }}
-                    fonts={{ color: "white", fontSize: '100%' }}
-                />
             </div>
             <nav>
             </nav>
