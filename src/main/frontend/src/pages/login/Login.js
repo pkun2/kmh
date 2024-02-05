@@ -23,7 +23,7 @@ const LoginPage = () => {
         const response = await callLogin(items);
         if(response.status === true) {
             startTimer();
-            navigate("/home");
+            window.location.href = "/home"
         } else {
             // 로그인 실패 로직
         }
