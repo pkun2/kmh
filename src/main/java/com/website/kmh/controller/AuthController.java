@@ -2,8 +2,6 @@ package com.website.kmh.controller;
 
 import com.website.kmh.domain.Account;
 import com.website.kmh.domain.AccountProfile;
-import com.website.kmh.domain.CheckNickname;
-import com.website.kmh.domain.UserChannel;
 import com.website.kmh.dto.*;
 import com.website.kmh.security.SecurityUtil;
 import com.website.kmh.security.jwt.JwtTokenProvider;
@@ -94,7 +92,7 @@ public class AuthController {
     }
 
     @PostMapping("/checkNickname")
-    public boolean checkNickname(@RequestBody CheckNickname checkNickname) {
+    public boolean checkNickname(@RequestBody CheckNicknameDto checkNickname) {
         if (checkNickname != null && checkNickname.getNickname() != null && !checkNickname.getNickname().isEmpty()) {
             return accountService.isNicknameAvailable(checkNickname.getNickname());
         } else {
