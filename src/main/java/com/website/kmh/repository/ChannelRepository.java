@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface ChannelRepository extends JpaRepository<Channel, Long> {
     List<Channel> findTop10ByOrderBySubscribersDesc();
     Optional<Channel> findByName(String channelName);
-    Channel findChannelByName(String channelName);
 }
