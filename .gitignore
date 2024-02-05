@@ -3,3 +3,4 @@ src/main/frontend/ckeditor5/node_modules
 src/main/resources/config/application.properties
 out/production/resources/config/application.properties
 build/resources/main/config/application.properties
+src/main/resources/application.properties
