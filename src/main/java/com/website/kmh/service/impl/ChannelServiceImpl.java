@@ -33,10 +33,6 @@ public class ChannelServiceImpl implements ChannelService {
         return channel.orElseThrow(() -> new RuntimeException("Channel not found with id: " + channelId));
     }
 
-    public Channel findChannelByName(String channelName) {
-        return channelRepository.findChannelByName(channelName);
-    }
-
     public List<Channel> getPopularChannels() {
         return channelRepository.findTop10ByOrderBySubscribersDesc();
     }

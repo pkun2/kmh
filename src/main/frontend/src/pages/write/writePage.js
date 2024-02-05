@@ -53,7 +53,7 @@ const WritePage = () => {
 
       // 백엔드와 통신에 성공에 200을 받으면, 페이지 이동
       if (response.status == true) {
-        navigate(`/${channelName}/post`);
+        navigate(`/${channelName}`);
       } else {
         console.log("오류 발생! 백엔드와 통신 오류!");
       }
