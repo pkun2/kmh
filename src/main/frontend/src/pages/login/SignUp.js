@@ -45,12 +45,6 @@ const SignUpPage = () => {
         setAuthCodeCheck(false);
     },[email, emailDomain])
 
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes} : ${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-    };
-
     useEffect(() => {
         let timerInterval;
 
@@ -60,11 +54,11 @@ const SignUpPage = () => {
             }, 1000);
         } else {
             clearInterval(timerInterval);
-            timerInterval = null; // 초기화
-
-            // 타이머가 0이 되었을 때의 로직 추가
+            timerInterval = null;
             if (time === 0) {
                 console.log("타이머 종료");
+                setTimerRunning(false);
+                setEmailAuthSequence(false);
             }
         }
 
@@ -73,6 +67,12 @@ const SignUpPage = () => {
             timerInterval = null; // 초기화
         };
     }, [isTimerRunning, time]);
+
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes} : ${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    };
 
     const handleSignUp = async (event) => {
         event.preventDefault();
@@ -213,6 +213,7 @@ const SignUpPage = () => {
             console.log(response.status)
             if(response.data) {
                 console.log(response.data)
+                setTimerRunning(false);
                 setAuthCodeCheck(true);
             }
         }
