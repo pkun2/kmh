@@ -85,6 +85,10 @@ const ChannelPage = () => {
         }
     };
 
+    const handleClick = (channel) => {
+        navigate(`/${channel.channelName}`)
+    }
+
 
     return (
         <div className="home-container">
@@ -93,7 +97,9 @@ const ChannelPage = () => {
                     <tbody>
                     {channels.map((channel, index) => (
                         <tr key={index}>
-                            <td>{channel.channelName}</td>
+                            <td onClick={() => handleClick(channel)} style={{ cursor: 'pointer' }}>
+                                {channel.channelName}
+                            </td>
                             <td>
                                 <button onClick={() => handleSubscription(channel)}>
                                     {channel.subscribed ? '구독중입니다' : '채널 구독하기'}
