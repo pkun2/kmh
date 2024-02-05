@@ -36,5 +36,21 @@ public class Channel {
     public Channel() {
 
     }
+
+    public void increaseSubscriberCount() {
+        if (subscribers == null) {
+            subscribers = 1L;
+        } else {
+            subscribers++;
+        }
+    }
+
+    public void decreaseSubscriberCount() {
+        if (subscribers == null) {
+            subscribers = 1L;
+        } else {
+            subscribers--;
+        }
+    }
 }
 
