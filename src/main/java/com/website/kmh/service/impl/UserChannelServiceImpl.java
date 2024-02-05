@@ -53,6 +53,9 @@ public class UserChannelServiceImpl implements UserChannelService {
 
     @Override
     public void CancelSubChannel(Long userId, Long channelId) { // 구독중인 채널 취소
+        Channel channel = channelService.getChannelById(channelId);
+         channel.decreaseSubscriberCount();
+
         userChannelRepository.deleteByAccountIdAndChannelId(userId, channelId);
     }
 
@@ -62,6 +65,8 @@ public class UserChannelServiceImpl implements UserChannelService {
 
         Account user = accountService.getUserById(userId);
         Channel channel = channelService.getChannelById(channelId);
+
+        channel.increaseSubscriberCount();
 
         subscription.setAccount(user);
         subscription.setChannel(channel);
