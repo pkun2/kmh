@@ -80,12 +80,6 @@ const LoginPage = () => {
                         <div onClick={handleSignUp}>
                             회원가입
                         </div>
-                        <div onClick={handleFindID}>
-                            아이디 찾기
-                        </div>
-                        <div onClick={handleFindPW}>
-                            비밀번호 찾기
-                        </div>
                     </div>
                 </div>
                 <div style={{backgroundColor: "#CCCCCC", width: "40%", height: "100%"}}>

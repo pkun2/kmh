@@ -89,7 +89,8 @@ export default function Header() {
         navigate("/channel");
     }
 
-    return (
+    if (window.location.pathname === "/login" || window.location.pathname === "/SignUp") return null;
+    else return (
         <>
             <div
                 style={{

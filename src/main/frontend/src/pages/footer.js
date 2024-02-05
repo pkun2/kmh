@@ -2,7 +2,8 @@ import React from 'react';
 import './footer.css';
 
 export default function Footer() {
-    return (
+    if (window.location.pathname === "/login" || window.location.pathname === "/SignUp") return null;
+    else return (
         <footer className="footer">
             <hr style={{ borderTop: '1px solid #fff' }} />
             <div className="container">
