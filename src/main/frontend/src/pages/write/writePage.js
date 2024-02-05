@@ -1,6 +1,5 @@
 // 글쓰기 페이지
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router';
 import TextEditor from '../../components/TextEditor';
 
@@ -52,7 +51,7 @@ const WritePage = () => {
       console.log(response);
 
       // 백엔드와 통신에 성공에 200을 받으면, 페이지 이동
-      if (response.status == true) {
+      if (response.status === true) {
         navigate(`/${channelName}`);
       } else {
         console.log("오류 발생! 백엔드와 통신 오류!");
