@@ -72,7 +72,7 @@ function HomePage() {
           <div key={`row-${i}`} style={channelContainer}>
             {channels.slice(i, i + 3).map(channelName => (
                 <div key={channelName} style={channel}>
-                  <h2>{channelName}</h2>
+                  <h2 onClick={() => navigate(`/${channelName}`)}>{channelName}</h2>
                   {/* 채널별 게시물 렌더링 로직 */}
                   {postsByChannel[channelName] && postsByChannel[channelName].length > 0 ? (
                       <ul>
