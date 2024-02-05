@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const DropDownBox = ({handleClick, items, boxStyles, dropStyles, boxFonts, dropsFonts}) => {
+const DropDownBox = ({handleClick, items, boxStyles, dropStyles, boxFonts, dropsFonts, handleGotoChannel}) => {
     const [isHovering, setIsHovering] = useState(false);
     const inStyles = {
         dropdown: {
@@ -41,11 +41,18 @@ const DropDownBox = ({handleClick, items, boxStyles, dropStyles, boxFonts, drops
             <button style={inStyles.dropbtn}>{items.title}</button>
             {items && Array.isArray(items.list) && (
                 <div style={inStyles.dropdownContent}>
-                    {items.list.map((item, index) => (
-                        <div key={index} style={inStyles.link} onClick = {() => handleClick(index)}>
+                    {items.list.length > 0 ? items.list.map((item, index) => (
+                        <div key={index} style={inStyles.link} onClick = {() => handleClick(item)}>
                             {item.value}
                         </div>
-                    ))}
+                    )) : <div style={inStyles.link}>구독 채널 없음</div>}
+
+                    {items.title === "채널 목록" && (
+                        <>
+                            <div style={{ borderTop: "1px solid #AAAAAA" }}></div>
+                            <div style={inStyles.link} onClick={handleGotoChannel}>더보기</div>
+                        </>
+                    )}
                 </div>
             )}
         </div>
